@@ -1,19 +1,39 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>GRMW Home</title>
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+{% extends 'header.html' %}
 
-	<!-- Optional theme -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+{% load staticfiles %}
 
-	<!-- Latest compiled and minified JavaScript -->
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	
-</head>
-<body>
-	<h5>This is a webpage</h5>
-	
-</body>
-</html>
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/home/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<img class="logo" src="{% static 'images/home/logo.png' %}">
+	<div style="position: relative;">
+		<img class="mainImage" src="{% static 'images/home/main.png' %}">
+		<table class="navBarLinks">
+			<tbody>
+				<tr>
+					<th colspan="1">Home</th>
+					<th colspan="1">Board Meetings</th>
+					<th colspan="1">Data</th>
+					<th colspan="1">Education</th>
+					<th colspan="1">Stepwise</th>
+					<th colspan="1">Atlas</th>
+				</tr>
+			</tbody>
+		</table>
+		<div class="mainOverlay">
+			<h3>HOW CAN WE HELP YOU FUND YOUR RESTORATION PROJECT?</h3>
+			<div href="/stepwise/" class="learn">
+				<h1>Learn More</h1>
+			</div>
+		</div>
+	</div>
+	<img class="motto" src="{% static 'images/home/grmwMotto.png' %}">
+	<div>
+	<div class="mid_page">
+		<img class="sidebar" src="{% static 'images/home/sidebar.jpg' %}">
+	</div>
+
+	  
+{% endblock %}

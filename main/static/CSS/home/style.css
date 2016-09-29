@@ -1,0 +1,81 @@
+.mainImage {
+	width: 100%;
+}
+.logo {
+	width: 15%;
+    margin-left: calc(50% - 7.5%);
+}
+.navBarLinks {
+	display: block;
+	background: #ef9502;
+	margin-top: .1%;
+	margin-right: .1%;
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 50;
+}
+.navBarLinks tbody {
+	display: inline-block;
+}
+.navBarLinks tr {
+	margin-left: 10%;
+}
+.navBarLinks th {
+	display: inline-block;
+    color: #ffffff;
+    font-size: calc(.75vw + .75vh);
+    font-family: "Bodoni MT";
+    font-weight: bold;
+    padding: calc(.3vw + .3vh);
+    padding-right: calc(1vw + 1vh);
+}
+.navBarLinks th:first-child {
+	padding-left: calc(1vw + 1vh);
+}
+.mainOverlay{
+	display: block;
+	position: absolute;
+	width: 20vw;
+	top: calc(2vw + 2vh);
+	left: calc(2vw + 2vh);
+	z-index: 50;
+}
+.mainOverlay h3{
+	font-family: "Bodoni MT";
+	color: #ffffff;
+	text-align: center;
+	font-weight: bold;
+	letter-spacing: 1px;
+	font-size: 2vw;
+	padding: calc(.5vh + .5vw);
+	padding-bottom: 0;
+}
+.learn {
+	width: 50%;
+	margin-left: 25%;
+	background: #ef9502;
+}
+.learn h1{
+	color: #ffffff;
+	font-family: 'rockwell';
+	text-align: center;
+	font-size: 1.5vw;
+	font-weight: bold;
+	padding: .2vw;
+}
+.motto {
+	width: 40%;
+	margin-left: 30%;
+	margin-top: 1vh;
+	margin-bottom: 1vh;
+}
+.mid_page{
+	width: 100%;
+	border-top: 3px dashed #ef9502;
+	border-bottom: 3px dashed #ef9502;
+	height: 100%;
+}
+.sidebar{
+	width: 26vw;
+}
