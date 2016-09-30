@@ -78,4 +78,16 @@
 }
 .sidebar{
 	width: 20.8vw;
+	border-right: 3px dashed #ef9502;
+}
+.projectSpot{
+	float: left;
+}
+.projectSpot h2{
+	font-size: 1.5vw;
+}
+.panel {
+	background: #f3f3f3;
+    display: inline-block;
+    vertical-align: top;
 }
