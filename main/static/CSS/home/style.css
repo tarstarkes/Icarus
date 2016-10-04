@@ -91,3 +91,18 @@
     display: inline-block;
     vertical-align: top;
 }
+#project_spotlight{
+	width: 20vw;
+}
+#project_scrollBox {
+	display: inline-block;
+	width: 30vw;
+	height: 20vh;
+	overflow-y: scroll;
+	overflow-x: hidden;
+	vertical-align: top;
+	list-style: none;
+}
+#project_scrollBox::-webkit-scrollbar{
+	display: none;
+}
