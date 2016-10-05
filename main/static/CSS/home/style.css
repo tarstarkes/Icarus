@@ -1,3 +1,6 @@
+h2{
+	margin: 0;
+}
 .mainImage {
 	width: 100%;
 }
@@ -90,6 +93,7 @@
 	background: #f3f3f3;
     display: inline-block;
     vertical-align: top;
+    max-width: 75vw;
 }
 #project_spotlight{
 	width: 20vw;
@@ -97,12 +101,45 @@
 #project_scrollBox {
 	display: inline-block;
 	width: 30vw;
-	height: 20vh;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	vertical-align: top;
 	list-style: none;
+	padding-left: 2vw;
+	border-left: .3vw solid gray;
+	max-height: 15vw;
+}
+#project_scrollBox li{
+	margin-top: 1vh;
+	margin-bottom: 1vh;
 }
 #project_scrollBox::-webkit-scrollbar{
 	display: none;
+}
+.project_selected{
+	font-weight: bold;
+	font-size: 1vw;
+	color: black;
+	cursor: pointer;
+}
+.project_unselected{
+	font-style: italic;
+	font-size: .8vw;
+	color: gray;
+	cursor: pointer;
+}
+.desc_box {
+	display: inline-block;
+	vertical-align: top;
+	width: 20vw;
+}
+.gotoproject {
+	margin-top:1vw;
+	margin-bottom: 1vw;
+	width: 12vw;
+}
+.desc_content{
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 7vw;
 }

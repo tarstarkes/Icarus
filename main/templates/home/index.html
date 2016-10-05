@@ -38,35 +38,52 @@
 				<h2 id="project_title"></h2>
 				<br>
 				<img id="project_spotlight" />
+				<div max-length="100" class="desc_box">
+					<h2>Description</h2>
+					<br>
+					<p class="desc_content"></p>
+					<h2>Gallery</h2>
+				</div>
 				<div id='project_scrollBox'>
 					<ul>
 					</ul>
 				</div>
-				<!--{% for project in projects %}
-				 	<h2>{{project.name}}</h2>
-				{% endfor %}-->
+				<img class="gotoproject" src="{% static 'images/home/gotoproject.png' %}"/>
 			</div>
 		</div>
 	</div>
 <script>
-function loadProjects(){
 	{% static "" as baseUrl %}
 	var projects_list = [ {% for project in projects %}'{{ project.name }}', {% endfor %} ];
-	var projects_img_url = [ {% for project in projects %}'{{ baseUrl }}images/projects/{{ project.id }}/main.jpg', {% endfor %} ]
+	var projects_img_url = [ {% for project in projects %}'{{ baseUrl }}images/projects/{{ project.id }}/main.jpg', {% endfor %} ];
 	var projects_desc = [ {% for project in projects %}'{{ project.description }}', {% endfor %} ];
 	var projects_flickr = [ {% for project in projects %}'{{ project.description }}', {% endfor %} ];
 
-	$("#project_spotlight").attr('src', projects_img_url[0]);
-	$("#project_title").html(projects_list[0]);
-	for(var x=0; x < projects_list.length; x++){
-		$('#project_scrollBox').append('<li>'+projects_list[x]+'</li><br>');
+	function loadProjects(){
+		$("#project_spotlight").attr('src', projects_img_url[0]);
+		$("#project_title").html(projects_list[0]);
+		$('.desc_content').html(projects_desc[0]);
+		for(var x=0; x < projects_list.length; x++){
+			if(x == 0){
+				$('#project_scrollBox').append('<li class="project_selected">'+projects_list[x]+'</li>');
+			}
+			else{
+				$('#project_scrollBox').append('<li class="project_unselected">'+projects_list[x]+'</li>');
+			}
+		}
+
+
 	}
+	loadProjects();
+	$("#project_scrollBox li").on('click', function (e){
+		$('#project_scrollBox li').addClass('project_unselected');
+		$('#project_scrollBox li').removeClass('project_selected');
+		$(e.target).addClass('project_selected');
+		$(e.target).removeClass('project_unselected');
+		var index = $(e.target).index()-1;
+		$("#project_spotlight").attr('src', projects_img_url[index]);
+		$("#project_title").html(projects_list[index]);
 
-
-}
-$("#project_spotlight").on('click', function (e){
-	//do stuff
-});
-loadProjects();
+	});
 </script>
 {% endblock %}
