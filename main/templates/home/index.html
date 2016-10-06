@@ -36,19 +36,21 @@
 		<div class="panel">
 			<div class="projectSpot">
 				<h2 id="project_title"></h2>
-				<br>
-				<img id="project_spotlight" />
+				<div style="width: 20vw; display: inline-block; margin-left: 1vw">
+					<img id="project_spotlight" />
+					<img class="gotoproject" src="{% static 'images/home/gotoproject.png' %}"/>
+				</div>
 				<div max-length="100" class="desc_box">
 					<h2>Description</h2>
-					<br>
 					<p class="desc_content"></p>
 					<h2>Gallery</h2>
+					<div id="js-flickr-gallery" data-user-id="62680502@N05" data-per-page="4">		
+					</div>
 				</div>
 				<div id='project_scrollBox'>
 					<ul>
 					</ul>
 				</div>
-				<img class="gotoproject" src="{% static 'images/home/gotoproject.png' %}"/>
 			</div>
 		</div>
 	</div>
@@ -57,12 +59,14 @@
 	var projects_list = [ {% for project in projects %}'{{ project.name }}', {% endfor %} ];
 	var projects_img_url = [ {% for project in projects %}'{{ baseUrl }}images/projects/{{ project.id }}/main.jpg', {% endfor %} ];
 	var projects_desc = [ {% for project in projects %}'{{ project.description }}', {% endfor %} ];
-	var projects_flickr = [ {% for project in projects %}'{{ project.description }}', {% endfor %} ];
+	var projects_flickr = [ {% for project in projects %}'{{ project.flickr }}', {% endfor %} ];
 
 	function loadProjects(){
 		$("#project_spotlight").attr('src', projects_img_url[0]);
 		$("#project_title").html(projects_list[0]);
 		$('.desc_content').html(projects_desc[0]);
+		$('#js-flickr-gallery').attr('data-set-id', projects_flickr[0]);
+		$('#js-flickr-gallery').jsFlickrGallery();
 		for(var x=0; x < projects_list.length; x++){
 			if(x == 0){
 				$('#project_scrollBox').append('<li class="project_selected">'+projects_list[x]+'</li>');
@@ -75,6 +79,7 @@
 
 	}
 	loadProjects();
+	$('.desc_content').dotdotdot();
 	$("#project_scrollBox li").on('click', function (e){
 		$('#project_scrollBox li').addClass('project_unselected');
 		$('#project_scrollBox li').removeClass('project_selected');
@@ -83,7 +88,9 @@
 		var index = $(e.target).index()-1;
 		$("#project_spotlight").attr('src', projects_img_url[index]);
 		$("#project_title").html(projects_list[index]);
-
+		$(".desc_content").html(projects_desc[index]);
+		//these are not working $('#js-flickr-gallery').attr('data-set-id', projects_flickr[index]);
+		//$('#js-flickr-gallery').jsFlickrGallery();
 	});
 </script>
 {% endblock %}

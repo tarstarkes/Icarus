@@ -70,8 +70,8 @@ h2{
 .motto {
 	width: 40%;
 	margin-left: 30%;
-	margin-top: 1vh;
-	margin-bottom: 1vh;
+	margin-top: 5vh;
+    margin-bottom: 5vh;
 }
 .mid_page{
 	width: 100%;
@@ -89,18 +89,24 @@ h2{
 .projectSpot h2{
 	font-size: 1.5vw;
 }
+#project_title{
+	color: gray;
+	font-family: 'bodoni';
+	padding: calc(.5vw + .5vh);
+	margin:0;
+}
 .panel {
 	background: #f3f3f3;
     display: inline-block;
     vertical-align: top;
-    max-width: 75vw;
+    max-width: 78vw;
 }
 #project_spotlight{
 	width: 20vw;
 }
 #project_scrollBox {
 	display: inline-block;
-	width: 30vw;
+	width: 25vw;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	vertical-align: top;
@@ -131,15 +137,42 @@ h2{
 .desc_box {
 	display: inline-block;
 	vertical-align: top;
-	width: 20vw;
+	width: 25vw;
+	margin-left: 1vw;
 }
 .gotoproject {
+	display: block;
 	margin-top:1vw;
 	margin-bottom: 1vw;
 	width: 12vw;
+	cursor: pointer;
 }
 .desc_content{
+	display: inline-block;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	height: 7vw;
+	font-size: 1.25vw;
+	margin-bottom: 0;
+	margin-top: 1vw;
+}
+#js-flickr-gallery ul{
+	margin-top: 1vw;
+	list-style: none;
+	margin-bottom: 0;
+	padding-left: 0;
+}
+#js-flickr-gallery img{
+	width: 5vw;
+}
+.span1{
+	width: 5vw;
+	display: inline-block;
+	max-height: 5vw;
+}
+.pagination{
+	display: none;
+}
+li.span1 a {
+    padding: 0;
 }
