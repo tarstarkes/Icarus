@@ -2,7 +2,6 @@ html,
 body {
 	height: 100%;
 	width: 100%;
-	min-width: 400px !important;
 	background: #f3f3f3;
 }
 body::-webkit-scrollbar{

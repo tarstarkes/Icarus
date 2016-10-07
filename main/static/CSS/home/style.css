@@ -70,8 +70,8 @@ h2{
 .motto {
 	width: 40%;
 	margin-left: 30%;
-	margin-top: 5vh;
-    margin-bottom: 5vh;
+	margin-top: calc(2.5vw + 2.5vh);
+    margin-bottom: calc(2.5vw + 2.5vh);
 }
 .mid_page{
 	width: 100%;
@@ -80,57 +80,67 @@ h2{
 	height: 100%;
 }
 .sidebar{
-	width: 20.8vw;
-	border-right: 3px dashed #ef9502;
+	width: 20.7vw;
+	border-right: .3vw dashed #ef9502;
 }
-.projectSpot{
-	float: left;
+.projectSpot {
+	width: 79vw;
+	display: inline;
 }
 .projectSpot h2{
 	font-size: 1.5vw;
+	font-style: italic;
 }
 #project_title{
 	color: gray;
 	font-family: 'bodoni';
 	padding: calc(.5vw + .5vh);
+	padding-left: 1vw;
 	margin:0;
+	font-style: normal;
 }
 .panel {
 	background: #f3f3f3;
     display: inline-block;
     vertical-align: top;
-    max-width: 78vw;
+    width: calc(79vw - 10px);
 }
 #project_spotlight{
-	width: 20vw;
+	width: 27vw;
 }
 #project_scrollBox {
 	display: inline-block;
-	width: 25vw;
-	overflow-y: scroll;
-	overflow-x: hidden;
-	vertical-align: top;
-	list-style: none;
-	padding-left: 2vw;
-	border-left: .3vw solid gray;
-	max-height: 15vw;
+    width: calc(21.7vw - 15px);
+    overflow-y: scroll;
+    overflow-x: hidden;
+    vertical-align: top;
+    list-style: none;
+    padding-left: 1vw;
+    margin-left: 1vw;
+    border-left: .2vw solid gray;
+    height: 24vw;
+    max-height: 24vw;
+    border-right: none;
 }
 #project_scrollBox li{
 	margin-top: 1vh;
 	margin-bottom: 1vh;
+}
+#project_scrollBox:first-child li{
+	margin-top: 0 !important;
 }
 #project_scrollBox::-webkit-scrollbar{
 	display: none;
 }
 .project_selected{
 	font-weight: bold;
-	font-size: 1vw;
+	font-size: 1.1vw;
 	color: black;
 	cursor: pointer;
 }
 .project_unselected{
 	font-style: italic;
-	font-size: .8vw;
+	font-size: 1vw;
 	color: gray;
 	cursor: pointer;
 }
@@ -153,26 +163,40 @@ h2{
 	text-overflow: ellipsis;
 	height: 7vw;
 	font-size: 1.25vw;
-	margin-bottom: 0;
+	margin-bottom: 1vw;
 	margin-top: 1vw;
 }
-#js-flickr-gallery ul{
+#gallery_content{
+	height: 7vw;
+	overflow: hidden;
+	overflow-y: scroll;
 	margin-top: 1vw;
-	list-style: none;
-	margin-bottom: 0;
-	padding-left: 0;
 }
-#js-flickr-gallery img{
-	width: 5vw;
+img.pretty-box{
+	width: 7vw;
+	padding: .2vw;
 }
-.span1{
-	width: 5vw;
-	display: inline-block;
-	max-height: 5vw;
-}
-.pagination{
-	display: none;
-}
-li.span1 a {
-    padding: 0;
+@media screen and (max-width: 480px) {
+	.navBarLinks {
+		display: block;
+		background: #ef9502;
+		position: absolute;
+		right: 0;
+		top: 0;
+		z-index: 50;
+	}
+	.navBarLinks tbody {
+		display: inline-block;
+	}
+	.navBarLinks tr {
+		margin-left: 10%;
+	}
+	.navBarLinks th {
+		display: inline-block;
+	    color: #ffffff;
+	    font-size: calc(2vw + 2px);
+	}
+	.navBarLinks th:first-child {
+		padding-left: 2vw;
+	}
 }
