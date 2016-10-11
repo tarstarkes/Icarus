@@ -51,6 +51,22 @@
 					<ul id='project_scrollBox'></ul>
 				</div>
 			</div>
+			<hr class="panelSeparator">
+			<div class="ripplesSpot">
+				<h2>About the Ripples Newsletter</h2>
+				<div class="ripples_text">
+					<p class="ripples_desc">
+						Through the GRMW Education Outreach Program we have developed Ripples in the Grande Ronde, a quarterly newsletter that is distributed through Union and Wallowa county's local newspapers as an insert.
+						<br><br>
+						The newsletter highlights collaborative projects in the Grande Ronde Basin, serves as a media source for other natural resource agencies, and includes a variety of water-related information equally interesting to adults and children. You may select newsletters below and view them in PDF format. If you would like a printed copy of the Ripples, contact the GRMW office.
+					</p>
+				</div>
+				<div class="ripples_years">
+					<ul class="yearList">
+						<!-- All years that have ripples -->
+					</ul>
+				</div>
+			</div>
 		</div>
 	</div>
 <script>
@@ -60,6 +76,18 @@
 	var projects_desc = [ {% for project in projects %}'{{ project.description }}', {% endfor %} ];
 	var projects_flickr = [ {% for project in projects %}'{{ project.flickr }}', {% endfor %} ];
 
+	var years_list = [{% for year in years %}'{{ year.year }}', {% endfor %}];
+
+
+	function loadRipples(){
+		for(var i=0; i < years_list.length; i++){
+			if (i == 0)
+				$('.yearList').append('<li class="year_selected">'+years_list[i]+'</li>');
+			else{
+				$('.yearList').append('<li class="year_unselected">'+years_list[i]+'</li>');
+			}
+		}
+	}
 	function loadProjects(){
 		$("#project_spotlight").attr('src', projects_img_url[0]);
 		$("#project_title").html(projects_list[0]);
@@ -77,19 +105,28 @@
 
 	}
 	loadProjects();
+	loadRipples();
 	$('.desc_content').dotdotdot();
+
 	$("#project_scrollBox li").on('click', function (e){
 		$('#gallery_content').html('');
-		$('#project_scrollBox li').addClass('project_unselected');
-		$('#project_scrollBox li').removeClass('project_selected');
-		$(e.target).addClass('project_selected');
-		$(e.target).removeClass('project_unselected');
-		var index = $(e.target).index()-1;
+		selectObject(e, '#project_scrollBox li', 'project_selected', 'project_unselected');
+		var index = $(e.target).index();
 		$("#project_spotlight").attr('src', projects_img_url[index]);
 		$("#project_title").html(projects_list[index]);
 		$(".desc_content").html(projects_desc[index]);
 		loadFlickr(projects_flickr[index]);
 	});
+
+	$(".yearList li").on('click', function (e){
+		selectObject(e, '.yearList li', 'year_selected', 'year_unselected');
+	});
+	function selectObject(e, boxItems, classSelected, classUnselected){
+		$(boxItems).addClass(classUnselected);
+		$(boxItems).removeClass(classSelected);
+		$(e.target).addClass(classSelected);
+		$(e.target).removeClass(classUnselected);
+	}
 
 	function loadFlickr(flickrSetID) {
 		var apiKey = 'e6b4ff424de5600fbcb3a22fda4c979a'; // Uploader API Key
@@ -98,7 +135,7 @@
 		jQuery.getJSON('https://api.flickr.com/services/rest/?&method=flickr.photosets.getPhotos&api_key=' + apiKey + '&photoset_id=' +setId + '&format=json&jsoncallback=?',
 			function(data){
 			// Loop through data from REST service
-			if (data.photoset != 'undefined'){
+			if (data.photoset != undefined && data.photoset.photo != undefined){
 				jQuery.each(data.photoset.photo, function(i,item){
 					//build the url of the photo in order to link to it
 					var photoURL_small = 'http://farm' + item.farm + '.static.flickr.com/' + item.server + '/' + item.id + '_' + item.secret + '_s.jpg';
@@ -112,7 +149,6 @@
 						function(data){				
 							//create an imgCont string variable which will hold all the link location, title, author link, and author name into a text string
 							/*var imgCont = '<div class="image-container" style="background: url(' + photoURL + ');"><div class="image-info"><p class="top"><a class="title" href="http://www.flickr.com/photos/' + data.photo.owner.nsid + '/' + photoID + '">' + data.photo.title._content + '</a> <span class="author">by <a href="http://flickr.com/photos/' + data.photo.owner.nsid + '">' + data.photo.owner.username + '</a></span></p><div class="bottom"><p><span class="infoTitle">Comments:</span> ' + data.photo.comments._content + '</p>';*/
-							
 							var imgCont = '<a class="fancybox-thumb" rel="fancybox-thumb" href="'+ photoURL_big + '" title=""><img src="' + photoURL_small + '" alt="" class="pretty-box"/></a>';
 					
 							//append the 'imgCont' variable to the document

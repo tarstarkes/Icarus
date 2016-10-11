@@ -294,3 +294,47 @@ class ProjectdbUnittype(models.Model):
         managed = False
         db_table = 'projectdb_unittype'
 
+
+class PublicationsRipples(models.Model):
+    year = models.CharField(max_length=4)
+    url = models.CharField(max_length=200)
+    size = models.CharField(max_length=7)
+    pub_date = models.DateField()
+    edition_id = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'publications_ripples'
+
+    def __str__(self):
+    	term = ""
+    	if (self.edition_id == 1):
+    		term = "Winter"
+    	elif (self.edition_id == 2):
+    		term = "Spring"
+    	elif (self.edition_id == 3):
+    		term = "Summer"
+    	else:
+    		term = "Fall"
+    	return (term+" "+self.year)
+
+
+class PublicationsRipplesarticle(models.Model):
+    article = models.CharField(max_length=300)
+    ripples_id = models.IntegerField()
+
+    class Meta:
+        managed = False
+        db_table = 'publications_ripplesarticle'
+
+
+class PublicationsRipplesedition(models.Model):
+    editionname = models.CharField(db_column='editionName', max_length=10)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'publications_ripplesedition'
+
+    def __str__(self):
+    	return self.editionName
+
