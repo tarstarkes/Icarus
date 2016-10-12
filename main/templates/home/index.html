@@ -72,7 +72,7 @@
 					</ul>
 				</div>
 				<div class="edition_detail" style="display:inline-block; vertical-align: top;">
-					<a><img></img></a>
+					<a target="_blank"><img></img></a>
 					<ul class="edition_articles">
 						<!-- The details of the selected edition -->
 					</ul>
@@ -105,7 +105,7 @@
 							$('.edition_detail a img').attr('src', '{{baseUrl}}images/ripples/'+years_list[j]+'/'+ph[0]+'.jpg')
 						}
 						else{
-							$('.editions').append('<li class="ripple_unselected">'+ripple_list[j]+'</li>');
+							$('.editions').append('<li class="ripple_unselected" data-index="'+j+'">'+ripple_list[j]+'</li>');
 						}
 					}
 				}
@@ -144,28 +144,26 @@
 		loadFlickr(projects_flickr[index]);
 	});
 
-	$(".yearList li").on('click', function (e){
+	$(".yearList").on('click', 'li', function (e){
 		selectObject(e, '.yearList li', 'year_selected', 'year_unselected');
 		$('.editions li').remove();
 		for (var j=0; j < ripple_list.length; j++){
 			if (ripple_list[j].includes($(e.target).html())){
-				if (j == 0){
-					$('.editions').append('<li class="ripple_selected">'+ripple_list[j]+'</li>');
-				}
-				else{
-					$('.editions').append('<li class="ripple_unselected">'+ripple_list[j]+'</li>');
-				}
+				$('.editions').append('<li class="ripple_unselected" data-index="'+j+'">'+ripple_list[j]+'</li>');
 			}
 		}
+		$('.editions li').first().addClass('ripple_selected');
+		$('.editions li').first().removeClass('ripple_unselected');
+		$('.editions li').first().trigger('click');
 	});
 
 	$(".editions").on('click', 'li', function(e){
-		console.log('click');
 		selectObject(e, '.editions li', 'ripple_selected', 'ripple_unselected');
 		var i = $(e.target).attr('data-index');
 		$('.edition_detail a').attr('href', ripple_url_list[i]);
 		ph = $('.ripple_selected').html().split(' ');
 		$('.edition_detail a img').attr('src', '{{baseUrl}}images/ripples/'+$('.year_selected').html()+'/'+ph[0]+'.jpg')
+
 	});
 
 	function selectObject(e, boxItems, classSelected, classUnselected){
