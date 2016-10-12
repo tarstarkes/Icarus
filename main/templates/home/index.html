@@ -66,6 +66,17 @@
 						<!-- All years that have ripples -->
 					</ul>
 				</div>
+				<div class="ripples_editions">
+					<ul class="editions">
+						<!-- All editions for the selected year-->
+					</ul>
+				</div>
+				<div class="edition_detail" style="display:inline-block; vertical-align: top;">
+					<a><img></img></a>
+					<ul class="edition_articles">
+						<!-- The details of the selected edition -->
+					</ul>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -76,13 +87,29 @@
 	var projects_desc = [ {% for project in projects %}'{{ project.description }}', {% endfor %} ];
 	var projects_flickr = [ {% for project in projects %}'{{ project.flickr }}', {% endfor %} ];
 
-	var years_list = [{% for year in years %}'{{ year.year }}', {% endfor %}];
-
+	var years_list = [{% for x in years %}'{{ x.year }}', {% endfor %}];
+	var ripple_list = [{% for x in ripples %}'{{ x }}', {% endfor %}];
+	var ripple_url_list = [{% for x in ripples %}'{{ x.url }}', {% endfor %}];
+	var ph = [];
 
 	function loadRipples(){
 		for(var i=0; i < years_list.length; i++){
-			if (i == 0)
+			if (i == 0){
 				$('.yearList').append('<li class="year_selected">'+years_list[i]+'</li>');
+				for (var j=0; j < ripple_list.length; j++){
+					if (ripple_list[j].includes(years_list[i])){
+						if (j == 0){
+							$('.editions').append('<li class="ripple_selected" data-index="'+j+'">'+ripple_list[j]+'</li>');
+							$('.edition_detail a').attr('href', ripple_url_list[j])
+							ph = ripple_list[j].split(' ');
+							$('.edition_detail a img').attr('src', '{{baseUrl}}images/ripples/'+years_list[j]+'/'+ph[0]+'.jpg')
+						}
+						else{
+							$('.editions').append('<li class="ripple_unselected">'+ripple_list[j]+'</li>');
+						}
+					}
+				}
+			}
 			else{
 				$('.yearList').append('<li class="year_unselected">'+years_list[i]+'</li>');
 			}
@@ -101,9 +128,8 @@
 				$('#project_scrollBox').append('<li class="project_unselected">'+projects_list[x]+'</li>');
 			}
 		}
-
-
 	}
+
 	loadProjects();
 	loadRipples();
 	$('.desc_content').dotdotdot();
@@ -120,7 +146,28 @@
 
 	$(".yearList li").on('click', function (e){
 		selectObject(e, '.yearList li', 'year_selected', 'year_unselected');
+		$('.editions li').remove();
+		for (var j=0; j < ripple_list.length; j++){
+			if (ripple_list[j].includes($(e.target).html())){
+				if (j == 0){
+					$('.editions').append('<li class="ripple_selected">'+ripple_list[j]+'</li>');
+				}
+				else{
+					$('.editions').append('<li class="ripple_unselected">'+ripple_list[j]+'</li>');
+				}
+			}
+		}
 	});
+
+	$(".editions").on('click', 'li', function(e){
+		console.log('click');
+		selectObject(e, '.editions li', 'ripple_selected', 'ripple_unselected');
+		var i = $(e.target).attr('data-index');
+		$('.edition_detail a').attr('href', ripple_url_list[i]);
+		ph = $('.ripple_selected').html().split(' ');
+		$('.edition_detail a img').attr('src', '{{baseUrl}}images/ripples/'+$('.year_selected').html()+'/'+ph[0]+'.jpg')
+	});
+
 	function selectObject(e, boxItems, classSelected, classUnselected){
 		$(boxItems).addClass(classUnselected);
 		$(boxItems).removeClass(classSelected);

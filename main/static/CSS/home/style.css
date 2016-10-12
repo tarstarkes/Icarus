@@ -88,13 +88,13 @@ h2{
 	width: 79vw;
 	display: inline;
 }
-.ripplesSpot h2,
 .projectSpot h2{
-	font-size: 2.5vw;
+	font-size: 1.5vw;
 	font-style: italic;
 }
 .ripplesSpot h2,
 #project_title{
+	font-size: 2.5vw;
 	color: gray;
 	font-family: 'bodoni';
 	padding: calc(.5vw + .5vh);
@@ -197,19 +197,22 @@ img.pretty-box{
 	width: 7vw;
 	padding: .2vw;
 }
+.ripples_editions,
 .ripples_years{
 	width: auto;
 	display:inline-block;
 	vertical-align: top;
 }
+.editions::-webkit-scrollbar,
 .yearList::-webkit-scrollbar{
 	display: none;
 }
+.editions,
 ul.yearList {
     display: inline-block;
     vertical-align: top;
     overflow-y: scroll;
-    height: calc(12vw + 12vh);
+    height: 24vw;
     list-style: none;
     border-right: .2vw solid gray;
     padding-right: 1vw;
@@ -219,16 +222,19 @@ ul.yearList {
     text-decoration: underline;
     margin-bottom: 0;
 }
+.editions li,
 ul.yearList li {
 	padding-left: 1vw;
     padding-right: 1vw;
     padding-bottom: 1vh;
 }
+.ripple_selected,
 .year_selected{
 	color: black;
 	font-weight: bold;
 	font-style: italic;
 }
+.ripple_unselected,
 .year_unselected{
 	color: gray;
 	font-weight: normal;
