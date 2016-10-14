@@ -53,7 +53,7 @@
 			</div>
 			<hr class="panelSeparator">
 			<div class="ripplesSpot">
-				<h2>About the Ripples Newsletter</h2>
+				<h2 class="ripple_title">About the Ripples Newsletter</h2>
 				<div class="ripples_text">
 					<p class="ripples_desc">
 						Through the GRMW Education Outreach Program we have developed Ripples in the Grande Ronde, a quarterly newsletter that is distributed through Union and Wallowa county's local newspapers as an insert.
@@ -72,7 +72,14 @@
 					</ul>
 				</div>
 				<div class="edition_detail" style="display:inline-block; vertical-align: top;">
-					<a target="_blank"><img></img></a>
+					<div class="article_subpanel">
+						<h2 class='article_title'>Articles</h2>
+						<p class="article_content"></p>
+					</div>
+					<a target="_blank">
+						<img>
+						</img>
+					</a>
 					<ul class="edition_articles">
 						<!-- The details of the selected edition -->
 					</ul>
@@ -90,6 +97,7 @@
 	var years_list = [{% for x in years %}'{{ x.year }}', {% endfor %}];
 	var ripple_list = [{% for x in ripples %}'{{ x }}', {% endfor %}];
 	var ripple_url_list = [{% for x in ripples %}'{{ x.url }}', {% endfor %}];
+	var article_list = [{% for x in articles %}{article_id:'{{ x.ripples_id }}', article:'{{ x.article }}'},{% endfor %}];
 	var ph = [];
 
 	function loadRipples(){
@@ -103,6 +111,7 @@
 							$('.edition_detail a').attr('href', ripple_url_list[j])
 							ph = ripple_list[j].split(' ');
 							$('.edition_detail a img').attr('src', '{{baseUrl}}images/ripples/'+years_list[j]+'/'+ph[0]+'.jpg')
+
 						}
 						else{
 							$('.editions').append('<li class="ripple_unselected" data-index="'+j+'">'+ripple_list[j]+'</li>');

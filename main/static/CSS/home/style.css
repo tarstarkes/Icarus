@@ -88,11 +88,12 @@ h2{
 	width: 79vw;
 	display: inline;
 }
+.edition_detail .article_title,
 .projectSpot h2{
 	font-size: 1.5vw;
 	font-style: italic;
 }
-.ripplesSpot h2,
+.ripple_title,
 #project_title{
 	font-size: 2.5vw;
 	color: gray;
@@ -239,6 +240,15 @@ ul.yearList li {
 	color: gray;
 	font-weight: normal;
 	font-style: italic;
+}
+.edition_detail a img {
+	width: 15vw;
+}
+.article_subpanel{
+	display: inline-block;
+	margin-left: 1vw;
+	margin-right: 1vw;
+	vertical-align: top;
 }
 @media screen and (max-width: 480px) {
 	.navBarLinks {

@@ -9,4 +9,5 @@ def index(request):
 	year_list = PublicationsRipples.objects.all().distinct('year').order_by('-year').values('year')
 	ripple_list = PublicationsRipples.objects.all()
 	edition_list = PublicationsRipplesedition.objects.all().order_by('-year')
-	return render(request, 'home/index.html', {'projects': project_list, 'years': year_list, 'ripples': ripple_list, 'edition': edition_list})
+	article_list = PublicationsRipplesarticle.objects.all()
+	return render(request, 'home/index.html', {'projects': project_list, 'years': year_list, 'ripples': ripple_list, 'edition': edition_list, 'articles': article_list})
