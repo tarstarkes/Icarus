@@ -294,8 +294,7 @@ class ProjectdbUnittype(models.Model):
         managed = False
         db_table = 'projectdb_unittype'
 
-
-class PublicationsRipples(models.Model):
+"""class PublicationsRipples(models.Model):
     year = models.CharField(max_length=4)
     url = models.CharField(max_length=200)
     size = models.CharField(max_length=7)
@@ -336,5 +335,46 @@ class PublicationsRipplesedition(models.Model):
         db_table = 'publications_ripplesedition'
 
     def __str__(self):
+    	return self.editionName"""
+class Ripplesedition(models.Model):
+    editionname = models.CharField(db_column='editionName', max_length=10)  # Field name made lowercase.
+
+    class Meta:
+        db_table = 'publications_ripplesedition'
+        managed = True
+
+    def __str__(self):
     	return self.editionName
+
+class Ripples(models.Model):
+
+    year = models.CharField(max_length=4)
+    url = models.CharField(max_length=200)
+    size = models.CharField(max_length=7)
+    pub_date = models.DateField()
+    edition_id = models.ForeignKey(Ripplesedition, db_column="edition_id")
+
+    class Meta:
+        db_table = 'publications_ripples'
+        managed = True
+
+    def __str__(self):
+    	term = ""
+    	if (self.edition_id == 1):
+    		term = "Winter"
+    	elif (self.edition_id == 2):
+    		term = "Spring"
+    	elif (self.edition_id == 3):
+    		term = "Summer"
+    	else:
+    		term = "Fall"
+    	return (term+" "+self.year)
+
+class Ripplesarticle(models.Model):
+    article = models.CharField(max_length=300)
+    ripples_id = models.ForeignKey(Ripples, db_column="ripples_id")
+
+    class Meta:
+        db_table = 'publications_ripplesarticle'
+        managed = True
 

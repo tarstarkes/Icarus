@@ -93,28 +93,44 @@
 	var projects_img_url = [ {% for project in projects %}'{{ baseUrl }}images/projects/{{ project.id }}/main.jpg', {% endfor %} ];
 	var projects_desc = [ {% for project in projects %}'{{ project.description }}', {% endfor %} ];
 	var projects_flickr = [ {% for project in projects %}'{{ project.flickr }}', {% endfor %} ];
-
 	var years_list = [{% for x in years %}'{{ x.year }}', {% endfor %}];
-	var ripple_list = [{% for x in ripples %}'{{ x }}', {% endfor %}];
-	var ripple_url_list = [{% for x in ripples %}'{{ x.url }}', {% endfor %}];
-	var article_list = [{% for x in articles %}{article_id:'{{ x.ripples_id }}', article:'{{ x.article }}'},{% endfor %}];
-	var ph = [];
+	var ripples = {{ripples | safe}};
+	
+	function loadArticles(id){
 
+	}
+	function getSeason(val){
+		var rtn;
+		switch(val){
+			case 1:
+				rtn = "Winter";
+				break;
+			case 2:
+				rtn = "Spring";
+				break;
+			case 3:
+				rtn = "Summer";
+				break;
+			case 4:
+				rtn = "Fall";
+				break;
+		};
+		return rtn;
+	}
 	function loadRipples(){
 		for(var i=0; i < years_list.length; i++){
 			if (i == 0){
 				$('.yearList').append('<li class="year_selected">'+years_list[i]+'</li>');
-				for (var j=0; j < ripple_list.length; j++){
-					if (ripple_list[j].includes(years_list[i])){
+				for (var j=0; j < ripples.length; j++){
+					if (ripples[j].fields.year.includes(years_list[i])){
 						if (j == 0){
-							$('.editions').append('<li class="ripple_selected" data-index="'+j+'">'+ripple_list[j]+'</li>');
-							$('.edition_detail a').attr('href', ripple_url_list[j])
-							ph = ripple_list[j].split(' ');
-							$('.edition_detail a img').attr('src', '{{baseUrl}}images/ripples/'+years_list[j]+'/'+ph[0]+'.jpg')
-
+							$('.editions').append('<li class="ripple_selected" data-index="'+j+'">'+getSeason(ripples[j].fields.edition_id)+'</li>');
+							$('.edition_detail a').attr('href', ripples[j].fields.url)
+							$('.edition_detail a img').attr('src', '{{baseUrl}}images/ripples/'+years_list[j]+'/'+getSeason(ripples[j].fields.edition_id)+'.jpg')
+							loadArticles();
 						}
 						else{
-							$('.editions').append('<li class="ripple_unselected" data-index="'+j+'">'+ripple_list[j]+'</li>');
+							$('.editions').append('<li class="ripple_unselected" data-index="'+j+'">'+getSeason(ripples[j].fields.edition_id)+'</li>');
 						}
 					}
 				}
@@ -155,23 +171,27 @@
 
 	$(".yearList").on('click', 'li', function (e){
 		selectObject(e, '.yearList li', 'year_selected', 'year_unselected');
-		$('.editions li').remove();
-		for (var j=0; j < ripple_list.length; j++){
-			if (ripple_list[j].includes($(e.target).html())){
-				$('.editions').append('<li class="ripple_unselected" data-index="'+j+'">'+ripple_list[j]+'</li>');
+		$('.editions li').remove(); //get rid of whatever was in the box before
+		for (var j=0; j < ripples.length; j++){
+			if (ripples[j].fields.year.includes($(e.target).html())){
+				$('.editions').append('<li class="ripple_unselected" data-index="'+j+'">'+getSeason(ripples[j].fields.edition_id)+'</li>');
 			}
 		}
-		$('.editions li').first().addClass('ripple_selected');
-		$('.editions li').first().removeClass('ripple_unselected');
-		$('.editions li').first().trigger('click');
+		var li = $('.editions li');
+		li.detach().sort(function(a,b) {
+    		return ($(a).html() > $(b).html());
+    	});
+    	$('.editions').append(li);
+		$('.editions li').first().addClass('ripple_selected'); //select the first ripple automatically
+		$('.editions li').first().removeClass('ripple_unselected'); //remove the unselected class from the first ripple
+		$('.editions li').first().trigger('click'); //trigger a click on the first selection
 	});
 
 	$(".editions").on('click', 'li', function(e){
 		selectObject(e, '.editions li', 'ripple_selected', 'ripple_unselected');
 		var i = $(e.target).attr('data-index');
-		$('.edition_detail a').attr('href', ripple_url_list[i]);
-		ph = $('.ripple_selected').html().split(' ');
-		$('.edition_detail a img').attr('src', '{{baseUrl}}images/ripples/'+$('.year_selected').html()+'/'+ph[0]+'.jpg')
+		$('.edition_detail a').attr('href', ripples[i].fields.url);
+		$('.edition_detail a img').attr('src', '{{baseUrl}}images/ripples/'+$('.year_selected').html()+'/'+$('.ripple_selected').html()+'.jpg');
 
 	});
 
