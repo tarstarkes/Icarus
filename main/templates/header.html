@@ -15,8 +15,18 @@
 
 	<!-- Latest compiled and minified JavaScript -->
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	
+	<!-- Bootstrap social-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.0.0/bootstrap-social.min.css">
+
+	<!-- google api css -->
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 	
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
 
 	{% block head %}
 	{% endblock %}
@@ -33,13 +43,99 @@
 		{% endblock %}
 		<div>
 			<div class="footer">
-				<h3>About Us</h3>
-				<h3>Contact Us</h3>
-				<h3>Other Projects</h3>
-				<h3>Find Us - La Grande</h3>
-				<h3>Find Us - Wallowa</h3>
+				<div style="display: inline-block;">
+					<h3>About Us</h3>
+					<p class="about subtext">
+					The Grande Ronde Model Watershed is a Non-Profit organization that is commited to restoring fish habitat on both private and public lands within the Grande Ronde Basin.</p>
+					<div class="contactUs">
+						<p class="contact subtext" style="display: inline-block">
+							<span style="font-weight: bold; font-size: 1.75vw;">La Grande Office</span><br>
+							Address: 1114 'J' Ave<br>
+							La Grande, OR 97850<br>
+							Email: contact@grmw.org<br>
+							Phone: 541.663.0570<br>
+							Fax: 541.962.1585<br>
+						</p>
+						<p class="contact subtext" style="display: inline-block">
+							<span style="font-weight: bold; font-size: 1.75vw;">Wallowa Office</span><br>
+							Address: 936 W North St.<br>
+							Enterprise, OR 97828<br>
+							Email: rcoby@grmw.org<br>
+							Phone: 541.426.0389<br>
+						</p>
+					</div>
+				</div>
+				<div style="float: right; margin-right: 2vw;">
+					<div style="display: inline-block; vertical-align:top;">
+						<h3 class="findUsLG" style="display:inline-block;vertical-align:top;">Find Us - La Grande</h3>
+						<div id="map" style="width: 20vw; height: 18vw;" >
+						</div>
+					</div>
+					<div style="margin-left: 2vw; display: inline-block; vertical-align:top">
+						<h3 class="findUsWal">Find Us - Wallowa</h3>
+						<div id="walMap" style="width: 20vw; height: 18vw;" >
+						</div>
+					</div>
+				</div>
+				<!--<a class="btn btn-social-icon btn-twitter">
+					<span class="fa fa-twitter"></span>
+	  			</a>  
+	  			<a class="btn btn-social-icon btn-youtube">
+	    			<span class="fa fa-youtube"></span>
+	  			</a>  
+	  			<a class="btn btn-social-icon btn-vimeo">
+	    			<span class="fa fa-vimeo"></span>
+	  			</a>
+	  			<a class="btn btn-social-icon btn-facebook">
+					<span class="fa fa-facebook"></span>
+	  			</a>-->
+	  			<a class="btn btn-block btn-social btn-twitter">
+			    	<span class="fa fa-twitter"></span> Sign in with Twitter
+			  	</a>
+			 	<a class="btn btn-block btn-social btn-youtube">
+			    	<span class="fa fa-youtube"></span> Sign in with Youtube
+			  	</a>
+			  	<a class="btn btn-block btn-social btn-vimeo">
+			    	<span class="fa fa-vimeo"></span> Sign in with Vimeo
+			  	</a>
+			  	<a class="btn btn-block btn-social btn-facebook">
+			    	<span class="fa fa-facebook"></span> Sign in with Facebook
+			  	</a>
+			  	<br><br>
 			</div>
 		</div>
 	</div>
+	<script>
+		var map;
+		var marker;
+		var wallowaMap;
+		var wallowaMarker;
+		var lgLoc = {lat: 45.320, lng: -118.097};
+		var walLoc = {lat: 45.4259203, lng: -117.2904193};
+		function initMap() {
+			// Create a map object and specify the DOM element for display.
+			map = new google.maps.Map(document.getElementById('map'), {
+				center: lgLoc,
+				scrollwheel: true,
+				zoom: 17
+			});
+			marker = new google.maps.Marker({
+				position: lgLoc,
+				map: map,
+				title: 'GRMW - La Grande Office'
+			});
+			map = new google.maps.Map(document.getElementById('walMap'), {
+				center: walLoc,
+				scrollwheel: true,
+				zoom: 17
+			});
+			marker = new google.maps.Marker({
+				position: walLoc,
+				map: map,
+				title: 'GRMW - Wallowa Office'
+			});
+		}
+	</script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpBNFyNgmMi3MjRxHmkaAel2z020k1CIw&callback=initMap" async defer></script>
 </body>
 </html>

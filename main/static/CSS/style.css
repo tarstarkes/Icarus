@@ -9,14 +9,49 @@ body::-webkit-scrollbar{
 }
 .footer{
 	width: 100%;
-	height: 650px;
-	color: white;
-	background: #4a6782;
+	color: black;
+	/*background: #4a6782;*/
 }
 .footer h3{
+	font-family: 'Gill Sans';
+	font-size: 2vw;
+	margin-left: 1vw;
+}
+.footer h3:first-child{
 	margin-top: 0;
+	padding-top:1vw;
 }
 .container-fluid{
 	padding-left: 2px;
 	padding-right: 2px;
+}
+.btn {
+	width: 23.5vw;
+	margin-left: 1vw;
+	display: inline-block;
+}
+.contact,
+.about {
+	width: 30vw;
+	font-size: 1.5vw;
+	font-family: 'bodoni';
+	margin-left: 1vw;
+
+}
+.subtext{
+	font-size: 1.5vw;
+	font-family: 'bodoni';
+}
+p.contact.subtext {
+    width: 17vw;
+    vertical-align: top;
+}
+h3.findUsLG{
+	margin-top: 1vw;
+}
+@media screen and (max-width: 800px){
+	.btn{
+		width: 97vw;
+		text-align: center;
+	}
 }

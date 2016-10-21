@@ -32,8 +32,8 @@
 	<img class="motto" src="{% static 'images/home/grmwMotto.png' %}">
 	<div>
 	<div class="mid_page">
-		<img class="sidebar" src="{% static 'images/home/sidebar.jpg' %}">
 		<div class="panel">
+			<img class="sidebar" src="{% static 'images/home/sidebar.jpg' %}">
 			<div class="projectSpot">
 				<h2 id="project_title"></h2>
 				<div style="width: 27vw; display: inline-block; margin-left: 1vw">
@@ -53,7 +53,7 @@
 			</div>
 			<hr class="panelSeparator">
 			<div class="ripplesSpot">
-				<h2 class="ripple_title">About the Ripples Newsletter</h2>
+				<h2 class="title">About the Ripples Newsletter</h2>
 				<div class="ripples_text">
 					<p class="ripples_desc">
 						Through the GRMW Education Outreach Program we have developed Ripples in the Grande Ronde, a quarterly newsletter that is distributed through Union and Wallowa county's local newspapers as an insert.
@@ -74,15 +74,30 @@
 				<div class="edition_detail" style="display:inline-block; vertical-align: top;">
 					<div class="article_subpanel">
 						<h2 class='article_title'>Articles</h2>
-						<p class="article_content"></p>
+						<ul class="article_content"></ul>
 					</div>
 					<a target="_blank">
-						<img>
-						</img>
+						<img class="article_thumb">
+						<div>
+							<img class="gotoripple" src="{% static 'images/home/gotoripple.png' %}">
+						</div>
 					</a>
-					<ul class="edition_articles">
-						<!-- The details of the selected edition -->
-					</ul>
+				</div>
+				<div class="subscription">
+					<h2 style="font-size: 2vw;" class="title">Subscribe to Ripples In The Grande Ronde</h2>
+					<input class="subscriber_email" placeholder="Email Address"/>
+					<img class="subscribe" src="{% static 'images/home/subscribe.png' %}">
+				</div>
+			</div>
+			<hr style="margin-bottom: 1vw;" class="panelSeparator">
+			<div class="best_country">
+				<div class="panelA">
+					<h2 class="title">People Restoring Rivers</h2>
+					<p>In 2009, the GRMW teamed up with Green Fire Productions to create a documentry of the Six Ranch Restoration project called "The Best Country".<br><br>Today we have a great opportunity to restore salmon and steelhead habitat in northeastern Oregon.<br><br>In The Best Country two longtime Wallowa valley ranching families tell their stories about restoring salmon and steelhead habitat on their land </p>
+				</div>
+				<div class="panelB">
+					<iframe style="width: 36vw; height: 20vw;" src="http://player.vimeo.com/video/23509400?title=0&amp;byline=0&amp;portrait=0&amp;color=c9ff23" frameborder="1"></iframe>
+					<p>Runtime: 35 min<br>Filmed in High Definition<br>Music by Brady Goss, Thatcher Carter, Matt Cooper.<br>Produced by Greenfire Productions</p>
 				</div>
 			</div>
 		</div>
@@ -94,10 +109,17 @@
 	var projects_desc = [ {% for project in projects %}'{{ project.description }}', {% endfor %} ];
 	var projects_flickr = [ {% for project in projects %}'{{ project.flickr }}', {% endfor %} ];
 	var years_list = [{% for x in years %}'{{ x.year }}', {% endfor %}];
-	var ripples = {{ripples | safe}};
+	var ripples = {{ ripples | safe }};
+	var articles = {{ articles | safe }};
 	
 	function loadArticles(id){
-
+		$('.article_content li').remove();
+		for(var i=0; i < articles.length; i++){
+			if (articles[i].fields.ripples_id == id){
+				$('.article_content').append('<li>'+articles[i].fields.article+'</li>')
+			}
+		}
+		$('.article_content').dotdotdot();
 	}
 	function getSeason(val){
 		var rtn;
@@ -126,8 +148,8 @@
 						if (j == 0){
 							$('.editions').append('<li class="ripple_selected" data-index="'+j+'">'+getSeason(ripples[j].fields.edition_id)+'</li>');
 							$('.edition_detail a').attr('href', ripples[j].fields.url)
-							$('.edition_detail a img').attr('src', '{{baseUrl}}images/ripples/'+years_list[j]+'/'+getSeason(ripples[j].fields.edition_id)+'.jpg')
-							loadArticles();
+							$('.edition_detail a .article_thumb').attr('src', '{{baseUrl}}images/ripples/'+years_list[j]+'/'+getSeason(ripples[j].fields.edition_id)+'.jpg')
+							loadArticles(ripples[j].pk);
 						}
 						else{
 							$('.editions').append('<li class="ripple_unselected" data-index="'+j+'">'+getSeason(ripples[j].fields.edition_id)+'</li>');
@@ -191,8 +213,8 @@
 		selectObject(e, '.editions li', 'ripple_selected', 'ripple_unselected');
 		var i = $(e.target).attr('data-index');
 		$('.edition_detail a').attr('href', ripples[i].fields.url);
-		$('.edition_detail a img').attr('src', '{{baseUrl}}images/ripples/'+$('.year_selected').html()+'/'+$('.ripple_selected').html()+'.jpg');
-
+		$('.edition_detail a .article_thumb').attr('src', '{{baseUrl}}images/ripples/'+$('.year_selected').html()+'/'+$('.ripple_selected').html()+'.jpg');
+		loadArticles(ripples[i].pk)
 	});
 
 	function selectObject(e, boxItems, classSelected, classUnselected){
