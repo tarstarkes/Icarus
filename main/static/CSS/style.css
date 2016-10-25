@@ -7,6 +7,12 @@ body {
 body::-webkit-scrollbar{
 	display: none;
 }
+.logo {
+	width: 15%;
+    margin-left: calc(50% - 7.5%);
+    margin-top: 1vw;
+    margin-bottom: 1vw;
+}
 .footer{
 	width: 100%;
 	color: black;
@@ -49,9 +55,74 @@ p.contact.subtext {
 h3.findUsLG{
 	margin-top: 1vw;
 }
+#map,
+#walMap{
+	width: 27vw;
+	height: 22vw;
+}
 @media screen and (max-width: 800px){
 	.btn{
 		width: 97vw;
 		text-align: center;
 	}
+}
+.navBarLinks {
+	display: block;
+	background: #ef9502;
+	margin-top: .1%;
+	margin-right: .1%;
+	position: absolute;
+	right: 0;
+	top: 0;
+	z-index: 50;
+}
+.navBarLinks tbody {
+	display: inline-block;
+}
+.navBarLinks tr {
+	margin-left: 10%;
+}
+.navBarLinks th {
+	display: inline-block;
+    color: #ffffff;
+    font-size: calc(.75vw + .75vh);
+    font-family: "Bodoni MT";
+    font-weight: bold;
+}
+.navBarLinks a{
+	color: white;
+}
+.navBarLinks a:hover{
+	text-decoration: none;
+}
+.navBarLinks .btn{
+	width: auto !important;
+	background: #ef9502;
+	font-family: "Bodoni MT" !important;
+	font-size: calc(.75vw + .75vh);
+    font-weight: bold !important;
+    padding: 1vw;
+    color: white;
+    margin-left: 0;
+}
+.navBarLinks .btn:hover{
+	opacity: .8;
+	background: lightgray;
+}
+.navBarLinks .dropdown-menu{
+	width: auto !important;
+	background: white;
+	width: auto;
+	min-width: 0;
+}
+.navBarLinks .dropdown-item{
+	display: block;
+	padding-left: 1vw;
+	padding-right: 1vw;
+	font-size: calc(.75vw + .75vh);
+	color: #ef9502;
+}
+.navBarLinks .dropdown-item:hover{
+	opacity: .8;
+	background: lightgray;
 }

@@ -1,32 +1,23 @@
 {% extends 'header.html' %}
 
 {% load staticfiles %}
-
+{% block title %}
+	<title>GRMW Home</title>
+{% endblock%}
 {% block head %}
 	<link rel="stylesheet" href="{% static 'CSS/home/style.css' %}" type="text/css">
 {% endblock %}
 
 {% block content %}
-	<img class="logo" src="{% static 'images/home/logo.png' %}">
 	<div style="position: relative;">
 		<img class="mainImage" src="{% static 'images/home/main.png' %}">
-		<table class="navBarLinks">
-			<tbody>
-				<tr>
-					<th colspan="1">Home</th>
-					<th colspan="1">Board Meetings</th>
-					<th colspan="1">Data</th>
-					<th colspan="1">Education</th>
-					<th colspan="1">Stepwise</th>
-					<th colspan="1">Atlas</th>
-				</tr>
-			</tbody>
-		</table>
 		<div class="mainOverlay">
 			<h3>HOW CAN WE HELP YOU FUND YOUR RESTORATION PROJECT?</h3>
-			<div href="/stepwise/" class="learn">
-				<h1>Learn More</h1>
-			</div>
+			<a style="text-decoration: none;" href="/stepwise/">
+				<div class="learn">
+					<h1>Learn More</h1>
+				</div>
+			</a>
 		</div>
 	</div>
 	<img class="motto" src="{% static 'images/home/grmwMotto.png' %}">

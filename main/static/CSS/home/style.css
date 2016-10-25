@@ -4,38 +4,6 @@ h2{
 .mainImage {
 	width: 100%;
 }
-.logo {
-	width: 15%;
-    margin-left: calc(50% - 7.5%);
-}
-.navBarLinks {
-	display: block;
-	background: #ef9502;
-	margin-top: .1%;
-	margin-right: .1%;
-	position: absolute;
-	right: 0;
-	top: 0;
-	z-index: 50;
-}
-.navBarLinks tbody {
-	display: inline-block;
-}
-.navBarLinks tr {
-	margin-left: 10%;
-}
-.navBarLinks th {
-	display: inline-block;
-    color: #ffffff;
-    font-size: calc(.75vw + .75vh);
-    font-family: "Bodoni MT";
-    font-weight: bold;
-    padding: calc(.3vw + .3vh);
-    padding-right: calc(1vw + 1vh);
-}
-.navBarLinks th:first-child {
-	padding-left: calc(1vw + 1vh);
-}
 .mainOverlay{
 	display: block;
 	position: absolute;
@@ -312,7 +280,7 @@ ul.article_content {
 	font-size: 1vw;
 }
 .panelB{
-	width:40vw;
+	width: 40vw;
 	vertical-align: top;
 	display: inline-block;
 	float:right;
@@ -320,9 +288,10 @@ ul.article_content {
 .best_country .title{
 	width: 30vw;
 	padding-left: 0vw;
+	padding-top: 0vw;
 }
 .panelB p{
-	font-size: .75vw;
+	font-size: 1vw;
 	font-style: italic;
 	font-family: 'bodoni';
 }
