@@ -48,3 +48,4 @@ Temporary Items
 
 #files that might contain sensitive information
 settings.py
+*/migrations/

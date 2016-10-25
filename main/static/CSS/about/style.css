@@ -1,17 +1,18 @@
 #aboutTabs a{
-	color: #F3F3F3;
+	color: #ef9502;
+	font-size: 2vw;
+	border-radius: 0;
 }
 #aboutTabs li.active a{
-	color: #122679;
+	color: #f3f3f3;
 }
 #aboutTabs a:hover{
-	color: #122679;
+	color: #ef9502;
 }
 #aboutTabs {
 	margin-top: 2vw;
 	padding-right: 2vw;
 	padding-left: 2vw;
-	background: #122679;
 }
 #aboutTabs li{
 	border-radius: 0;
@@ -23,5 +24,5 @@
 	font-size: 2vw;
 }
 .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{
-	background: #F3F3F3;
+	background: #ef9502;
 }
