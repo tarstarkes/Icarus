@@ -2,7 +2,6 @@
 <html>
 <head>
 	{% block title %}
-	<title>GRMW Home</title>
 	{% endblock %}
 	<meta charset="utf-8" />
 
@@ -35,6 +34,7 @@
 
 	{% load staticfiles %}
 	<script src="{% static '/js/jquery.dotdotdot.min.js' %}"></script>
+	<script type="text/javascript" src="{% static '\js\jquery.bootstrap-dropdown-hover.min.js' %}"></script>
 
 	<link rel="stylesheet" href="{% static 'CSS/style.css' %}" type="text/css" >
 
@@ -55,7 +55,6 @@
 								<a class="dropdown-item" href="/about/">About Us</a>
 								<a class="dropdown-item" href="/staff/">Staff</a>
 								<a class="dropdown-item" href="/directors/">Board of Directors</a>
-								<a class="dropdown-item" href="/history/">History</a>
 								<a class="dropdown-item" href="/sitemap/">Site Map</a>
 							</div>
 						</th>
@@ -90,6 +89,11 @@
 							    Atlas
 							</button>
 						</th>
+						<script>
+							$('[data-toggle="dropdown"]').bootstrapDropdownHover({
+							  // see next for specifications
+							});
+						</script>
 					</tr>
 				</tbody>
 			</table>
@@ -101,7 +105,7 @@
 				<div style="display: inline-block;">
 					<h3>About Us</h3>
 					<p class="about subtext">
-					The Grande Ronde Model Watershed is a Non-Profit organization that is commited to restoring fish habitat on both private and public lands within the Grande Ronde Basin.</p>
+					The Grande Ronde Model Watershed is a Non-Profit organization that is commited to restoring fish habitat on both private and public lands within the Grande Ronde Basin.<a href="/about/"> Read More...</a></p>
 					<div class="contactUs">
 						<p class="contact subtext" style="display: inline-block">
 							<span style="font-weight: bold; font-size: 1.75vw;">La Grande Office</span><br>
@@ -132,33 +136,34 @@
 						</div>
 					</div>
 				</div>
-				<!--<a class="btn btn-social-icon btn-twitter">
-					<span class="fa fa-twitter"></span>
-	  			</a>  
-	  			<a class="btn btn-social-icon btn-youtube">
-	    			<span class="fa fa-youtube"></span>
-	  			</a>  
-	  			<a class="btn btn-social-icon btn-vimeo">
-	    			<span class="fa fa-vimeo"></span>
-	  			</a>
-	  			<a class="btn btn-social-icon btn-facebook">
-					<span class="fa fa-facebook"></span>
-	  			</a>-->
-	  			<a class="btn btn-block btn-social btn-twitter">
-			    	<span class="fa fa-twitter"></span> Sign in with Twitter
-			  	</a>
-			 	<a class="btn btn-block btn-social btn-youtube">
-			    	<span class="fa fa-youtube"></span> Sign in with Youtube
-			  	</a>
-			  	<a class="btn btn-block btn-social btn-vimeo">
-			    	<span class="fa fa-vimeo"></span> Sign in with Vimeo
-			  	</a>
-			  	<a class="btn btn-block btn-social btn-facebook">
-			    	<span class="fa fa-facebook"></span> Sign in with Facebook
-			  	</a>
-			  	<br><br>
+				
+	  			<!--<div style="display: block; float:right; margin-bottom:2vw; margin-right: 2vw;">
+		  			<a class="btn btn-social-icon btn-twitter btn-sm">
+				    	<span class="fa fa-twitter"></span>
+				  	</a>
+				 	<a class="btn btn-social-icon btn-youtube btn-sm">
+				    	<span class="fa fa-youtube"></span>
+				  	</a>
+				  	<a class="btn btn-social-icon btn-vimeo btn-sm">
+				    	<span class="fa fa-vimeo"></span>
+				  	</a>
+				  	<a class="btn btn-social-icon btn-facebook btn-sm">
+				    	<span class="fa fa-facebook"></span>
+				  	</a>
+				 </div>-->
 			</div>
 		</div>
+		<div id="lightbox" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+		    <div class="modal-dialog">
+		        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		        <div class="modal-content">
+		            <div class="modal-body">
+		                <img src="" alt="" />
+		            </div>
+		        </div>
+		    </div>
+		</div>
+</div>
 	</div>
 	<script>
 		var map;
@@ -191,6 +196,32 @@
 			});
 		}
 	</script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpBNFyNgmMi3MjRxHmkaAel2z020k1CIw&callback=initMap" async defer></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpBNFyNgmMi3MjRxHmkaAel2z020k1CIw&callback=initMap" async defer>
+	</script>
+	<script>
+		$(document).ready(function() {
+		    var $lightbox = $('#lightbox');
+		    
+		    $('[data-target="#lightbox"]').on('click', function(event) {
+		        var $img = $(this).find('img'), 
+		            src = $img.attr('src'),
+		            alt = $img.attr('alt'),
+		            css = {
+		                'maxWidth': $(window).width() - 100,
+		                'maxHeight': $(window).height() - 100
+		            };
+		    
+		        $lightbox.find('img').attr('src', src);
+		        $lightbox.find('img').attr('alt', alt);
+		        $lightbox.find('img').css(css);
+		    });
+		    
+		    $lightbox.on('shown.bs.modal', function (e) {
+		        var $img = $lightbox.find('img');
+		            
+		        $lightbox.find('.modal-dialog').css({'width': $img.width()});
+		    });
+		});
+	</script>
 </body>
 </html>

@@ -11,36 +11,67 @@
 
 {% block content %}
 	<img style="width: 100%;" src="{% static 'images/about/about.png' %}"/>
-
-	<ul id="aboutTabs" class="nav nav-pills">
-	  <li role="presentation" class="active"><a href="#who">Who We Are</a></li>
-	  <li role="presentation"><a href="#where">Where We Work</a></li>
-	  <li role="presentation"><a href="#what">What We Do</a></li>
-	  <li role="presentation"><a href="#why">Why Habitat Restoration?</a></li>
-	</ul>
-	<!-- tab content -->
-	<div class="tab-content">
-		<div role="tab-panel" class="tab-pane fade in active" id="who">
-	  		<p>The GRMW Program is the primary entity coordinating habitat restoration on both private and public lands within the Grande Ronde Basin. </p>
-			<p>In April of 1992, the Grande Ronde Basin was selected by the Northwest Power Planning Council as the model watershed project in Oregon. This selection was reviewed and agreed upon by the Strategic Water Management Group and certified by the Office of the Governor.  The Model Watershed is to serve as an example for the establishment of watershed management partnerships among local residents, state and federal agency staffs, and public interest groups concerned with the management of a particular watershed. The central strategy of the approach is based upon the belief that a locally based effort to improve coordination, integration and implementation of existing local, state, and federal programs can effectively protect, enhance, and restore a regional watershed area.</p>
-		</div>
-		<div role="tab-panel" class="tab-pane fade" id="where">
-			<p>The Grande Ronde Basin, including the Imnaha, comprises the boundary of our work, a collective 3.1 million acres of various terrain. The major river systems which we service include the Grande Ronde River, Catherine Creek, Imnaha River, Joseph Creek, Minam River and Wallowa River; all tributaries to the Snake River. 
-			<br>
-			<img style="width: 60vw; margin-left: calc(50% - 30vw)" src="{% static '/images/about/subbasin.jpg' %}"/>
-		</div>
-		<div role="tab-panel" class="tab-pane fade" id="what">
-			<p>The purpose of a model watershed is to coordinate the goals and objectives of all interests to use available natural, human, and fiscal resources within a watershed basin in the most beneficial manner. A comprehensive watershed management approach is used to enhance and expedite implementation of activities to identify knowledge and program gaps, resolve conflicts, and formulate priorities for action. Both public and private lands and initiatives are included in the process through voluntary participation in the program activities. The process seeks to bring together local landowners, resource managers, and key interests to formulate goals and initiate activities to restore and improve habitat and native fisheries, improve water supply and quality, and foster community development within the region.</p>
-    
-    		<p>In 2009, the GRMW teamed up with Green Fire Productions to create a documentry of the Six Ranch Restoration project called "The Best Country". In this video, two longtime Wallowa valley ranching families tell their stories about restoring salmon and steelhead habitat on their land.</p>
-		</div>
-		<div role="tab-panel" class="tab-pane fade" id="why">
-			<p>The GRMW program (1) coordinates watershed planning activities with public agencies and private interests in the river basin to restore and enhance salmon and steelhead resources, (2) encourages and supports land and water management, economics, multiple land uses consistent with sound ecosystem management, and (3) enhances the quality and quantity of river flow within the Grande Ronde River Basin.</p>
-    		<br>
-    		<p>The following illustrates the magnitude of the problems in the subbasin:
-		</div>
-  	</div>
-
+	<br>
+	<img class="quote" src="{% static 'images/about/quote.png' %}"></img>
+	<br>
+	<div class=content-wrapper>
+		<ul id="aboutTabs" class="nav nav-pills nav-stacked">
+		  <li role="presentation" class="active"><a href="#who">Who We Are</a></li>
+		  <li role="presentation"><a href="#history">History of the Watershed</a></li>
+		  <li role="presentation"><a href="#where">Where We Work</a></li>
+		  <li role="presentation"><a href="#what">What We Do</a></li>
+		  <li role="presentation"><a href="#why">Why Habitat Restoration?</a></li>
+		</ul>
+		<!-- tab content -->
+		<div class="tab-content">
+			<div role="tab-panel" class="tab-pane fade in active" id="who">
+				<h3>A Legacy of Coordination</h3>
+		  		<p>The GRMW Program is the primary entity coordinating habitat restoration on both private and public lands within the Grande Ronde Basin. </p>
+				<p>The Model Watershed is to serve as an example for the establishment of watershed management partnerships among local residents, state and federal agency staffs, and public interest groups concerned with the management of a particular watershed. The central strategy of the approach is based upon the belief that a locally based effort to improve coordination, integration and implementation of existing local, state, and federal programs can effectively protect, enhance, and restore a regional watershed area.</p>
+			</div>
+			<div role="tab-panel" class="tab-pane fade" id="where">
+				<h3>The Great Outdoors</h3>
+				<p>The Grande Ronde Basin, including the Imnaha, comprises the boundary of our work, a collective 3.1 million acres of various terrain. The major river systems which we service include the Grande Ronde River, Catherine Creek, Imnaha River, Joseph Creek, Minam River and Wallowa River; all tributaries to the Snake River.</p>
+				<a href="#" class="thumbnail" data-toggle="modal" data-target="#lightbox"><img class="subbasin" src="{% static '/images/about/subbasin.jpg' %}"/></a>
+			</div>
+			<div role="tab-panel" class="tab-pane fade" id="what">
+				<h3>Making a Difference</h3>
+				<p>The purpose of a model watershed is to coordinate the goals and objectives of all interests to use available natural, human, and fiscal resources within a watershed basin in the most beneficial manner. A comprehensive watershed management approach is used to enhance and expedite implementation of activities to identify knowledge and program gaps, resolve conflicts, and formulate priorities for action. Both public and private lands and initiatives are included in the process through voluntary participation in the program activities. The process seeks to bring together local landowners, resource managers, and key interests to formulate goals and initiate activities to restore and improve habitat and native fisheries, improve water supply and quality, and foster community development within the region.</p>
+	    		<p>In 2009, the GRMW teamed up with Green Fire Productions to create a documentry of the Six Ranch Restoration project called "The Best Country". In this video, two longtime Wallowa valley ranching families tell their stories about restoring salmon and steelhead habitat on their land.</p>
+			</div>
+			<div role="tab-panel" class="tab-pane fade" id="why">
+				<h3>The Importance of Restoration</h3>
+				<p>The GRMW program (1) coordinates watershed planning activities with public agencies and private interests in the river basin to restore and enhance salmon and steelhead resources, (2) encourages and supports land and water management, economics, multiple land uses consistent with sound ecosystem management, and (3) enhances the quality and quantity of river flow within the Grande Ronde River Basin.</p>
+	    		<p>The following illustrates the magnitude of the problems in the subbasin:</p>
+	    		<ul class="checks">
+			      <li>Major portions of the anadromous fish habitat in the area are considered to be in a degraded condition.</li>
+			      <li>Estimated number of spring chinook spawners in the Grande Ronde subbasin have dropped from 12,200 in 1957 to less than 400 in 1989.</li>
+			      <li>Water quality is documented by several agencies to be impaired by both sedimentation and thermal problems. The watershed is listed by the Oregon Department of Environmental Quality as being of "limited" water quality.</li>
+			      <li>Large pool habitat in the mainstem of the Grande Ronde River and Catherine Creek has declined by 73% since 1941.</li>
+			      <li>Spring flooding of downstream areas and farmland occurs every few years, causing economic hardship.</li>
+			    </ul>
+			</div>
+			<div role="tab-panel" class="tab-pane fade" id="history">
+				<h3>A Brief History</h3>
+				<p>In April of 1992, the Grande Ronde Basin was selected by the Northwest Power Planning
+				Council as the model watershed project in Oregon. This selection was reviewed and agreed
+				upon by the Strategic Water Management Group and certified by the Office of the Governor.</p>
+				<p> A Board of Directors, composed of local representatives and agency personnel involved
+				with the multiple uses of natural resources within the basin, was formed to coordinate
+				policy for the development, implementation, monitoring, and maintenance of the Grande Ronde Model Watershed (GRMW). The GRMW has also been confirmed by the
+				Union and Wallowa County courts. An executive director was appointed by the board to begin
+				implementation of the Grande Ronde Model Watershed  following guidelines set by the
+				board. </p>
+				<p>The Model Watershed  is to serve as an example for the establishment of
+				watershed management partnerships among local residents, state and federal agency staffs,
+				and public interest groups concerned with the management of a particular watershed. The
+				central strategy of the approach is based upon the belief that a locally based effort to
+				improve coordination, integration and implementation of existing local, state, and federal
+				programs can effectively protect, enhance, and restore a regional watershed area.</p>
+			</div>
+	  	</div>
+	</div>
+  	<br>
   	<script>
   	$('#aboutTabs li').on('click', 'a', function (e) {
 		e.preventDefault();

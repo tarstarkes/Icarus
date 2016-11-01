@@ -32,8 +32,11 @@ body::-webkit-scrollbar{
 	padding-right: 2px;
 }
 .btn {
-	width: 23.5vw;
-	margin-left: 1vw;
+	display: inline-block;
+}
+.footer .btn{
+	text-align: center;
+	margin-left: .25vw;
 	display: inline-block;
 }
 .contact,
@@ -60,21 +63,17 @@ h3.findUsLG{
 	width: 27vw;
 	height: 22vw;
 }
-@media screen and (max-width: 800px){
-	.btn{
-		width: 97vw;
-		text-align: center;
-	}
-}
 .navBarLinks {
 	display: block;
 	background: #ef9502;
-	margin-top: .1%;
 	margin-right: .1%;
 	position: absolute;
 	right: 0;
 	top: 0;
 	z-index: 50;
+	-webkit-box-shadow: -9px 9px 20px -9px rgba(0,0,0,0.75);
+	-moz-box-shadow: -9px 9px 20px -9px rgba(0,0,0,0.75);
+	box-shadow: -9px 9px 20px -9px rgba(0,0,0,0.75);
 }
 .navBarLinks tbody {
 	display: inline-block;
@@ -97,7 +96,7 @@ h3.findUsLG{
 }
 .navBarLinks .btn{
 	width: auto !important;
-	background: #ef9502;
+	background: none;
 	font-family: "Bodoni MT" !important;
 	font-size: calc(.75vw + .75vh);
     font-weight: bold !important;
@@ -119,10 +118,49 @@ h3.findUsLG{
 	display: block;
 	padding-left: 1vw;
 	padding-right: 1vw;
-	font-size: calc(.75vw + .75vh);
+	font-size: 1.75vw;
 	color: #ef9502;
 }
 .navBarLinks .dropdown-item:hover{
 	opacity: .8;
 	background: lightgray;
+}
+#lightbox .modal-content {
+    display: inline-block;
+    text-align: center;   
+}
+#lightbox .close {
+    opacity: 1;
+    color: #ffffff;
+    background-color: #ef9502;
+    padding: 5px 8px;
+    border-radius: 30px;
+    border: 2px solid rgb(255, 255, 255);
+    position: absolute;
+    top: -15px;
+    right: -55px;
+    z-index:1032;
+}
+.thumbnail {
+    display: initial;
+    padding: 0;
+    margin: 0;
+    line-height: 0;
+    background-color: initial;
+    border: none;
+    border-radius: 0;
+    -webkit-transition: none;
+    -o-transition: none;
+    transition: none;
+}
+.about.subtext a{
+	color: #ef9502;
+	text-decoration: none;
+}
+.about.subtext a:hover{
+	color: #122679;
+}
+hr {
+	margin-top: 1vw;
+	margin-bottom: 1vw;
 }

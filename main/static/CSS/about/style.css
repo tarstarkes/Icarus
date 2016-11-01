@@ -1,3 +1,7 @@
+@font-face{
+	font-family: 'myBrownFont';
+	src: url(https://lineto.com/The+Fonts/Font+Categories/Text+Fonts/Brown/Regular/);
+}
 #aboutTabs a{
 	color: #ef9502;
 	font-size: 2vw;
@@ -13,6 +17,9 @@
 	margin-top: 2vw;
 	padding-right: 2vw;
 	padding-left: 2vw;
+	display: inline-block;
+	width: 30vw;
+
 }
 #aboutTabs li{
 	border-radius: 0;
@@ -22,7 +29,57 @@
 	padding-left: 2vw;
 	padding-right: 2vw;
 	font-size: 2vw;
+	font-family: 'Calibri';
 }
 .nav-pills>li.active>a, .nav-pills>li.active>a:focus, .nav-pills>li.active>a:hover{
 	background: #ef9502;
+	padding: 1vw;
+}
+.nav-pills>li a{
+	padding: 1vw;
+}
+.tab-content {
+	display: inline-block;
+    width: 65vw;
+    vertical-align: top;
+}
+.subbasin{
+	width: 50vw; 
+	display: inline-block;
+	vertical-align: top;
+	margin-left: calc(50% - 25vw);
+	margin-bottom: 2vw;
+}
+.tab-content h3{
+    font-size: 3vw;
+    margin-left: 2vw;
+    font-family: 'Bodoni';
+    font-weight: bold;
+    color: gray;
+}
+.quote{
+	width: 50%;
+    margin-left: 25%;
+    margin-top: -1.5vw;
+    margin-bottom: 2.5vw;
+    background: #f3f3f3;
+    padding-top: 1vw;
+    border-radius: 2vw;
+    position: relative;
+}
+ul.checks li {
+    list-style-type: none;
+    margin: 0;
+    background: url(/static/images/about/icon-check.png) no-repeat 5px 0.5em;
+    padding-left: 3vw;
+    font-size: 1.5vw;
+    background-size: 2vw;
+    background-position: left top;
+    padding-right: 3vw;
+    margin-bottom: 1vw;
+}
+.content-wrapper{
+	-webkit-box-shadow: -1px 5px 16px 3px rgba(0,0,0,0.75);
+	-moz-box-shadow: -1px 5px 16px 3px rgba(0,0,0,0.75);
+	box-shadow: -1px 5px 16px 3px rgba(0,0,0,0.75);
 }
