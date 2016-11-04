@@ -24,7 +24,6 @@
 	<div>
 	<div class="mid_page">
 		<div class="panel">
-			<img class="sidebar" src="{% static 'images/home/sidebar.jpg' %}">
 			<div class="projectSpot">
 				<h2 id="project_title"></h2>
 				<div style="width: 27vw; display: inline-block; margin-left: 1vw">
@@ -80,11 +79,11 @@
 					<img class="subscribe" src="{% static 'images/home/subscribe.png' %}">
 				</div>
 			</div>
-			<hr style="margin-bottom: 1vw;" class="panelSeparator">
+			<br>
 			<div class="best_country">
 				<div class="panelA">
 					<h2 class="title">People Restoring Rivers</h2>
-					<p>In 2009, the GRMW teamed up with Green Fire Productions to create a documentry of the Six Ranch Restoration project called "The Best Country".<br><br>Today we have a great opportunity to restore salmon and steelhead habitat in northeastern Oregon.<br><br>In The Best Country two longtime Wallowa valley ranching families tell their stories about restoring salmon and steelhead habitat on their land </p>
+					<p>In 2009, the GRMW teamed up with Green Fire Productions to create a documentry of the Six Ranch Restoration project called "The Best Country".<br><br>Today we have a great opportunity to restore salmon and steelhead habitat in northeastern Oregon.<br><br>In The Best Country two longtime Wallowa valley ranching families tell their stories about restoring salmon and steelhead habitat on their land. </p>
 				</div>
 				<div class="panelB">
 					<iframe style="width: 36vw; height: 20vw;" src="http://player.vimeo.com/video/23509400?title=0&amp;byline=0&amp;portrait=0&amp;color=c9ff23" frameborder="1"></iframe>
@@ -214,6 +213,29 @@
 		$(e.target).addClass(classSelected);
 		$(e.target).removeClass(classUnselected);
 	}
+	function bindMyHandlers(){
+		var $lightbox = $('#lightbox');
+	    
+	    $('[data-target="#lightbox"]').on('click', function(event) {
+	    	console.log('click');
+	        var $img = $(this).find('img'), 
+	            src = $img.attr('src'),
+	            alt = $img.attr('alt'),
+	            css = {
+	                'maxWidth': $(window).width() - 100,
+	                'maxHeight': $(window).height() - 100
+	            };
+	    
+	        $lightbox.find('img').attr('src', src);
+	        $lightbox.find('img').attr('alt', alt);
+	        $lightbox.find('img').css(css);
+	    });
+	    
+	    $lightbox.on('shown.bs.modal', function (e) {
+	        var $img = $lightbox.find('img');
+	        $lightbox.find('.modal-dialog').css({'width': $img.width()});
+	    });
+	}
 
 	function loadFlickr(flickrSetID) {
 		var apiKey = 'e6b4ff424de5600fbcb3a22fda4c979a'; // Uploader API Key
@@ -236,10 +258,12 @@
 						function(data){				
 							//create an imgCont string variable which will hold all the link location, title, author link, and author name into a text string
 							/*var imgCont = '<div class="image-container" style="background: url(' + photoURL + ');"><div class="image-info"><p class="top"><a class="title" href="http://www.flickr.com/photos/' + data.photo.owner.nsid + '/' + photoID + '">' + data.photo.title._content + '</a> <span class="author">by <a href="http://flickr.com/photos/' + data.photo.owner.nsid + '">' + data.photo.owner.username + '</a></span></p><div class="bottom"><p><span class="infoTitle">Comments:</span> ' + data.photo.comments._content + '</p>';*/
-							var imgCont = '<a class="fancybox-thumb" rel="fancybox-thumb" href="'+ photoURL_big + '" title=""><img src="' + photoURL_small + '" alt="" class="pretty-box"/></a>';
+							/*var imgCont = '<a class="fancybox-thumb" rel="fancybox-thumb" href="'+ photoURL_big + '" title=""><img src="' + photoURL_small + '" alt="" class="pretty-box"/></a>';*/
+							var imgCont = '<a class="thumbnail" data-toggle="modal" data-target="#lightbox" href="#" ><img src="' + photoURL_big + '" alt="" class="pretty-box"/></a>';
 					
 							//append the 'imgCont' variable to the document
 							jQuery(imgCont).appendTo('#gallery_content');
+							bindMyHandlers();
 					});
 			
 				});

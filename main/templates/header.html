@@ -200,7 +200,10 @@
 	</script>
 	<script>
 		$(document).ready(function() {
-		    var $lightbox = $('#lightbox');
+		    bindHandlers();
+		});
+		function bindHandlers(){
+			var $lightbox = $('#lightbox');
 		    
 		    $('[data-target="#lightbox"]').on('click', function(event) {
 		        var $img = $(this).find('img'), 
@@ -221,7 +224,7 @@
 		            
 		        $lightbox.find('.modal-dialog').css({'width': $img.width()});
 		    });
-		});
+		}
 	</script>
 </body>
 </html>

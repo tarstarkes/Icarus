@@ -6,11 +6,68 @@
 {% endblock %}
 
 {% block head %}
-	<link rel="stylesheet" href="{% static 'CSS/about/style.css' %}" type="text/css">
+	<link rel="stylesheet" href="{% static 'CSS/staff/style.css' %}" type="text/css">
 {% endblock %}
 
 {% block content %}
-	<h1>THIS IS THE STAFF PAGE<br>NEED PICTURES</h1>
+	<div class="staff">
+		<div class="mainImage">
+			<img src="{% static 'images/staff/staffPicture.jpg' %}">
+		</div>
+		<img class="quote" src="{% static 'images/about/quote.png' %}"></img>
+		<br>
+		<div class="meetOurStaff">
+			<div class=content-wrapper>
+				<ul id="aboutTabs" class="nav nav-pills nav-stacked">
+				  <li role="presentation" class="active"><a href="#staff">Our Staff</a></li>
+				  <li role="presentation"><a href="#history">Subject2</a></li>
+				  <li role="presentation"><a href="#where">Subject 3</a></li>
+				  <li role="presentation"><a href="#what">Subject 4</a></li>
+				  <li role="presentation"><a href="#why">Subject 5</a></li>
+				</ul>
+				<!-- tab content -->
+				<div class="tab-content">
+					<div role="tab-panel" class="tab-pane fade in active" id="staff">
+						<h3>Our Staff</h3>
+						<a href="#">
+							<div class="panel-box">
+								<img src="{% static 'images/staff/mary.jpg'%}">
+								<h4>Mary Estes</h4>
+								<p>Office/Finance Manager</p>
+								<p>Email: mary@grmw.org</p>
 
-	
+							</div>
+						</a>
+						<a href="#">
+							<div class="panel-box">
+								<img src="{% static 'images/staff/jeff.jpg'%}">
+								<h4>Jeff Oveson</h4>
+								<p>Executive Director/Contractor</p>
+								<p>Email: jeff@grmw.org</p>
+							</div>
+						</a>
+					</div>
+					<div role="tab-panel" class="tab-pane fade" id="where">
+						<h3>Subject 2</h3>
+					</div>
+					<div role="tab-panel" class="tab-pane fade" id="what">
+						<h3>Subject 3</h3>
+					</div>
+					<div role="tab-panel" class="tab-pane fade" id="why">
+						<h3>Subject 4</h3>
+					</div>
+					<div role="tab-panel" class="tab-pane fade" id="history">
+						<h3>Subject 5</h3>
+					</div>
+			  	</div>
+			</div>
+		  	<br>
+		  	<script>
+			  	$('#aboutTabs li').on('click', 'a', function (e) {
+					e.preventDefault();
+					$(this).tab('show');
+				});
+		  	</script>
+		</div>
+	</div>
 {% endblock %}

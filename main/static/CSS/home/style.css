@@ -51,17 +51,14 @@ h2{
 	border-bottom: .3vw dashed #ef9502;
 	height: 100%;
 }
-.sidebar{
-	width: 20.7vw;
-    border-right: .3vw dashed #ef9502;
-    display: inline-block;
-    float: left;
-    height: 100%;
-}
-.ripplesSpot,
-.projectSpot {
-	width: 79vw;
-	display: inline;
+.ripplesSpot {
+    width: 102vw;
+    margin-left: -10.6vw;
+    padding-left: 10.6vw;
+    -webkit-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+    padding-bottom: 1vw;
 }
 .edition_detail .article_title,
 .projectSpot h2{
@@ -77,8 +74,8 @@ h2{
     color: gray;
     font-family: 'bodoni';
     padding: calc(.5vw + .5vh);
-    padding-left: 22vw;
-    margin-left: 1vw;
+    /* padding-left: 22vw; */
+    /* margin-left: 1vw; */
     margin: 0;
     font-style: normal;
     margin-bottom: 1vw;
@@ -87,9 +84,12 @@ h2{
 	background: #f3f3f3;
     display: inline-block;
     vertical-align: top;
-    width: calc(100vw);
     height: 100%;
+    padding-left: 10vw;
     margin-bottom: 0;
+    padding-right: 10vw;
+    width: 100%;
+
 }
 #project_spotlight{
 	width: 27vw;
@@ -174,6 +174,7 @@ h2{
 }
 .panelSeparator {
 	margin: 0;
+	margin-top: 2vw;
 }
 img.pretty-box{
 	width: 7vw;
@@ -254,6 +255,9 @@ ul.article_content {
     float: right;
     margin-top: 1vw;
 }
+.subscription{
+	margin-top: 1vw;
+}
 .subscription .title{
 	padding-bottom: 0;
 	padding-top: .5vw;
@@ -261,8 +265,8 @@ ul.article_content {
 .subscriber_email{
 	font-family: 'bodoni';
     padding-left: 1vw;
-    margin: 0;
-    margin-left: 22vw;
+    margin: 1vw;
+    /* margin-left: 22vw; */
     font-size: 1.5vw;
     font-style: normal;
     width: 34vw;
@@ -271,9 +275,9 @@ ul.article_content {
 }
 .subscribe{
 	display: block;
-	width: 12vw;
-	margin-bottom: 1vw;
-	margin-left: 22vw;
+    width: 12vw;
+    margin-bottom: 1vw;
+    margin-left: 1vw;
 }
 .panelA{
 	width: 30vw;
@@ -281,13 +285,17 @@ ul.article_content {
 	margin-left: 1vw;
 	font-family: 'bodoni';
 	display: inline-block;
-	font-size: 1vw;
+	font-size: 1.5vw;
+	padding-bottom: 1vw;
 }
 .panelB{
 	width: 40vw;
 	vertical-align: top;
 	display: inline-block;
 	float:right;
+}
+.best_country{
+	margin-top: 2vw;
 }
 .best_country .title{
 	width: 30vw;
@@ -298,6 +306,9 @@ ul.article_content {
 	font-size: 1vw;
 	font-style: italic;
 	font-family: 'bodoni';
+}
+img.pretty-box{
+	display: inline;
 }
 @media screen and (max-width: 480px) {
 	.navBarLinks {
@@ -321,13 +332,5 @@ ul.article_content {
 	}
 	.navBarLinks th:first-child {
 		padding-left: 2vw;
-	}
-}
-@media screen and (max-width: 1200px){
-	.sidebar{
-		height: calc(100vw + 50px);
-	}
-	.best_country .panelA{
-		font-size: 1.25vw;
 	}
 }
