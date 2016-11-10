@@ -17,10 +17,11 @@ a:hover {
 }
 #aboutTabs {
 	margin-top: 2vw;
-	padding-right: 2vw;
-	padding-left: 2vw;
-	display: inline-block;
-	margin-bottom: 2vw;
+    padding-right: 2vw;
+    padding-left: 2vw;
+    display: inline-block;
+    margin-bottom: 2vw;
+    width: 21vw;
 }
 #aboutTabs li{
 	border-radius: 0;
@@ -41,7 +42,7 @@ a:hover {
 }
 .tab-content {
 	display: inline-block;
-    width: 65vw;
+    width: 76vw;
     vertical-align: top;
 }
 .tab-content h3{
@@ -52,6 +53,9 @@ a:hover {
     color: gray;
     text-decoration: none;
     margin: 2vw;
+    color: white;
+    background: #EF9502;
+    padding: 1vw;
 }
 .quote{
 	width: 50%;
@@ -80,23 +84,25 @@ ul.checks li {
 	box-shadow: -1px 5px 16px 3px rgba(0,0,0,0.75);
 }
 .panel-box{
-	display: inline-block;
+    display: inline-block;
     border: .5vw solid #ef9502;
     border-radius: .3vw .3vw .3vw .3vw;
-	-moz-border-radius: .3vw .3vw .3vw .3vw;
-	-webkit-border-radius: .3vw .3vw .3vw .3vw;
-	width: 20vw;
-	height: auto;
-	text-align:center;
-	color: gray;
-	text-decoration: none;
-	background: #ffefde;
-	padding: 1vw;
-	font-family: "bodoni MT";
-	margin-bottom: 2vw;
-	vertical-align:top;
-	margin-left: 2vw;
-	min-height: 35vw;
+    -moz-border-radius: .3vw .3vw .3vw .3vw;
+    -webkit-border-radius: .3vw .3vw .3vw .3vw;
+    width: 22vw;
+    height: auto;
+    text-align: center;
+    color: gray;
+    text-decoration: none;
+    padding: 1vw;
+    font-family: "bodoni MT";
+    margin-bottom: 2vw;
+    vertical-align: top;
+    margin-left: 2vw;
+    -webkit-box-shadow: .3vw .3vw .2vw 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: .3vw .3vw .2vw 0px rgba(0,0,0,0.75);
+    box-shadow: .3vw .3vw .2vw 0px rgba(0,0,0,0.75);
+    min-height: 33vw;
 }
 .panel-box:hover{
 	text-decoration: none;
@@ -113,7 +119,17 @@ ul.checks li {
 }
 .panel-box img{
 	width:15vw;
-	-webkit-box-shadow: .3vw .3vw .2vw 0px rgba(0,0,0,0.75);
+}
+.portrait{
+	width: 15vw;
+    margin: 2vw;
+    margin-top: 1vw;
+    margin-bottom: 0;
+    -webkit-box-shadow: .3vw .3vw .2vw 0px rgba(0,0,0,0.75);
 	-moz-box-shadow: .3vw .3vw .2vw 0px rgba(0,0,0,0.75);
 	box-shadow: .3vw .3vw .2vw 0px rgba(0,0,0,0.75);
+}
+.tab-pane p{
+	vertical-align: top;
+    padding-top: 0;
 }

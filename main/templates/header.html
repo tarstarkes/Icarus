@@ -47,19 +47,18 @@
 				<tbody>
 					<tr>
 						<th colspan="1">
-							<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="window.location.href='/'">
 							    Home
 							</button>
 							<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="/">Home Page</a>
 								<a class="dropdown-item" href="/about/">About Us</a>
 								<a class="dropdown-item" href="/staff/">Staff</a>
-								<a class="dropdown-item" href="/directors/">Board of Directors</a>
-								<a class="dropdown-item" href="/sitemap/">Site Map</a>
+								<a class="dropdown-item" href="/board/">Board of Directors</a>
+								<a class="dropdown-item" href="/home/sitemap/">Site Map</a>
 							</div>
 						</th>
 						<th colspan="1">
-							<button onclick="window.location.href='/board/'" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							<button onclick="window.location.href='/board/meetings'" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 								Board Meetings
 							</button>
 						</th>
@@ -124,33 +123,31 @@
 						</p>
 					</div>
 				</div>
-				<div style="float: right; margin-right: 2vw;">
+				<div class="credits">
+					<h3>Policies & Credits</h3>
+					<p>Powered in part by <a target="_blank" href="http://getbootstrap.com/">Bootstrap</a></p>
+					<p>Vimeo and YouTube icons designed by <a target="_blank" href="http://www.flaticon.com/authors/dave-gandy" >Dave Gandy</a> from Flaticon</p>
+					<p>Twitter icon designed by <a target="_blank" href="http://www.flaticon.com/authors/elegant-themes" >Elegant Themes</a> from Flaticon</p>
+					<p>Facebook icon designed by <a target="_blank" href="http://www.flaticon.com/authors/icomoon" >Icomoon</a> from Flaticon</p>
+				</div>
+				<div style="vertical-align: top; display: inline-block; margin-left: 2vw;">
 					<div style="display: inline-block; vertical-align:top;">
-						<h3 class="findUsLG" style="display:inline-block; vertical-align:top;margin-left:0">Find Us - La Grande</h3>
-						<div id="map" >
+						<h3 class="findUsLG" style="display:inline-block; vertical-align:top;margin-left:0">La Grande Office</h3>
+						<div id="map">
 						</div>
 					</div>
 					<div style="margin-left: 2vw; display: inline-block; vertical-align:top;">
-						<h3 class="findUsWal" style="margin-left:0">Find Us - Wallowa</h3>
+						<h3 class="findUsWal" style="margin-left:0">Wallowa Office</h3>
 						<div id="walMap" >
 						</div>
 					</div>
+					<div class="social">
+						<a target="_blank" href="https://www.facebook.com/pages/Grande-Ronde-Model-Watershed/138256389544901"><img src="{% static 'images/header/facebook.png' %}"/></a>
+						<a target="_blank" href="http://www.youtube.com/user/grmodelwatershed"><img src="{% static 'images/header/youtube.png' %}"/></a>
+						<a target="_blank" href="http://vimeo.com/user3679116"><img src="{% static 'images/header/vimeo.png' %}"/></a>
+						<a target="_blank" href="https://www.twitter.com/modelwatershed"><img src="{% static 'images/header/twitter.png' %}"/></a>
+					</div>
 				</div>
-				
-	  			<!--<div style="display: block; float:right; margin-bottom:2vw; margin-right: 2vw;">
-		  			<a class="btn btn-social-icon btn-twitter btn-sm">
-				    	<span class="fa fa-twitter"></span>
-				  	</a>
-				 	<a class="btn btn-social-icon btn-youtube btn-sm">
-				    	<span class="fa fa-youtube"></span>
-				  	</a>
-				  	<a class="btn btn-social-icon btn-vimeo btn-sm">
-				    	<span class="fa fa-vimeo"></span>
-				  	</a>
-				  	<a class="btn btn-social-icon btn-facebook btn-sm">
-				    	<span class="fa fa-facebook"></span>
-				  	</a>
-				 </div>-->
 			</div>
 		</div>
 		<div id="lightbox" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -224,6 +221,21 @@
 		            
 		        $lightbox.find('.modal-dialog').css({'width': $img.width()});
 		    });
+
+		    
+		    $( ".panel-box" ).hover(function(e) {
+				$(e.target).closest('.panel-box').animate({
+					width: '23vw',
+					'min-height': '34vw'
+				}, 200, function() {
+					// Animation complete.
+				});
+				}, function(e){
+					$(e.target).closest('.panel-box').animate({
+						width: '22vw',
+						'min-height': '33vw'
+					});
+			});
 		}
 	</script>
 </body>

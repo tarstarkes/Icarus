@@ -47,8 +47,6 @@ h2{
 }
 .mid_page{
 	width: 100%;
-	border-top: .3vw dashed #ef9502;
-	border-bottom: .3vw dashed #ef9502;
 	height: 100%;
 }
 .ripplesSpot {
@@ -74,8 +72,6 @@ h2{
     color: gray;
     font-family: 'bodoni';
     padding: calc(.5vw + .5vh);
-    /* padding-left: 22vw; */
-    /* margin-left: 1vw; */
     margin: 0;
     font-style: normal;
     margin-bottom: 1vw;
@@ -309,6 +305,115 @@ ul.article_content {
 }
 img.pretty-box{
 	display: inline;
+}
+.siteMapBox{
+	width: 100%;
+    text-align: center;
+    padding-bottom: 5vw;
+    margin-bottom: 2vw;
+    -webkit-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+	box-shadow: 0px 0px 15px 2px rgba(0,0,0,0.75);
+	padding-top:2vw;
+}
+.siteMapFrame{
+	width:80vw;
+}
+.siteMapBox h3{
+    font-size: 3vw;
+    margin-left: 2vw;
+    font-family: 'Bodoni';
+    font-weight: bold;
+    color: gray;
+    text-decoration: none;
+    margin: 2vw;
+    margin-top:0;
+    color: white;
+    background: #EF9502;
+    padding: 1vw;
+}
+.siteMapAbsoluteFrame{
+	top: 9.22vw;
+    position: absolute;
+    left: 9.85vw;
+}
+.siteMapAbsoluteFrame img{
+	width: 80vw;
+}
+.button{
+	height: 4vw;
+	position: absolute;
+}
+#home {
+    width: 12vw;
+    padding-left: 1vw;
+    left: 1vw;
+    top: 20vw;
+}
+#meetings{
+	height: 10vw;
+    width: 22vw;
+    left: 31vw;
+    top: 2vw;
+}
+#education {
+    width: 15vw;
+    left: 31vw;
+    top: 11vw;
+}
+#data {
+    width: 8vw;
+    left: 31vw;
+    top: 20vw;
+}
+#stepwise{
+    width: 13vw;
+    left: 31vw;
+    top: 28.5vw;
+}
+#atlas {
+    width: 8.5vw;
+    left: 31vw;
+    top: 37.5vw;
+}
+#board {
+    width: 11.5vw;
+    left: 67vw;
+    top: 2vw;
+}
+#staff {
+    width: 9.5vw;
+    left: 67vw;
+    top: 8.75vw;
+}
+#about {
+    width: 11.5vw;
+    left: 67vw;
+    top: 15.5vw;
+}
+#database {
+    width: 15.5vw;
+    left: 49vw;
+    top: 19.75vw;
+}
+#arc {
+    width: 11.5vw;
+    left: 49vw;
+    top: 26.5vw;
+}
+#assessments {
+    width: 19.5vw;
+    left: 49vw;
+    top: 33vw;
+}
+#precip {
+    width: 21.5vw;
+    left: 49vw;
+    top: 39.5vw;
+    height: 7vw;
+}
+.button{
+	cursor: pointer;
 }
 @media screen and (max-width: 480px) {
 	.navBarLinks {

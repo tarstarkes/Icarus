@@ -21,4 +21,6 @@ urlpatterns = [
     url(r'^', include('home.urls'), name='home'),
     url(r'^about/', include('about.urls'), name='about'),
     url(r'^staff/', include('staff.urls'), name='staff'),
+    url(r'^board/', include('board.urls'), name='board'),
+    url(r'^home/', include('home.urls'), name="sitemap"),
 ]

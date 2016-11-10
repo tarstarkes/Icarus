@@ -12,3 +12,6 @@ def index(request):
 	ripple_list = serializers.serialize('json', Ripples.objects.all().order_by('-year'))
 	ripple_article = serializers.serialize('json', Ripplesarticle.objects.all())
 	return render(request, 'home/index.html', {'projects': project_list, 'years': year_list, 'ripples': ripple_list, 'articles': ripple_article})
+
+def sitemap(request):
+	return render(request, 'home/sitemap.html')

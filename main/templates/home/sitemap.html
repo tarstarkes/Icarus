@@ -1,0 +1,52 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Sitemap</title>
+{% endblock %}
+
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/home/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div>
+		<img style="width: 100%" src="{% static 'images/home/basin.jpg' %}"/>
+		<img class="motto" src="{% static 'images/home/grmwMotto.png' %}"/>
+	</div>
+	<div class="siteMapContent">
+		<div style="position: relative;"class="siteMapBox">
+			<h3>Sitemap</h3>
+			<div>
+				<img style="opacity: 0;" class="siteMapFrame" src="{% static 'images/home/sitemap_v2.png' %}"/>
+				<div class="siteMapAbsoluteFrame">
+					<img src="{% static 'images/home/sitemap_v2.png'%}"/>
+					<a href="/"><div id="home" class="button"></div></a>
+					<a href="/board/meetings/"><div id="meetings" class="button"></div></a>
+					<a href="/education/"><div id="education" class="button"></div></a>
+					<a href="/database/"><div id="data" class="button"></div></a>
+					<a href="/stepwise/"><div id="stepwise" class="button"></div></a>
+					<a href="/atlas/"><div id="atlas" class="button"></div></a>
+					<a href="/board/"><div id="board" class="button"></div></a>
+					<a href="/staff/"><div id="staff" class="button"></div></a>
+					<a href="/about/"><div id="about" class="button"></div></a>
+					<a href="/database/"><div id="database" class="button"></div></a>
+					<a href="http://grmw.maps.arcgis.com/"><div id="arc" class="button"></div></a>
+					<a href="/assessments/"><div id="assessments" class="button"></div></a>
+					<a href="/stream/"><div id="precip" class="button"></div></a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script>
+		$(document).ready(function(){
+			$('.button').hover(function(e){
+				var id = $(e.target).attr('id');
+				$('.siteMapFrame').attr('src', '{{ baseUrl }}/static/images/home/'+id+'_hover.png');
+				$('.siteMapFrame').css('opacity', 1);
+			}, function(e){
+				$('.siteMapFrame').css('opacity', 0);
+			});
+		});
+	</script>
+{% endblock %}

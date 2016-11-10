@@ -1,0 +1,81 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Board</title>
+{% endblock %}
+
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/board/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div>
+		<img class="mainImage" src="{% static 'images/board/board.png' %}"/>
+		<img class="quote" src="{% static 'images/board/quote.png' %}"/>
+	</div>
+
+	<div class="meetOurStaff">
+			<div class=content-wrapper>
+				<ul id="aboutTabs" class="nav nav-pills nav-stacked">
+				  <li role="presentation" class="active"><a href="#board">Board of Directors</a></li>
+				  <li id="maryEstes" role="presentation"><a href="#1">Bruce Eddy</a></li>
+				  <li id="jeffOveson" role="presentation"><a href="#2">Jim Lauman</a></li>
+				  <li id="jesseSteele" role="presentation"><a href="#3">Bill Howell</a></li>
+				  <li id="cobyMenton" role="presentation"><a href="#4">Ted Taylor</a></li>
+				  <li id="connarStone" role="presentation"><a href="#5">Troy Abercrombie</a></li>
+				  <li id="jessicaPhelps" role="presentation"><a href="#6">Norm Cimon</a></li>
+				  <li id="alexBorgerding" role="presentation"><a href="#7">Daryl Hawes</a></li>
+				  <li id="jesseSteele" role="presentation"><a href="#8">Joe McCormack</a></li>
+				  <li id="cobyMenton" role="presentation"><a href="#9">Katie Frenyea</a></li>
+				  <li id="connarStone" role="presentation"><a href="#10">Allen Childs</a></li>
+				  <li id="jessicaPhelps" role="presentation"><a href="#11">Larry Cribbs</a></li>
+				  <li id="alexBorgerding" role="presentation"><a href="#12">Dave Yost</a></li>
+				</ul>
+				<!-- tab content -->
+				<div class="tab-content">
+					<div role="tab-panel" class="tab-pane fade in active" id="board">
+						<h3>Meet the Board</h3>
+						<p>The mission of the Board of Directors of the Grande Ronde Model Watershed is to develop and oversee the implementation, maintenance, and monitoring of coordinated resource management that will enhance the natural resources of the Grande Ronde River Basin.
+
+						Board members have a unique task. Expected to represent the constituency that nominated them for participation, they are also expected to support the mission of the GRMW. Human nature dictates that serving these two masters can be a challenge, and individual interpretations of the mission statement add to the burden of working from outside and from within the GRMW as board members are asked to do.
+
+						The board represents all the key elements of today's society in northeastern Oregon. Over the years, the work of the board has provided solid evidence that the GRMW is in the good and capable hands of citizens who care; people who seek a reasonable balance of social, economic, and environmental values; and who are consistently willing to place the good of the whole at the forefront of their thoughts and actions.</p>
+					</div>
+					<div role="tab-panel" class="tab-pane fade" id="1">
+						
+					</div>
+					<div role="tab-panel" class="tab-pane fade" id="2">
+						
+					<div role="tab-panel" class="tab-pane fade" id="3">
+						
+					</div>
+					<div role="tab-panel" class="tab-pane fade" id="4">
+				
+					</div>
+					<div role="tab-panel" class="tab-pane fade" id="5">
+						
+					</div>
+					<div role="tab-panel" class="tab-pane fade" id="6">
+	
+					</div>
+					<div role="tab-panel" class="tab-pane fade" id="7">
+
+					</div>
+
+			  	</div>
+			</div>
+		  	<br>
+		  	<script>
+			  	$('#aboutTabs li').on('click', 'a', function (e) {
+					e.preventDefault();
+					$(this).tab('show');
+				});
+
+				$('.pane').on('click', function(e){
+					var targ = $(e.target).closest('.panel-box').attr('data-id');
+					console.log($('#'+targ+' a').trigger("click"));
+				});
+		  	</script>
+		</div>
+{% endblock %}
