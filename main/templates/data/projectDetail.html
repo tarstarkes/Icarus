@@ -1,0 +1,278 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW - Project</title>
+{% endblock %}
+
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/data/project/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="project_detail_body">
+		<div>
+			<div class=mainImage ><h2>{{ project.name }}</h2></div>
+		</div>
+
+		<div id="genInfo">
+			<p><strong><span style="color:#ef9502;">GRMW ID:</span></strong> {{ project.grmw_id }}</p>
+			<p class="inline-year"><strong><span style="color:#ef9502;">Fiscal Year:</span></strong> {{ project.fiscalyear }}</p>
+			<div id="status" ><h2>Project Status: </h2><div>{{ project.status_id.name }}</div></div>
+		</div>
+
+		{% if ortho %}
+			<div id=ortho>
+				<img id="orthoThumb" src="/{{ ortho.thumbFile }}">
+			</div>
+		{% endif %}
+
+		<div id="description">
+			<h3>Description</h3>
+			<div class="content">
+				<div class="boxA">
+					<h5>{{ project.name }}</h5>
+					<p class="desc">{{ project.description }}</p>
+				</div>
+				<div class="boxB">
+					{% if images %}
+						<div id="gallery">
+							<h5>Gallery</h5>
+							<div class="slider">
+								<div class="slider_inner">
+									{% for x in images %}
+										<a data-toggle="modal" data-target="#lightbox" href="#"><img class="thumbnailImage" src="{{ x.file }}"></a>
+									{% endfor %}
+								</div>
+							</div>			
+						</div>
+					{% endif %}
+					<h5>Project Site Locations</h5>
+					<div id="map_canvas" style="width: 45vw; height: 40vw;"></div>
+				</div>
+			</div>
+		</div>
+
+		{% if sites %}
+			<div id="sites" class="inline_block">
+				<h3>Development Sites</h3>
+				<div class="contentTable">
+					<table>
+						<tr>
+							<th>Site name</th>
+							<th>Latitude/Longitude</th>
+							<th>Download</th>
+						</tr>
+						{% for site in sites%}
+						<tr>
+							<td>{{site.description}}</td>
+							<td>{{site.getLat}}/{{site.getLong}}</td>
+							<td><a href="/data/project/{{site.project_id}}/kml/{{site.id}}/">Download KML</a></td>
+						</tr>
+						{% endfor %}
+					</table>
+				</div>
+			</div>
+		{% endif %}
+
+		{% if contacts %}
+			<div id="contacts" class="inline_block">
+				<h3>Contacts & Roles</h3>
+				<div class="contentTable">
+					<table>
+						<tr>
+							<th>Name</th>
+							<th>Role</th>
+							<th>Organization</th>
+						</tr>
+						{% for contact in contacts %}
+						<tr>
+							<td>{{contact.contacttype_id.name}}</td>
+							<td>{{contact.contactrole_id.name}}</td>
+							<td>{{contact.contacttype_id.orgtype_id.name}}</td>
+						</tr>
+						{% endfor %}
+					</table>
+				</div>
+			</div>
+		{% endif %}
+
+		<div class="block2" style="display:block; margin-top: 2vw">
+			{% if organizations %}
+				<div id="organizations" class="inline_block">
+					<h3>Organizations</h3>
+					<div class="contentTable">
+						<table>
+							<tr>
+								<th>Organization</th>
+								<th>Role</th>
+							</tr>
+							{% for org in organizations %}
+							<tr>
+								<td>{{org.orgtype_id.name}}</td>
+								<td>{{org.orgrole_id.name}}</td>
+							</tr>
+							{% endfor %}
+						</table>
+					</div>
+				</div>
+			{% endif %}
+
+			{% if contracts %}
+			<div id="contracts" class="inline_block">
+				<h3>Grants & Contracts</h3>
+				<div class="contentTable">
+					<table>
+						<tr>
+							<th>Organization</th>
+							<th>Contract #</th>
+							<th>Finding Amount</th>
+						</tr>
+						{% for contract in contracts %}
+						<tr>
+							<td>{{contract.fundingorg_id.name}}</td>
+							<td>{{contract.contractnumber}}</td>
+							<td>{{contract.amount}}</td>
+						</tr>
+						{% endfor %}
+					</table>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+	<div class="block3" style="display:block; margin-top: 2vw">
+		{% if docs %}
+		<div id="docs">
+			<h3>Grants & Contracts</h3>
+			<div class="contentTable">
+				<table>
+					<tr>
+						<th>Document Type</th>
+						<th>View</th>
+						<th>Download</th>
+					</tr>
+					{% for doc in docs %}
+					<tr>
+						<td>{{doc.type_id.name}}</td>
+						<td><a href="{% static ''%}{{doc.file}}">View Document</a></td>
+						<td><a href="{% static ''%}{{doc.file}}" download>Download Document</a></td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+		{%endif%}
+
+		{% if videos %}
+			<div id="video_gallery">
+				<h3>Videos</h3>
+				<div class="content">
+					{% for x in videos %}
+						<iframe src="{{x.youtubeURL}}" frameborder="0" allowfullscreen></iframe>
+					{% endfor %}
+				</div>			
+			</div>
+		{% endif %}
+	</div>
+		<br>
+	</div>
+	<script>
+		$(document).ready(function(){
+			var url = "{% static ''%}images/projects/{{ project.grmw_id }}/main.jpg"
+			checkImage(url, function(exists){
+				if(exists){
+					$('.mainImage').css("background-image", "url({% static ''%}images/projects/{{ project.grmw_id }}/main.jpg)");
+				}
+				else{
+					$('.mainImage').css("background-image", "url({% static ''%}images/projects/main.jpg)");
+				}
+			});
+
+			gallery = [{% for x in images %} "{{ x.file }}", {% endfor %}];
+			galleryLength = gallery.length;
+			$('#content .slider_inner').css("width", (galleryLength*10)+"vw")
+
+			if("{{project.status_id.name}}" == "Complete"){
+				$('#status div').css("background", "#4E7DB8");
+			}
+			resizables();
+		});
+
+		$( window ).resize(function() {
+			resizables();
+		});
+
+		function checkImage(url, callback) {
+			var img = new Image();
+			img.onload = function() { callback(true); };
+			img.onerror = function() { callback(false); };
+			img.src = url;
+		}
+
+		function initProjectSiteMap(){
+			var map;
+			var marker;
+			var siteLocs = [];
+
+			{% for site in sites %}
+				{% if forloop.first %}
+					center_lat = {{ site.getLat }}
+					center_long = {{ site.getLong }}
+				{% endif %}
+				siteLocs.push(['{{ site.description }}', {{ site.getLat }}, {{ site.getLong }}]);
+			{% endfor %}
+			var centerLoc = {lat: center_lat, lng: center_long};
+			// Create a map object and specify the DOM element for display.
+			map = new google.maps.Map(document.getElementById('map_canvas'), {
+				center: centerLoc,
+				scrollwheel: true,
+				zoom: 12,
+				mapTypeId: google.maps.MapTypeId.SATELLITE
+			});
+			setMarkers(map, siteLocs);
+		}
+
+		function setMarkers(map, locations){
+			var image = new google.maps.MarkerImage("{% static 'images/data/beachflag.png' %}",
+				new google.maps.Size(20, 32),
+				new google.maps.Point(0,0),
+				new google.maps.Point(0, 32)
+			);
+			var shadow = new google.maps.MarkerImage("{% static 'images/data/beachflag_shadow.png' %}",
+				new google.maps.Size(37, 32),
+				new google.maps.Point(0,0),
+				new google.maps.Point(0, 32)
+			);
+			var shape = {
+				coord: [1, 1, 1, 20, 18, 20, 18 , 1],
+				type: 'poly'
+			};
+			for (var i = 0; i < locations.length; i++) {
+				var beach = locations[i];
+				var myLatLng = new google.maps.LatLng(beach[1], beach[2]);
+				var marker = new google.maps.Marker({
+					position: myLatLng,
+					map: map,
+					shadow: shadow,
+					icon: image,
+					shape: shape,
+					title: beach[0],
+					zIndex: beach[3]
+				});
+			}
+		}
+
+		function resizables(){
+			var x = $("#contacts .contentTable").css("height").split("px")[0];
+			var y = $("#sites .contentTable").css("height").split("px")[0];
+			var z = x - y;
+			if(z < 0){
+				//do nothing
+			}
+			else{
+				z=z+10;
+				$(".block2").css("margin-top", z+"px");
+			}
+		}
+	</script>
+{% endblock %}

@@ -7,7 +7,7 @@ from django.db.models import F
 
 
 def index(request):
-	project_list = ProjectdbProject.objects.filter(publish=True).filter(Q(status_id=1) | Q(status_id=2)).order_by("-fiscalyear")[:10]
+	project_list = Project.objects.filter(publish=True).filter(Q(status_id=1) | Q(status_id=2)).order_by("-fiscalyear")[:10]
 	year_list = Ripples.objects.all().distinct('year').order_by('-year').values('year')
 	ripple_list = serializers.serialize('json', Ripples.objects.all().order_by('-year'))
 	ripple_article = serializers.serialize('json', Ripplesarticle.objects.all())

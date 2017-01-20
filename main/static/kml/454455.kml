@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+    <Document id="feat_1">
+        <Placemark id="feat_2">
+            <name>Catherine Creek 44 Stream and Fish Habitat Restoration Phase II</name>
+            <Point id="geom_0">
+                <coordinates>-117.79364931917095,45.164559376458264,0.0</coordinates>
+            </Point>
+        </Placemark>
+    </Document>
+</kml>

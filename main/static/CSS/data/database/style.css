@@ -1,0 +1,140 @@
+h3{
+	font-size: 2.5vw;
+	font-family: sans-serif;
+}
+.mainPhoto{
+    position: relative;
+}
+.mainImage {
+	width: 100%;
+}
+.mainPhoto h2 {
+    vertical-align: bottom;
+    margin: 0;
+    position: absolute;
+    bottom: 0;
+    padding: 1vw;
+    color: #ef9502;
+    background: #f3f3f3;
+    -webkit-border-top-right-radius: .5vw;
+    -moz-border-radius-topright: .5vw;
+    border-top-right-radius: .5vw;
+    font-size: 2vw;
+}
+.list-group{
+	width: 75%;
+	margin-left: 12.5%;
+}
+#table-head-label{
+	width: 75%;
+	margin-left: 12.5%;
+	padding: 10px 15px;
+	background: #ef9502;
+	color: white;
+	-webkit-border-top-left-radius: .5vw;
+	-webkit-border-top-right-radius: .5vw;
+	-moz-border-radius-topleft: .5vw;
+	-moz-border-radius-topright: .5vw;
+	border-top-left-radius: .5vw;
+	border-top-right-radius: .5vw;
+	font-size: 1.5vw;
+}
+#table-head-label p{
+	display: inline-block;
+	margin: 0;
+}
+div#inputs {
+    width: 75%;
+    margin-left: 12.5%;
+    padding: 2vw;
+    background: #e8e8e8;
+    margin-top: 2vw;
+    margin-bottom: 2vw;
+    -webkit-border-radius: .5vw;
+    -moz-border-radius: .5vw;
+    border-radius: .5vw;
+    padding-top: .2vw;
+}
+input#search {
+    width: 100%;
+    text-align: center;
+    padding: .2vw;
+    font-size: 2vw;
+    -webkit-border-radius: .5vw;
+    -moz-border-radius: .5vw;
+    border-radius: .5vw;
+    -webkit-appearance: none;
+    border: 0;
+    outline: none;
+}
+.list-group-item{
+	font-size: 1.5vw;
+}
+select#organizations, select#year {
+    width: 18vw;
+    padding: .5vw;
+    border: 0px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    margin-top: .2vw;
+    margin-bottom: .2vw;
+    font-size: 1.5vw;
+}
+#dbSubmit {
+    font-size: 1.5vw;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    background: #ef9502;
+    color: white;
+    border: 0;
+    padding: 0.5vw;
+    margin-top: 1vw;
+    -webkit-appearance: none;
+}
+p#empty_message {
+    font-size: 2vw;
+    padding: 2vw;
+    background: white;
+    text-align: center;
+}
+.pagination {
+    margin: 0;
+    margin-bottom: 1vw;
+}
+nav{
+	text-align:center;
+}
+.id_label{
+	float: right;
+    margin-right: 4vw !important;
+}
+.year_label{
+	display: inline-block;
+	float:right;
+}
+.fiscal_year { 
+	display: inline-block;
+	float:right;
+}
+.grmw_id {
+	float: right;
+	margin-right: 6vw;
+}
+.grmw_name {
+	width:40vw;
+	display: inline-block;
+	margin:.2vw;
+	height: 2vw;
+}
+.current a{
+	background:#ef9502 !important;
+	color: white !important;
+}
+.sponsor{
+	margin-bottom: 0;
+}
+#docs p{
+	display: inline-block;
+	margin: 0;
+}

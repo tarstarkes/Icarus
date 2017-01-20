@@ -23,4 +23,8 @@ urlpatterns = [
     url(r'^staff/', include('staff.urls'), name='staff'),
     url(r'^board/', include('board.urls'), name='board'),
     url(r'^home/', include('home.urls'), name="sitemap"),
+    url(r'^data/', include('data.urls'), name="data"),
+    url(r'^stepwise/', include('stepwise.urls'), name="stepwise"),
+    url(r'^education/', include('education.urls'), name="edu"),
+    url(r'^login/', include('user_login.urls'), name="login"),
 ]

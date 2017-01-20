@@ -1,0 +1,158 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Database</title>
+{% endblock %}
+
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/data/database/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="mainPhoto">
+		<img class="mainImage" src="{% static 'images/data/data.jpg' %}">
+		<h2>Project Database</h2>
+	</div>
+
+	<div id="searchForm">
+		<form method="GET" action="">
+			<div id="inputs">
+				<h3>Database Search</h3>
+				<input id="search" name="search" placeholder="Search" autofocus/>
+				<select id="organizations" name="org" placeholder="Select an Organization">
+					<option selected>-- Sponsor --</option>
+					{% for x in orgs %}
+						<option class="orgOption" value="{{ x.orgtype_id.id }}">{{ x.orgtype_id.name }}</option>
+					{% endfor %}
+				</select>
+				<select id="year" name="yr" placeholder="Select a Fiscal Year">
+					<option selected>-- Fiscal Year --</option>
+					{% for x in years %}
+						<option class="yrOption">{{ x.fiscalyear }}</option>
+					{% endfor %}
+				</select>
+				<br>
+				<input id="dbSubmit" type="submit" value="Submit"/>
+			</div>
+		</form>
+		<div id="table-head-label">
+			<p>Project Name/Sponsor</p>
+			<p class="year_label">Year</p>
+			<p class="id_label">GRMW ID</p>
+		</div>
+		<div class="list-group">
+		</div>
+		<nav aria-label="Page navigation">
+		  <ul class="pagination">
+		    <li id="prev">
+		      <a href="javascript: prevPage();" aria-label="Previous">
+		        <span aria-hidden="true">&laquo;</span>
+		      </a>
+		    </li>
+		    <li id="page1" ><a href="javascript:loadPage(1)">1</a></li>
+		    <li id="next">
+		      <a href="javascript: nextPage();" aria-label="Next">
+		        <span aria-hidden="true">&raquo;</span>
+		      </a>
+		    </li>
+		  </ul>
+		</nav>
+	</div>
+
+	<script>
+		var chosen_year = "{{ chosen_year }}";
+		var chosen_search = htmlDecode("{{ chosen_search }}");
+		console.log(chosen_search);
+		var chosen_org = "{{ chosen_org }}"
+		var year = $("#year")[0];
+		var org = $("#organizations")[0];
+		if (chosen_year != ""){
+			for (var i=0; i < $(".yrOption").length; i++){
+				if (year[i].value == chosen_year){
+					$("#year option:eq("+i+")").attr("selected", "selected");
+				}
+			}
+		}
+		if (chosen_search != "" && chosen_search != "None"){
+			$("#search").val(chosen_search);
+		}
+		if (chosen_org != ""){
+			for (var i=0; i < $(".orgOption").length; i++){
+				if (org[i].value == chosen_org){
+					$("#organizations option:eq("+i+")").attr("selected", "selected");
+				}
+			}
+		}
+		/*var projects = [{% for x in projects %} { name: "{{ x.name }}", id: {{ x.grmw_id }}, year: {{ x.fiscalyear }}, sponsor: "{{ x.sponsor_list }}" }, {% endfor %} ];*/
+		var projects = [{% for x in projects %} { name: "{{ x.name }}", id: {{ x.grmw_id }}, year: {{ x.fiscalyear }}, proj_id: {{ x.id }}, sponsor: "" }, {% endfor %} ];
+		var orgs = [ {% for x in orgs_all %} { name: "{{ x.orgtype_id.name }}", id: {{ x.orgtype_id.id }}, proj_id: {{ x.project_id.id }} }, {% endfor %} ];
+		for (var x=0; x < projects.length; x++){
+			for (var i=0; i < orgs.length; i++){
+				if (projects[x].proj_id == orgs[i].proj_id){
+					projects[x].sponsor = orgs[i].name;
+				}
+			}
+		}
+		var pages = Math.floor(projects.length/20);
+		appendPages(pages);
+		$("#page1 a")[0].click();
+
+		if ($(".pagination li a").length <= 3){
+			$(".pagination [aria-label='Previous']").parent().addClass("disabled");
+			$(".pagination [aria-label='Next']").parent().addClass("disabled");
+		}
+
+		function appendPages(pages){
+			for (var x=2; x < pages+2; x++){
+				$('<li id="page'+x+'"><a href="javascript: loadPage('+x+')">'+x+'</a></li>').insertBefore(".pagination li:last");
+			}
+		}
+
+		function loadPage(page){
+			$(".list-group").html("");
+			var end = page*20;
+			start = end-20;
+
+			$(".pagination li").removeClass("current");
+			$("#page"+page).addClass("current");
+
+			for(var i=start; i < end; i++){
+				if(typeof(projects[i]) != "undefined" ){
+					$(".list-group").append("<a href='/data/project/"+projects[i].proj_id+"/' target='_blank' class='list-group-item'><p class='grmw_name'><strong>"+projects[i].name+"</strong></p><p class='fiscal_year'>"+projects[i].year+"</p><p class='grmw_id'>"+projects[i].id+"</p><p class='sponsor'>"+projects[i].sponsor+"</p"+"</a>");
+				}
+			}
+			//$(".grmw_name").dotdotdot();
+
+			$("#prev").removeClass("disabled");
+			$("#next").removeClass("disabled");
+			if($(".current").prev()[0].id == "prev"){
+				$("#prev").addClass("disabled");
+			}
+			if($(".current").next()[0].id == "next"){
+				$("#next").addClass("disabled");
+			}
+			if (projects.length == 0){
+				$(".list-group").append("<p id='empty_message'>No Results Found. Please Broaden Your Search Criteria.</p")
+			}
+		}
+
+		function nextPage(){
+			var selector = $('.current').next();
+			$("#"+selector[0].id+" a")[0].click()
+
+		}
+
+		function prevPage(){
+			var selector = $('.current').prev();
+			$("#"+selector[0].id+" a")[0].click()
+		}
+
+		function htmlDecode(input)
+		{
+		  var doc = new DOMParser().parseFromString(input, "text/html");
+		  return doc.documentElement.textContent;
+		}
+	</script>
+
+{% endblock %}

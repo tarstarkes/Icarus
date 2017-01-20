@@ -29,7 +29,7 @@
 				<h2 id="project_title"></h2>
 				<div style="width: 27vw; display: inline-block; margin-left: 1vw">
 					<img id="project_spotlight" />
-					<img class="gotoproject" src="{% static 'images/home/gotoproject.png' %}"/>
+					<a id="project_link" href=""><img class="gotoproject" src="{% static 'images/home/gotoproject.png' %}"/></a>
 				</div>
 				<div max-length="100" class="desc_box">
 					<h2>Description</h2>
@@ -95,8 +95,8 @@
 	</div>
 <script>
 	{% static "" as baseUrl %}
-	var projects_list = [ {% for project in projects %}'{{ project.name }}', {% endfor %} ];
-	var projects_img_url = [ {% for project in projects %}'{{ baseUrl }}images/projects/{{ project.id }}/main.jpg', {% endfor %} ];
+	var projects_list = [ {% for project in projects %}{name: '{{ project.name }}', id: {{ project.id}} }, {% endfor %} ];
+	var projects_img_url = [ {% for project in projects %}'{{ baseUrl }}images/projects/{{ project.grmw_id }}/main.jpg', {% endfor %} ];
 	var projects_desc = [ {% for project in projects %}'{{ project.description }}', {% endfor %} ];
 	var projects_flickr = [ {% for project in projects %}'{{ project.flickr }}', {% endfor %} ];
 	var years_list = [{% for x in years %}'{{ x.year }}', {% endfor %}];
@@ -155,15 +155,16 @@
 	}
 	function loadProjects(){
 		$("#project_spotlight").attr('src', projects_img_url[0]);
-		$("#project_title").html(projects_list[0]);
+		$("#project_title").html(projects_list[0].name);
 		$('.desc_content').html(projects_desc[0]);
 		loadFlickr(projects_flickr[0]);
 		for(var x=0; x < projects_list.length; x++){
 			if(x == 0){
-				$('#project_scrollBox').append('<li class="project_selected">'+projects_list[x]+'</li>');
+				$('#project_scrollBox').append('<li class="project_selected">'+projects_list[x].name+'</li>');
+				$('#project_link').attr("href", "/data/project/"+projects_list[x].id)
 			}
 			else{
-				$('#project_scrollBox').append('<li class="project_unselected">'+projects_list[x]+'</li>');
+				$('#project_scrollBox').append('<li class="project_unselected">'+projects_list[x].name+'</li>');
 			}
 		}
 	}
@@ -177,8 +178,9 @@
 		selectObject(e, '#project_scrollBox li', 'project_selected', 'project_unselected');
 		var index = $(e.target).index();
 		$("#project_spotlight").attr('src', projects_img_url[index]);
-		$("#project_title").html(projects_list[index]);
+		$("#project_title").html(projects_list[index].name);
 		$(".desc_content").html(projects_desc[index]);
+		$('#project_link').attr("href", "/data/project/"+projects_list[index].id)
 		loadFlickr(projects_flickr[index]);
 	});
 

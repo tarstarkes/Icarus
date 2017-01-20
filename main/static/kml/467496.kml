@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+    <Document id="feat_3">
+        <Placemark id="feat_4">
+            <name>Sheep Creek FS 5160 Rd. Culvert Replacement</name>
+            <Point id="geom_1">
+                <coordinates>-118.45578127882482,45.059012428846124,0.0</coordinates>
+            </Point>
+        </Placemark>
+    </Document>
+</kml>

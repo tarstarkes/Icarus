@@ -1,0 +1,124 @@
+.assessments_body th{
+	font-weight:normal;
+}
+.precipData{
+	height: 30vw;
+	width: 60vw;
+	margin:2vw;
+	margin-left: 20vw;
+}
+.mainImage {
+	position: relative;
+}
+.mainImage img{
+	width: 100%;
+}
+.mainImage h2 {
+    vertical-align: bottom;
+    margin: 0;
+    position: absolute;
+    bottom: 0;
+    padding: 1vw;
+    color: #ef9502;
+    background: #f3f3f3;
+    -webkit-border-top-right-radius: .5vw;
+    -moz-border-radius-topright: .5vw;
+    border-top-right-radius: .5vw;
+    font-size: 2vw;
+}
+.columnA {
+    height: 100%;
+    width: 30vw;
+    display: inline-block;
+}
+.columnB{
+	display: inline-block;
+	vertical-align: top;
+}
+.navBox {
+	width: 26vw;
+    border: .25vw solid #ef9502;
+    -webkit-border-radius: .5vw;
+    -moz-border-radius: .5vw;
+    border-radius: .5vw;
+    margin: 1vw;
+    margin-left: 2vw;
+    margin-top: 2vw;
+}
+ul.navBoxLinks {
+    margin: 0;
+    padding: 1vw;
+}
+.navBoxLinks li {
+    color: #ef9502;
+    list-style: none;
+    padding: .5vw;
+    font-size: 1.75vw;
+    font-weight: bold;
+}
+.navBoxLinks a{
+	text-decoration: none;
+	cursor: pointer;
+}
+.navBox h3{
+	font-size: 2vw;
+    font-weight: bold;
+    color: #ef9502;
+    padding: .5vw;
+    margin: 0;
+    padding-left: 1.5vw;
+    margin-top: .5vw;
+}
+.stylized_heading{
+    background: #ef9502;
+    color: white;
+    margin-right: 2vw;
+    margin-top: 2vw;
+    margin-bottom: 0;
+    padding: 1vw;
+    text-align: center;
+    border-radius: .5vw .5vw 0px 0px;
+    -moz-border-radius: .5vw .5vw 0px 0px;
+    -webkit-border-radius: .5vw .5vw 0px 0px;
+    border: 0px solid #000000;
+    font-family: sans-serif;
+    font-weight: bold;
+    font-size:2.25vw;
+}
+.content{
+	background: #ececec;
+	margin-right:2vw;
+}
+.content p{
+	font-size: 1.5vw;
+	padding:2vw;
+}
+.content ol {
+    font-size: 1.5vw;
+    margin-left: 2vw;
+    margin-top: 0vw;
+    margin-bottom: 0vw;
+}
+ul.docLinkBox li {
+    padding: .75vw;
+    color: white;
+    background: #ef9502;
+    margin: .5vw;
+    text-align: center;
+    border-radius: .5vw;
+    display: inline-block;
+    font-size: 1.25vw;
+    font-weight: bold;
+    vertical-align: top;
+}
+ul.docLinkBox li:hover{
+	background: #4e7db8;
+
+}
+ul.docLinkBox {
+	margin: .75vw;
+    list-style: none;
+    margin-top: 0;
+    padding: 0.75vw;
+    padding-top: 0;
+}

@@ -11,6 +11,198 @@
 
 {% block content %}
 	<div>
-		THIS IS THE MEETINGS PAGE
+		<div class="mainPhoto">
+			<img id="meetings" src="{% static 'images/board/meetings.jpg' %}">
+			<h2>Board Meetings</h2>
+		</div>
+		<div id="mainBody">
+			<div id="nxtMeeting">
+				<h2>Next Meeting</h2>
+				<p></p>
+			</div>
+		<div id="selectMenuLabel">
+			<h4>Year</h4>
+			<h4 style="margin-left: 5.5vw;">Date</h4>
+			<h4 style="margin-left: 13.5vw;">Documents & Links</h4>
+		</div>
+		<div id="selectMenu">
+			<div class="board_years">
+				<ul class="yearList">
+					<!-- All years that have ripples -->
+				</ul>
+			</div>
+			<div class="board_date">
+				<ul class="date">
+					<!-- All editions for the selected year-->
+				</ul>
+			</div>
+			<div class="docBox">
+				<ul class="docs">
+					<!-- All editions for the selected year-->
+				</ul>
+			</div>
+		</div>
+		<!-- Map Placeholder -->
+		<div id="boardMap"></div>
+
 	</div>
+	<script>
+		$(document).ready(function(){
+			var meeting = [{% for x in data %} {id: "{{ x.id }}", name: "{{ x.location_id.name }}", date: "{{ x.date }}", address: "{{ x.location_id.address }}", agenda: "{{ x.agenda_id.url.url }}", minutes: "{{ x.minutes_id.url.url }}", agenda_title: "{{ x.agenda_id.title}}", minutes_title: "{{ x.minutes_id.title }}" }, {% endfor %}];
+			loadData(meeting);
+			var datetime = meeting[0].date.split(',');
+			$("#nxtMeeting p").html("The next meeting will be held on "+datetime[0]+", "+datetime[1]+" at the "+meeting[0].name+" located at "+meeting[0].address+" @ "+datetime[2]);
+		});
+
+		function initBoardMap() {
+
+			// Create a map object and specify the DOM element for display.
+			var loc = {lat:45.00000, lng: -118.00000};
+			var geocoder = new google.maps.Geocoder;
+			var name = '{% for x in data %} {% if forloop.first %}{{x.location_id.name}}{% endif %} {% endfor %}';
+			var address = '{% for x in data %} {% if forloop.first %}{{x.location_id.address}}{% endif %} {% endfor %}';
+			var date = '{% for x in data %} {% if forloop.first %}{{x.date}}{% endif %} {% endfor %}'
+			var contentString = '<div id="content">'+
+					      '<div id="siteNotice">'+
+					      '</div>'+
+					      '<div id="bodyContent">'+
+					      '<p><b>'+name+'<br></b>'+address+'<br><i>'+date+'</i></p></div>';
+			geocoder.geocode({'address': address}, function(results, status) {
+				if (status === 'OK') {
+					if (typeof results[0] != 'undefined') {
+						loc = results[0].geometry.location;
+						var map = new google.maps.Map(document.getElementById('boardMap'), {
+							center: loc,
+							scrollwheel: true,
+							zoom: 17
+						});
+						var marker = new google.maps.Marker({
+							position: loc,
+							map: map,
+							title: name
+						});
+						//View Large Map
+						contentString = contentString + "<a target='_blank' href='https://maps.google.com?q="+address+"' >View Larger Map</a>"
+						var infowindow = new google.maps.InfoWindow({
+							content: contentString
+						});
+						infowindow.open(map, marker);
+
+					} else {
+						console.log("Geocode was not successful, here is why: " +status);
+					}
+				}	
+			});
+		}
+
+		function loadNewMap(name, date, address){
+			var loc = {lat:45.00000, lng: -118.00000};
+			var geocoder = new google.maps.Geocoder;
+			var contentString = '<div id="content">'+
+					      '<div id="siteNotice">'+
+					      '</div>'+
+					      '<div id="bodyContent">'+
+					      '<p><b>'+name+'<br></b>'+address+'<br><i>'+date+'</i></p></div>';
+			geocoder.geocode({'address': address}, function(results, status) {
+				if (status === 'OK') {
+					if (typeof results[0] != 'undefined') {
+						loc = results[0].geometry.location;
+						var map = new google.maps.Map(document.getElementById('boardMap'), {
+							center: loc,
+							scrollwheel: true,
+							zoom: 17
+						});
+						var marker = new google.maps.Marker({
+							position: loc,
+							map: map,
+							title: name
+						});
+						//View Large Map
+						contentString = contentString + "<a target='_blank' href='https://maps.google.com?q="+address+"' >View Larger Map</a>"
+						var infowindow = new google.maps.InfoWindow({
+							content: contentString
+						});
+						infowindow.open(map, marker);
+
+					} else {
+						console.log("Geocode was not successful, here is why: " +status);
+					}
+				}
+			});
+		}
+
+		function loadData(meeting){
+			//First iteration for years
+			var cond = '($(".board_years").text().indexOf(date[1])) < 0';
+			var content = '(date[1])';
+			appendObject(".yearList", "year_selected", "year_unselected", cond, meeting, content);
+
+			//Second iteration for date
+			cond = '($(".year_selected").text() == date[1])';
+			content = '(date[0]+", "+date[1])';
+			appendObject(".date", "date_selected", "date_unselected", cond, meeting, content);
+
+			$('.date li:first').trigger("click");
+
+		}
+
+		function selectObject(e, boxItems, classSelected, classUnselected){
+			$(boxItems).addClass(classUnselected);
+			$(boxItems).removeClass(classSelected);
+			$(e.target).addClass(classSelected);
+			$(e.target).removeClass(classUnselected);
+		}
+
+		function appendObject(appendBox, classSelected, classUnselected, condition, meeting, content){
+			$(appendBox).text("");
+			var date;
+			for(var x in meeting){
+				date = meeting[x].date.split(",");
+				if(eval(condition)){
+					if($(appendBox).text() == ""){
+						$(appendBox).append("<li data-id='"+meeting[x].id+"' class='"+classSelected+"'>"+eval(content)+"</li>");
+
+					}
+					else{
+						$(appendBox).append("<li data-id='"+meeting[x].id+"' class='"+classUnselected+"'>"+eval(content)+"</li>");
+					}
+				}
+			}
+
+			$(".yearList li").click(function(e){
+				cond = '($(".year_selected").text() == date[1])';
+				content = '(date[0]+", "+date[1])';
+				appendObject(".date", "date_selected", "date_unselected", cond, meeting, content);
+				selectObject(e, ".yearList li", "year_selected", "year_unselected");
+				$(".date li:first").trigger("click");
+			});
+
+			$(".date li").click(function(e){
+				selectObject(e, ".date li", "date_selected", "date_unselected");
+				appendDocs(e, meeting);
+			});
+		}
+
+		function appendDocs(e, meeting){
+			$(".docs").text("");
+			var id; var agenda_url; var minutes_url;
+			for (var i in meeting){
+				id = meeting[i].id
+				agenda_url = meeting[i].agenda;
+				minutes_url = meeting[i].minutes;
+				if(id == $(e.target).attr("data-id")){
+					if(agenda_url != ""){
+						$(".docs").append("<li><a target='_blank' href='/"+agenda_url+"'>"+meeting[i].agenda_title+"</a></li>");
+					}
+					if(minutes_url != ""){
+						$(".docs").append("<li><a target='_blank' href='/"+minutes_url+"'>"+meeting[i].minutes_title+"</a></li>")
+					}
+					$(".docs").append("<li><a style='cursor:pointer;' data-address='"+meeting[i]["address"]+"' data-name='"+meeting[i]["name"]+"' data-date='"+meeting[i]["date"]+"' id='loadLocation'>View Location on Map</a></li>");
+					$("#loadLocation").on('click', function(e){
+						loadNewMap($("#loadLocation").attr('data-name'), $("#loadLocation").attr('data-date'), $("#loadLocation").attr('data-address'));
+					});
+				}
+			}
+		}
+	</script>
 {% endblock %}

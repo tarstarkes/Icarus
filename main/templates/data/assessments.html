@@ -1,0 +1,133 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW - Assessments</title>
+{% endblock %}
+
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/data/assessments/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="assessments_body">
+		<div class="mainImage">
+			<img src="{% static 'images/data/assessments.png' %}">
+			<h2>Assessments</h2>
+		</div>
+		<table>
+			<th>
+				<div class="columnA">
+					<div class="navBox">
+						<h3>TABLE OF CONTENTS</h3>
+						<ul class="navBoxLinks">
+							<li><a href="javascript: scroll('#subbasin');">Subbasin Plans</a></li>
+							<li><a href="javascript: scroll('#CCTA');">Catherine Creek Tributary Assessment</a></li>
+							<li><a href="javascript: scroll('#UGRTA');">Upper Grande Ronde Tributary Assessment</a></li>
+							<li><a href="javascript: scroll('#atlas');">Restoration Atlas</a></li>
+							<li><a href="javascript: scroll('#expert');">Expert Panel</a></li>
+						</ul>
+					</div>
+				</div>
+			</th>
+			<th>
+				<div class="columnB">
+					<h3 id="subbasin" class="stylized_heading">Subbasin Plan</h3>
+					<div class="content">
+						<p>The Pacific Northwest Electric Power Planning and Conservation Act of 1980 authorized the creation of the Northwest Power and Conservation Council. The Act directed the Council to develop a program to protect, mitigate and enhance fish and wildlife in the Columbia River and its tributaries affected by the development, operation and management of the Columbia River dams. The <strong>Grande Ronde Subbasin Plan</strong> was prepared at the direction of the Northwest Power and Conservation Council.</p>
+						<ul class="docLinkBox">
+							<a href="{% static 'documents/data/assessment_documents/Grande Ronde Subbasin Plan.pdf'%}" target="_blank"><li class="docLink">Main Document</li></a>
+							<a href="{% static 'documents/data/assessment_documents/Grande Ronde Appendices.pdf' %}" target="_blank"><li class="docLink">Appendices</li></a>
+							<a href="{% static 'documents/data/assessment_documents/Grande Ronde Appendix_6.pdf' %}" target="_blank"><li>Appendix 6</li></a>
+							<a href="{% static 'documents/data/assessment_documents/Grande Ronde Supplement.pdf' %}" target="_blank"><li>Supplement</li></a>
+							<a href="{% static 'documents/data/assessment_documents/Grande Ronde Supplement Appendices.pdf' %}" target="_blank"><li>Supplement Appendices</li></a>
+						</ul>
+					</div>
+
+					<h3 class="stylized_heading">Imnaha Subbasin Plan</h3>
+					<div class="content">
+						<p>The Pacific Northwest Electric Power Planning and Conservation Act of 1980 authorized the creation of the Northwest Power and Conservation Council. The Act directed the Council to develop a program to protect, mitigate and enhance fish and wildlife in the Columbia River and its tributaries affected by the development, operation and management of the Columbia River dams. The <strong>Imnaha Subbasin Plan</strong> was prepared at the direction of the Northwest Power and Conservation Council.</p>
+						<ul class="docLinkBox">
+							<a href="{% static 'documents/data/assessment_documents/Imnaha Subbasin Assessment.pdf'%}" target="_blank"><li class="docLink">Main Document</li></a>
+							<a href="{% static 'documents/data/assessment_documents/Imnaha Inventory.pdf' %}" target="_blank"><li class="docLink">Inventory</li></a>
+							<a href="{% static 'documents/data/assessment_documents/Imnaha Management Plan.pdf' %}" target="_blank"><li>Management Plan</li></a>
+							<a href="{% static 'documents/data/assessment_documents/Imnaha Management Plan Supplement.pdf' %}" target="_blank"><li>Management Plan Supplement</li></a>
+						</ul>
+					</div>
+
+					<h3 id="CCTA" class="stylized_heading">Catherine Creek Tributary Assessment</h3>
+					<div class="content">
+						<p>The goal of the <strong>Catherine Creek Tributary Assessment (CCTA)</strong> is to evaluate the overall status of the entire Catherine Creek watershed in order to identify and prioritize potential habitat restoration projects. A project of this scope can only be accomplished through the efforts of many people from several different organizations.</p>
+						<ul class="docLinkBox">
+							<a href="{% static 'documents/data/assessment_documents/Catherine Creek Tributary Assessment.pdf'%}" target="_blank"><li class="docLink">Main Document</li></a>
+							<a href="{% static 'documents/data/assessment_documents/Catherine Creek Appendix A-C.pdf' %}" target="_blank"><li class="docLink">Appendix A-C</li></a>
+							<a href="{% static 'documents/data/assessment_documents/Catherine Creek Appendix D-H.pdf' %}" target="_blank"><li>Appendix D-H</li></a>
+							<a href="{% static 'documents/data/assessment_documents/Catherine Creek Appendix G-I.pdf' %}" target="_blank"><li>Appendix G-I</li></a>
+						</ul>
+					</div>
+
+					<h3 id="UGRTA" class="stylized_heading">Upper Grande Ronde Tributary Assessment</h3>
+					<div class="content">
+						<p>The <strong>Upper Grande Ronde Tributary Assessment (UGR TA)</strong> provides scientific information on geomorphology and physical processes that can be used to implement fish habitat improvement projects and to help focus those projects on increasing the survival of salmon and steelhead. The purpose of the UGR TA is to assess physical characteristics of streams and how they have changed over time; with the purpose of identifying suitable habitat improvement actions specific to that tributary. This project has had contributions from many partners, and is chaired by the Bureau of Reclamation.</p>
+						<ul class="docLinkBox">
+							<a href="{% static 'documents/data/assessment_documents/Grande Ronde Tributary Assessment.pdf' %}" target="_blank"><li>Main Document</li></a>
+						</ul>
+					</div>
+
+					<h3 id="atlas" class="stylized_heading">Restoration Atlas</h3>
+					<div class="content">
+						<p>BPA, GRMW and partners are developing an additional tool to focus restoration activities even more on the highest priority geographic areas, which address the most critical limiting factors and implement the most cost-effective activities.  The <strong>Restoration Atlas</strong> will assist basin managers in:
+						</p>
+						<ol>
+							<li>Prioritizing restoration activities in strategically defined locations</li>
+							<li>Will provide the transition from the current model of opportunistic restoration to focused restoration of key reaches</li>
+							<li>Facilitate collaborative, focused and value added restoration projects</li>
+						</ol>
+						<p>The Atlas will centralize data and maps related to limiting factors, life history requirements, biologically significant reaches and habitat restoration opportunities. It will produce a scoring and ranking matrix to prioritize projects.</p>
+						<ul class="docLinkBox">
+							<a href="{% static 'documents/data/assessment_documents/Atlas Exec Summ_2_8_13s.pdf'%}" target="_blank"><li class="docLink">Executive Summary</li></a>
+						</ul>
+					</div>
+
+					<h3 id="expert" class="stylized_heading">Expert Panel</h3>
+					<div class="content">
+						<p><strong>Expert Panel</strong> workshops are held every three years to evaluate changes in habitat limiting-factors for mainstem tributaries. The process includes both evaluating changes in habitat which are a result of previously completed projects, and estimating the expected change from projects planned for the next implementation cycle. Panel participants include a range of experienced professionals who are knowledgeable of local conditions, including the current and potential conditions of limiting factors.
+						</p>
+						<ul class="docLinkBox">
+							<a href="{% static 'documents/data/assessment_documents/PieMapUpperGrandeRonde_Chinook_XLS_20130530_20130701.pdf' %}" target="_blank"><li class="docLink">LGR Chinook - Pie Map</li></a>
+							<a href="{% static 'documents/data/assessment_documents/PieMapUpperGrandeRonde_Chinook_XLS_20130530_20130701.pdf' %}" target="_blank"><li class="docLink">UGR Chinook - Pie Map</li></a>
+							<a href="{% static 'documents/data/assessment_documents/PieMapUpperGrandeRonde_Steelhead_XLS_20130524_20131121.pdf' %}" target="_blank"><li class="docLink">UGR Steelhead - Pie Map</li></a>
+						</ul>
+					</div>
+				</div>
+
+
+			</th>
+		</table>
+	</div>
+	<script>
+		$(document).ready(function(){
+			var widthInPX = $(window).width();
+			var twoVW = Math.round(widthInPX*.02);
+			var navHeight = $(".navBox").height();
+			$(window).on('scroll', function(){
+				console.log(window.pageYOffset);
+				if(window.pageYOffset > (twoVW+navHeight)){
+					if(window.pageYOffset < $(".columnB").height()){
+						$(".navBox").css('margin-top', ((window.pageYOffset-navHeight)+"px"));
+					}
+				}
+				else if(window.pageYOffset < (twoVW+navHeight)){
+					$(".navBox").css('margin-top', (twoVW+"px"));
+				}
+			});
+		});
+		function scroll(t){
+			$('html, body').animate({
+        		scrollTop: $(t).offset().top
+    		}, 500);
+		}
+
+
+	</script>
+{% endblock %}

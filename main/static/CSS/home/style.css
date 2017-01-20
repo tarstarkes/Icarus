@@ -268,6 +268,9 @@ ul.article_content {
     width: 34vw;
     display: block;
     margin-bottom: 1vw;
+    border: none !important;
+    border-radius: 0;
+    -webkit-appearance: none;
 }
 .subscribe{
 	display: block;

@@ -1,0 +1,33 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW - Precipitation & Flow</title>
+{% endblock %}
+
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/data/precipFlow/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="precipFlowBody">
+		<div class="mainImage">
+			<img src="{% static 'images/data/streamFlow.png' %}">
+			<h2>Stream Precipitation & Flow</h2>
+		</div>
+		<div>
+			<h3 class="stylized_heading">Monitoring Flow in the Grande Ronde Basin</h3>
+			<div class="content"><p>The Grande Ronde Model Watershed, in cooperation with Oregon Water Resources Department, operates and maintains 12 stream-flow gauges in the Grande Ronde Basin. For more than a decade the gauges have been funded by BPA, OWEB and the US Forest Service. Five of the 12 operate in Wallowa County and the remaining 7 are in Union County. The gauges measure flow past a specific point in a stream and this measurement is expressed in cubic-feet per second, (the amount of flow moving past a designated ‘point’ in one second). Often, it's valuable to measure instream water as a volume. This unit is expressed in acre-feet; the number of acres that would be covered by one foot of water. This collected data serves many interests including irrigation water management, fisheries research and management, and restoration project development.</p></div>
+		<div>
+		<center><small>Click on any of the station locations below to learn more information.</small></center>
+		<iframe class="precipData" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://grmw.maps.arcgis.com/apps/Embed/index.html?webmap=c854450775754d2b89898b92329c38da&amp;extent=-119.2467,44.6703,-115.7008,46.3902&amp;zoom=true&amp;scale=true&amp;basemap_toggle=true&amp;alt_basemap=hybrid&amp;theme=light"></iframe><br /><center><small><a href="http://grmw.maps.arcgis.com/apps/Embed/index.html?webmap=c854450775754d2b89898b92329c38da&amp;extent=-119.2467,44.6703,-115.7008,46.3902&amp;zoom=true&amp;scale=true&amp;basemap_toggle=true&amp;alt_basemap=hybrid&amp;theme=light" style="text-align:left" target="_blank">View larger map</a></small>
+		</center>
+		<h3 class="stylized_heading">Snow and precipitation reports</h3>
+		<div class="content">
+			<p>Snow Telemetry (SNOTEL) and Snow Course Data and Products are located here. After selecting Oregon, the Report Type you're interested in, and the time frame you're looking for, clicking the 'submit' button will generate a PDF containing information for the Grande Ronde and Imnaha Basins.</p>
+		</div>
+	</div>
+	<script>
+		
+	</script>
+{% endblock %}

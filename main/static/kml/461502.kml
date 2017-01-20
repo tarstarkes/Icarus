@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2">
+    <Document id="feat_1">
+        <Placemark id="feat_2">
+            <name>Catherine Creek 44 Phase 3 - Southern Cross</name>
+            <Point id="geom_0">
+                <coordinates>-117.81403539923907,45.17701524917163,0.0</coordinates>
+            </Point>
+        </Placemark>
+    </Document>
+</kml>

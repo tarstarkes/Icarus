@@ -1,3 +1,65 @@
+.mainPhoto{
+    position: relative;
+}
+.mainPhoto h2 {
+    vertical-align: bottom;
+    margin: 0;
+    position: absolute;
+    bottom: 0;
+    padding: 1vw;
+    color: #ef9502;
+    background: #f3f3f3;
+    -webkit-border-top-right-radius: .5vw;
+    -moz-border-radius-topright: .5vw;
+    border-top-right-radius: .5vw;
+    font-size: 2vw;
+}
+#mainBody h2 {
+    font-size: 3vw;
+}
+div#nxtMeeting {
+    width: 95%;
+    margin-left: 2.5%;
+    text-align: center;
+    background: #ef9502;
+    border-radius: .5vw;
+    padding: .2vw;
+    margin-top: 2vw;
+    color: white;
+    font-family: rockwell;
+}
+
+div#nxtMeeting p {
+    font-size: 2vw;
+    padding: 0.2vw;
+}
+
+#meetingWindow {
+    display: inline-block;
+    width: 52vw;
+    margin-left: 2vw;
+    vertical-align: top;
+    margin-top:2vw;
+    margin-bottom:2vw;
+}
+
+#boardMap{
+    width: 40%;
+    height: 40vw;
+    margin: 2vw;
+    margin-top: 0vw;
+    max-width: none;
+    display: inline-block;
+}
+#meetings{
+    width: 100%;
+    -moz-transform: scaleX(-1);
+    -o-transform: scaleX(-1);
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: FlipH;
+    -ms-filter: "FlipH";
+}
 .mainImage {
 	width: 100%;
 }
@@ -10,6 +72,9 @@
     padding-top: 1vw;
     border-radius: 2vw;
     position: relative;
+}
+a {
+    text-decoration: none;
 }
 a:hover {
 	text-decoration: none;
@@ -133,3 +198,87 @@ ul.checks li {
 	vertical-align: top;
     padding-top: 0;
 }
+
+.board_years,
+.board_date{
+    width: auto;
+    display:inline-block;
+    vertical-align: top;
+}
+.board_years{
+    margin-left: 2vw;
+}
+.date::-webkit-scrollbar,
+.yearList::-webkit-scrollbar{
+    display: none;
+}
+.date,
+ul.yearList {
+    display: inline-block;
+    vertical-align: top;
+    overflow-y: scroll;
+    max-height: 40vw;
+    list-style: none;
+    border-right: .2vw solid gray;
+    padding-right: 1vw;
+    cursor: pointer;
+    font-size: 2vw;
+    padding-left: 1vw;
+    text-decoration: underline;
+    margin-bottom: 0;
+}
+.date li,
+ul.yearList li {
+    padding-left: 1vw;
+    padding-right: 1vw;
+    padding-bottom: 1vw;
+}
+.date_selected,
+.year_selected{
+    color: black;
+    font-weight: bold;
+    font-style: italic;
+}
+.date_unselected,
+.year_unselected{
+    color: gray;
+    font-weight: normal;
+    font-style: italic;
+}
+#selectMenu {
+    width: 54vw;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.docBox {
+    display: inline-block;
+    vertical-align: top;
+    text-decoration: none;
+    font-size: 2vw
+}
+.docBox a{
+    color: #ef9502;
+}
+.docBox a:hover{
+    color: #4E7DB8;
+}
+.docBox ul{
+    list-style: none;
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: 2vw;
+}
+#selectMenuLabel{
+    width: 100%;
+    margin-top: 2vw;
+}
+#selectMenuLabel h4{
+    font-size: 1.5vw;
+    color: #000000;
+    display: inline-block;
+}
+#selectMenuLabel h4:first-child{
+    margin-left: 4vw;
+}
+
