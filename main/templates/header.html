@@ -41,7 +41,18 @@
 </head>
 <body>
 	<div class="container-fluid">
-		<img class="logo" src="{% static 'images/home/logo.png' %}">
+		<div class="logoLogin">
+			<img class="logo" src="{% static 'images/home/logo.png' %}">
+			{% if user.is_authenticated %}
+				<div class="loginSnip">
+					<p>Welcome, {{ user.username }}</p>
+				</div>
+			{% else %}
+				<div class="loginSnip">
+					<a href="/login/"><p>Sign In</p></a>
+				</div>
+			{% endif %}
+		</div>
 		<div style="position: relative;">
 			<table class="navBarLinks">
 				<tbody>

@@ -15,6 +15,22 @@
 			<h2>Login</h2>
 		</div>
 		<div>
+			{% if error %}
+			<div>
+				<p style="color: red; text-align:center; width: 50vw; margin-left: 25vw; padding:1vw;font-weight: bold; font-size: 2vw;">{{ error }}</p>
+			</div>
+			{% endif %}
+			<form class="submitLogin" method="GET" action="">
+				<div id="inputs">
+					<input id="username" name="user" placeholder="username"/>
+					<input id="password" name="pass" placeholder="password" type="password"/>
+					<input style="display: none" name="redirect" value="{{ redirect }}"/>
+					<div class="submitButtons">
+						<input id="login" class="button" type="submit" value="Login"/>
+						<a href="/login/register/"><input id="register" class="button" type="button" value="Register"/></a>
+					</div>
+				</div>
+			</form>
 		</div>
 	</div>
 <script>
