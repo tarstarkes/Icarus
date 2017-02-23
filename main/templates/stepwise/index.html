@@ -15,19 +15,23 @@
 			<h2>Stepwise</h2>
 		</div>
 		<div>
-			<h3 class="stylized_heading">About the Stepwise Process</h3>
-			<div class="content">
-				<p>The Stepwise Process gives a clear and transparent way for partners in the Grande Ronde and Imnaha Subbasins of the Snake River to apply for restoration funds. The process starts with a Prospectus which is submitted in order to give GRMW a brief overview of the project. Once GRMW reviews the prospectus they will then invite the project sponsor to submit a Draft Proposal. The Draft Proposal is used by the Implementation Team to evaluate the project. Draft Proposals are accepted twice a year; once on March 1st and again on September 15th. A site visit is conducted and the sponsor then submits a Final Proposal that reflects the changes requested by the Implementation Team. The Final Proposal is then given to GRMW's <a href="/board/">Board of Directors</a> for a funding decision. The GRMW has an ongoing open solicitation process for all project prospectuses. <a href="/staff/">GRMW staff</a> is available throughout the year to provide technical assistance or guidance in the development of projects and funding applications. Below is a link to the Stepwise Process.</p>
+			<h3 class="stylized_heading">Enter Stepwise</h3>
+			<div class="content" style="padding-bottom:2vw;">
+				<p>To enter stepwise, please click the link labeled "My Stepwise". This will take you to a personalized page where you can track each prospectus and the overall progress of each submission within the Stepwise process. Stepwise will also track correspondance, uploaded documents, and completed Stepwise projects.</p>
+				<div class="enterStepwise">
+					<a style="text-decoration: none;" href="stepwise_portal/">
+						<h4 class="start_stepwise">My Stepwise<h4>
+					</a>
+					{% load filters %}
+					{% if request.user|has_group:"stepwise_manager"%}
+					<a style="text-decoration: none;" href="stepwise_portal_admin/">
+						<h4 class="manage_stepwise">Stepwise Admin<h4>
+					</a>
+					{% endif %}
+				</div>
 			</div>
 		</div>
-		<div>
-			<h3 class="stylized_heading">Where to Start?</h3>
-			<div class="content">
-				<p>The Stepwise Process starts off by submitting a Prospectus to GRMW. The link below will take you to that form. After completing the form you will be able to track the progress of your prospectus through the website. You will
-				need an account with grmw.com to start this process. If you do not have a login, you may create one by clicking <a href="/login/register/">here</a></p>
-				<a href="stepwise_portal/"><h4 class="start_prospectus">Stepwise Portal<h4></a>
-			</div>
-		</div>
+		
 	</div>
 <script>
 	

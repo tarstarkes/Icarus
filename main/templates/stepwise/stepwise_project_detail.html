@@ -1,0 +1,326 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Stepwise</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/stepwise/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="stepwise_project_detail">
+		<div class="mainImage">
+			<img src="{% static 'images/stepwise/mainImage.png' %}">
+			<h2>Stepwise - {{ project.prospectus_id.title }}</h2>
+		</div>
+		<table style="width: 100%;">
+			<tr style="width: 100%;">
+				<th style="vertical-align:top;">
+					<div class="columnA">
+						<div class="navBox">
+							<h3>TABLE OF CONTENTS</h3>
+							<ul class="navBoxLinks">
+								<li><a href="javascript: scroll('#about_step');">Current Step</a>
+								<li><a href="javascript: scroll('#project_details');">Project Details</a></li>
+								<li><a href="javascript: scroll('#documents');">Documents</a></li>
+								<li><a href="javascript: scroll('#comments');">Comments</a></li>
+								<!-- <li><a href="javascript: scroll('');"></a></li>
+								<li><a href="javascript: scroll('');"></a></li>
+								<li><a href="javascript: scroll('');"></a></li>
+								<li><a href="javascript: scroll('');"></a></li> -->
+							</ul>
+						</div>
+						<div id="nav_menu_links">
+							{% if project.current_step == 1 or project.current_step == 2%}
+							<a href="/stepwise/edit_prospectus/{{ project.id }}"><div class="link_button menu_button">Edit Prospectus</div></a>
+							<a href="/stepwise/generate_prospectus/{{ project.id }}"><div id="generate_prospectus" class="link_button menu_button">Generate Prospectus</div></a>
+							{% elif project.current_step == 3 %}
+							<a href="/stepwise/upload_draft/{{ project.id }}">
+							<div class="link_button menu_button" style="display:inline-block; cursor:pointer;">Upload Draft Proposal</div></a>
+							{% endif %}
+							<a href="/stepwise/stepwise_portal"><div class="back_to_stepwise menu_button link_button">Back to Stepwise Portal</div></a>
+						</div>
+					</div>
+				</th>
+				<th style="vertical-align:top;">
+					<div class="columnB">
+						{% if project.current_step %}
+						<center>
+							<p class="stepTracker">
+							{% if project.current_step == 1 %}
+								Step {{project.current_step}} of 7 (Prospectus)</p>
+							{% elif project.current_step == 2 %}
+								Step {{project.current_step}} of 7 (Review)</p>
+							{% elif project.current_step == 3 %}
+								Step {{project.current_step}} of 7 (Draft Proposal)</p>
+							{% elif project.current_step == 4 %}
+								Step {{project.current_step}} of 7 (Site Visit & Feedback Loop)</p>
+							{% elif project.current_step == 5 %}
+								Step {{project.current_step}} of 7 (Final Draft)</p>
+							{% elif project.current_step == 6 %}
+								Step {{project.current_step}} of 7 (Approval)</p>
+							{% elif project.current_step == 7 %}
+								Step {{project.current_step}} of 7 (Final Decision)
+							{% endif %}
+						</center>
+						{% endif %}
+						<div style="height: 2vw; margin-right: 2vw; margin-left:2vw;margin-top: .5vw;background: #d0d0d0;" class="progress">
+							  <div class="progress-bar" role="progressbar" aria-valuenow="0"
+							  aria-valuemin="0" aria-valuemax="100" style="width:0%">
+							  </div>
+						</div>
+
+						<h3 id="about_step" class='stylized_heading'>
+							{% if project.current_step == 1 %}
+								Step {{project.current_step}} of 7 (Prospectus)
+							{% elif project.current_step == 2 %}
+								Step {{project.current_step}} of 7 (Review)
+							{% elif project.current_step == 3 %}
+								Step {{project.current_step}} of 7 (Draft Proposal)
+							{% elif project.current_step == 4 %}
+								Step {{project.current_step}} of 7 (Site Visit & Feedback Loop)
+							{% elif project.current_step == 5 %}
+								Step {{project.current_step}} of 7 (Final Draft)
+							{% elif project.current_step == 6 %}
+								Step {{project.current_step}} of 7 (Approval)
+							{% elif project.current_step == 7 %}
+								Step {{project.current_step}} of 7 (Final Decision)
+							{% endif %}
+						</h3>
+						<div class="content">
+							{% if project.current_step == 1 %}
+								<p>
+								The prospectus is a form that GRMW uses to gather some basic information about your prosposed opportunity. You have already started this form, but it is not yet complete. Once your prospectus is complete, please click the 'Generate Prospectus' button located on the left-hand menu. You will then see a link to the newly generated prospectus in the 'Documents' section of this page. Please note that generating a new prospectus will overwrite any prospectuses you have previously generated for this project.</p>
+							{% elif project.current_step == 2 %}
+								<p style="padding-bottom:1vw;">
+								Your prospectus is currently under review. Once the GRMW staff has looked over your prospectus, you will be notified within 6 weeks of submission whether you are invited to submit a draft project proposal. 
+								<br><br>
+								<span class="normal">GRMW will present the completed prospectus to the Implementation Team which will vote on whether to advance the prospectus to the proposal phase.  The Implementation Team will rank the opportunity presented in the prospectus using the Atlas scoring matrices which evaluate the following:</span><br><br></p>
+								<div style="margin-left:4vw;">
+								<ul class="normal" style="font-size: 1.5vw; margin:1vw;">
+									<li> Is this opportunity in a high ranking Biologically Significant Reach (BSR)?</li>
+									<li> Does this opportunity address the critical  life stages of the focal fish species occupying the BSR?</li>
+									<li>Will this opportunity address the most critical limiting factors in the BSR?</li>
+									<li>Do the restoration actions effectively improve habitat?</li>
+								</ul>
+								</div>
+								<br><br>
+								<p style="padding-top:1vw;"><span class="normal">
+								Once the opportunity presented in the prospectus is scored, the Implementation Team will determine whether the opportunity is a high priority for current fish populations and should advance to Step 2, the Draft Proposal. The Opportunity Lead will be notified within 6 weeks  of submitting a prospectus whether they are invited to submit a draft proposal.</span></p>
+							{% elif project.current_step == 3 %}
+								<p>
+									This step is intended to explain the proposed project in more detail. Using the OWEB Proposal format found <a href="http://apps.wrd.state.or.us/apps/oweb/oa/Home.aspx" target="_blank">here</a>, the Opportunity Lead should clearly describe the project goals, objective, design, schedule, and budget. The Implementation Team should be able to understand all aspects of the proposed project after reviewing the proposal. If you do not have the proper GRMW credentials for logging into the OWEB Grant Application, please call GRMW at <a href="tel:1-541-663-0570">541-663-0570</a> or email us at <a href="emailto:projects@grmw.org">projects@grmw.org</a> so we may provide them for you. Once logged in, you should be able to create a new application.<br><br>
+
+									<span class="normal">Once the Opportunity Lead has submitted an application to OWEB, depending on whether OWEB funding was requested, a copy of the application may be downloaded. If a copy of the application was obtained from OWEB, we ask that you upload it here as a draft proposal. The 'upload draft proposal' button located on the left-hand menu will take you to the appropriate page to upload the application. If you were unable to obtain a copy of the application for any reason, we instead ask that you email us at projects@grmw.org and let us know that your application has been submitted to OWEB.<br><br>
+
+									GRMW will facilitate technical review and a project site visit by the Implementation Team. The Implementation Team is responsible for reviewing and providing feedback on technical merit, cost effectiveness, feasibility, and sustainability of the project.<br><br>
+
+									Draft Proposals are accepted twice a year; once on March 1st and again on September 15th.  In the event that the available BPA project funds are not fully allocated with the one solicitation or an additional high priority project becomes available, a second solicitation may be held.  If necessary, the due date for the second solicitation will be September 15th. Please contact GRMW for more information about the status of our solicitations.</span>
+								</p>
+							{% elif project.current_step == 4 %}
+								<p>
+									This step allows the Atlas Implementation Team and the Opportunity Lead (sponsor) to discuss the technical and biological merits of the project while on site.<br><br>
+ 
+									<span class="normal">During the site visit, the Implementation Team and Opportunity Lead will discuss any relevant issues such as expected biological benefit, likelihood of meeting the biological objectives, technical design, contingencies, and suggestions for improving the proposed project. Within two weeks following the site visit, the Opportunity Lead will receive a written site visit report prepared by GRMW that incorporates the Implementation Team recommendations.<br><br>
+									</span>
+								</p>
+							{% elif project.current_step == 5 %}
+								<p>
+									The Opportunity Lead will have four weeks to address the Implementation Team’s feedback and submit a revised draft proposal for distribution to the Implementation Team. You may upload your revised draft using the 'Upload Final Draft' button located on the left hand menu.<br><br>
+
+									<span class="normal">The Implementation Team will review the revised draft proposal and determine, by consensus, to defer or advance the proposal for a funding decision.  The GRMW will support the Opportunity Lead by addressing questions, concerns, or requests for additional information.  If the proposal is advanced by the Implementation Team, GRMW will present the final proposal, along with any Implementation Team recommendations, to the GRMW Board of Directors for a vote to determine whether the proposed project should be approved for funding.</span>
+								</p>
+							{% elif project.current_step == 6 %}
+								<p>
+									This step will provide formal electronic notification of GRMW Board of Director’s decision to fund or not fund the proposed project.<br><br>
+ 
+									<span class="normal">This notification will be provided as a letter to the Opportunity Lead (sponsor) with a copy for the appropriate BPA staff within five days of the decision at the June Board of Directors meeting. The letter will state whether project funding has been approved or denied, with the associated rationale provided for a denial decision. Funding may be approved partially or completely relative to the  amount requested in the project proposal.<br><br>
+
+									Once a decision has been reached, this stepwise process will progress to step 7 of 7 and a small message will appear in this box alerting you to the status of this opportunity. If your opportunity is approved for funding, an approval letter will show up in the documents section of this page.</span>
+								</p>
+							{% elif project.current_step == 7 %}
+								<!--Final Approval/Denial should have one for each outcome, denied or approved.-->
+								{% if project.final_approval_id.approval_flag == True %}
+								<p>
+									Congratulations! Your project has been approved for funding! By this time you should see a letter of approval in your documents section of this page.
+								</p>
+								{% elif project.final_approval_id.approval_flag == False %}
+								<p>
+									We regret to inform you that your proposed opportunity has not been selected for funding at this time. 
+								</p>
+								{% else %}
+								<p>
+									A decision as to the funding of your proposed opportunity has not yet been determined.
+								</p>
+								{% endif %}
+							{% endif %}	
+						</div>
+
+						<h3 id="project_details" class='stylized_heading'>Project Details</h3>
+						<div class="content">
+							<p>
+							Title: <span class="normal">{{ project.prospectus_id.title }}</span><br>
+							Technical Contact Name:<span class="normal"> {{ project.prospectus_id.tech_contact_name }}</span><br>
+							Opportunity Lead:<span class="normal"> {{ project.prospectus_id.opp_lead_name }}</span><br>
+							Description: <span class="normal">{{ project.prospectus_id.project_description|linebreaksbr }}</span><br>
+							</p>					
+						</div>
+
+						<h3 id="documents" class='stylized_heading'>Documents</h3>
+						<div class="content">
+							{% if prospectus %}
+								<p>Click a link below to begin downloading the associated document.</p>
+								<a href="/{{prospectus.file}}" type="application/pdf" download><div class="link_button document_link">Prospectus</div></a>
+							{% else %}
+								<center><p>There are no documents on file for this project.</p></center>
+							{% endif %}
+							{% if draft_files %}
+								{% for draft in draft_files %}
+									<a href="/{{draft.draft_file}}" download><div class="link_button document_link">{{draft.draft_title}}</div></a>
+								{% endfor %}
+							{% endif %}
+						</div>
+
+						<h3 id="comments" class='stylized_heading'>Comments</h3>
+						<div class="content">
+							<div class="comment_box">
+								{% if comments %}
+										{% for comment in comments %}
+											{% if comment.user_id.id == request.user.id %}
+												<div class="comment">
+													<p style="padding-bottom: .5vw;">
+														From: <span class="normal">{{comment.user_id.first_name}} {{comment.user_id.last_name}}</span><br>
+														Subject: <span class="normal">{{comment.subject}}</span>
+													</p>
+													<div class="normal less_separation">
+														{{comment.content|linebreaks}}
+													</div><br>
+													<div class="attachment_box">
+														{% if comment.attachment %}
+															<span class="bold smallFont">Attachment:<br/></span><a class="attachment_link" href="/{{comment.attachment}}" download>{{comment.attachment.file.name}}</a>
+														{% endif %}
+													</div>
+												</div>
+											{% else %}
+												<div class="other-comment">
+													<p style="padding-bottom:.5vw;">
+														From: <span class="normal">{{comment.user_id.first_name}} {{comment.user_id.last_name}}</span><br>
+														Subject: <span class="normal">{{comment.subject}}</span>
+													</p>
+													<div class="normal less_separation">
+														{{comment.content|linebreaks}}
+													</div><br>
+													<div class="attachment_box">
+														{% if comment.attachment %}
+														<span class="bold smallFont">Attachment:<br/></span>
+														<a class="attachment_link" href="/{{comment.attachment}}" download>
+															{{comment.attachment.file.name}}
+														</a>
+														{% endif %}
+													</div>
+												</div>
+											{% endif %}
+										{% endfor %}
+								{% else %}
+									<center><p>You have no comments</p></center>
+								{% endif %}
+							</div>
+
+							<div id="comment_form" style="border-top:.1vw solid black">
+								{% if comment_form %}
+								<form enctype="multipart/form-data" method="POST" action="/stepwise/stepwise_comment/{{project.id}}/">{% csrf_token %}
+									{{ comment_form.as_p }}
+									<button id="submit_comment" class="link_button" type="submit">Submit</button>
+								</form>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</th>
+			</tr>
+		</table>		
+	</div>
+<script>
+	$(document).ready(function(){
+		var widthInPX = $(window).width();
+		var twoVW = Math.round(widthInPX*.02);
+		var navHeight = $(".logologin").height();
+		var navmenulinks = $(".mainImage").height();
+		$(window).on('scroll', function(){
+			if(window.pageYOffset > (twoVW*3+navHeight+navmenulinks)){
+				if(window.pageYOffset < $(".columnB").height()){
+					$(".navBox").css('margin-top', ((($(window).scrollTop())-(twoVW*2)-navHeight-navmenulinks)+"px"));
+				}
+			}
+			else if(window.pageYOffset < (twoVW+navHeight)){
+				$(".navBox").css('margin-top', (twoVW+"px"));
+			}
+		});
+
+		{% if project.current_step %}
+			var percentage = Math.ceil(({{project.current_step}}/7)*100);
+			$(".progress-bar").attr('aria-valuenow', percentage)
+			$(".progress-bar").attr('style', 'width: '+percentage+'%')
+		{% endif %}
+
+		$("#generate_prospectus").click(function(e){
+			return window.confirm("Are you sure you wish to generate another prospectus? If you do, your previous prospectus will be overwritten.")
+		});
+
+		$("#comment_form label").hide();
+		$('#comment_form label[for="id_attachment"]').show();
+
+		$('.comment_box').scrollTop($('.comment_box')[0].scrollHeight);
+
+		//prepend upload icon to upload label
+		$('#comment_form label[for="id_attachment"]').html("<img class='upload_icon' src='{% static 'images/stepwise/upload.png'%}'/>  Upload Attachment");
+
+		var id_attachment = document.querySelectorAll( '#id_attachment' );
+		Array.prototype.forEach.call( id_attachment, function( input )
+		{
+			var label	 = $('#comment_form label[for="id_attachment"]');
+			labelVal = label.html;
+			console.log("made it")
+			input.addEventListener( 'change', function( e )
+			{
+				console.log("something changed: ")
+				var fileName = '';
+				if( this.files && this.files.length > 1 )
+					fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+				else
+					fileName = e.target.value.split( '\\' ).pop();
+
+				if( fileName )
+					$('#comment_form label[for="id_attachment"]').html("Attachment: "+fileName);
+				else
+					$('#comment_form label[for="id_attachment"]').html("<img class='upload_icon' src='{% static 'images/stepwise/upload.png'%}'/>  Upload Attachment");
+			});
+		});
+
+		//use filename instead of path for all attachments
+		attachments = $(".comment .attachment_link");
+		for(var i=0; i < attachments.length; i++){
+			filename = attachments[i].innerHTML 
+			filename = filename.split('\\');
+			filename = filename[filename.length-1];
+			filename = filename.replace(/\s/g,'');
+			if(filename != ''){
+				attachments[i].innerHTML = "Download: "+filename;
+			}
+		}
+
+		//style parent of upload button (can't be done with css)
+		$('label[for="id_attachment"]').parent().css('max-width', '30vw');
+		$('label[for="id_attachment"]').parent().css('display', 'inline-block');
+		$('label[for="id_attachment"]').parent().css('verical-align', 'top');
+		$('label[for="id_attachment"]').parent().css('margin-bottom', '2vw');
+	});
+
+	function scroll(t){
+		$('html, body').animate({
+			scrollTop: $(t).offset().top
+		}, 500);
+	}
+</script>
+{% endblock %}

@@ -6,6 +6,7 @@ from django.db.models import Q
 from html.parser import HTMLParser
 from django.conf import settings
 from django.contrib.auth import authenticate, login
+from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
 
 import os
@@ -16,12 +17,15 @@ def index(request):
 	pwd = request.GET.get("pass")
 	redirect = request.GET.get("redirect")
 	err = request.GET.get("error")
+	variableList = {}
 
 	#go to the login page if there is nothing to authenticate
 	if (err != None and err != ""):
-		returnHtml = render(request, "user_login/login.html", {'error': err})
-	else:
-		returnHtml = render(request, "user_login/login.html")
+		variableList['error'] = err
+	if (redirect != None and redirect != ""):
+		variableList['redirect'] = redirect
+	
+	returnHtml = render(request, "user_login/login.html", variableList)
 
 	#user and pwd were not entered
 	if(user != None and pwd != None):
@@ -29,6 +33,8 @@ def index(request):
 		pwd = parser.unescape(pwd)
 		user = parser.unescape(user)
 		user=authenticate(username=user, password=pwd) #authenticate the username and password
+		print(redirect)
+		#user authenticated successfully, there should be no errors beyond this point so we may use HttpResponseRedirect without fear of losing an error message
 		if user is not None:
 			login(request, user) #log the user in
 			returnHtml = HttpResponseRedirect("/")
@@ -39,8 +45,8 @@ def index(request):
 		else:
 			#user failed to authenticate
 			print("going back to login")
-			err="Sorry, but that username and password combination is invalid. Please check your credentials and try again or contact the server admin at infotech@gmail.com."
-			returnHtml = render(request, "user_login/login.html", { 'error': err } )
+			variableList['error'] = "Sorry, but that username and password combination is invalid. Please check your credentials and try again or contact the server admin at infotech@gmail.com."
+			returnHtml = render(request, "user_login/login.html", variableList)
 
 	return returnHtml
 
@@ -48,5 +54,5 @@ def register(request):
 	return render(request, "user_login/register.html")
 
 def logout(request):
-
-	return render(request, "")
+	django_logout(request)
+	return HttpResponseRedirect("/login/")

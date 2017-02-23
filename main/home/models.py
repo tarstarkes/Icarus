@@ -146,7 +146,7 @@ class DocumentType(models.Model):
         return (self.name)
 
 def get_upload_path(instance, filename):
-    return os.path.join( "documents", "data", "project_documents", str(instance.project_id.id), filename)
+    return os.path.join( "static", "documents", "data", "project_documents", str(instance.project_id.id), filename)
 
 class Document(models.Model):
     id = models.AutoField(primary_key=True)
@@ -165,7 +165,7 @@ class Document(models.Model):
         return (self.type_id.name+" - "+self.project_id.name+" - "+str(self.date))
 
 def get_image_path(instance, filename):
-    return os.path.join( "images", "data", "project_images", str(instance.project_id.id), filename)
+    return os.path.join( "static", "images", "data", "project_images", str(instance.project_id.id), filename)
 
 class Image(models.Model):
     id = models.AutoField(primary_key=True)

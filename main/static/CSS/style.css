@@ -1,3 +1,6 @@
+p{
+	margin-bottom: .2vw;	
+}
 hr {
     /* color: black; */
     background-color: gray;
@@ -13,13 +16,17 @@ body {
 body::-webkit-scrollbar{
 	display: none;
 }
+h2{
+	margin-top: .5vw;
+	margin-bottom: .5vw;
+}
 .logo {
 	width: 15%;
     margin-left: calc(50% - 7.5%);
     margin-top: 1vw;
     margin-bottom: 1vw;
 }
-.loginSnip{
+/*.loginSnip{
     margin-right: 1vw;
     font-size: 1.5vw;
     position: absolute;
@@ -28,6 +35,16 @@ body::-webkit-scrollbar{
     margin-right: 2vw;
     font-weight: bold;
     color: #ef9502;
+}*/
+.loginSnip{
+    font-size: 1.5vw;
+    display: inline-block;
+    font-weight: bold;
+    color: #ef9502;
+    text-align: right;
+    width: 40vw;
+    padding-right: 1vw;
+    vertical-align:bottom;
 }
 .loginSnip a{
 	color: #ef9502;

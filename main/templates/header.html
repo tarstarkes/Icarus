@@ -45,11 +45,11 @@
 			<img class="logo" src="{% static 'images/home/logo.png' %}">
 			{% if user.is_authenticated %}
 				<div class="loginSnip">
-					<p>Welcome, {{ user.username }}</p>
+					<p>Welcome, {{ user.username }} (<a href="/login/logout/">Sign Out</a>)</p>
 				</div>
 			{% else %}
 				<div class="loginSnip">
-					<a href="/login/"><p>Sign In</p></a>
+					<p><a href="/login/">Sign In</a> / <a href="/accounts/register/">Register</a></p>
 				</div>
 			{% endif %}
 		</div>
@@ -121,7 +121,7 @@
 							<span style="font-weight: bold; font-size: 1.75vw;">La Grande Office</span><br>
 							Address: 1114 'J' Ave<br>
 							La Grande, OR 97850<br>
-							Email: contact@grmw.org<br>
+							Email: mary@grmw.org<br>
 							Phone: 541.663.0570<br>
 							Fax: 541.962.1585<br>
 						</p>

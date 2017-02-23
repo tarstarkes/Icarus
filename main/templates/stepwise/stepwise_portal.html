@@ -9,10 +9,114 @@
 {% endblock %}
 
 {% block content %}
-	<div>
-		THIS IS THE STEPWISE PAGE
+	<div class="stepwise_portal_body">
+		<div class="mainImage">
+			<img src="{% static 'images/stepwise/main.png'%}"/>
+			<h2>Stepwise - {{ user }}</h2>
+		</div>
+		<table style="width: 100%;">
+			<tr style="width: 100%;">
+				<th style="vertical-align:top;">
+					<div class="columnA">
+						<div class="navBox">
+							<h3>TABLE OF CONTENTS</h3>
+							<ul class="navBoxLinks">
+								<li><a href="javascript: scroll('#proj');">My Projects</a></li>
+								<li><a href="javascript: scroll('#about_stepwise');">About Stepwise</a></li>
+								<li><a href="javascript: scroll('#where_to_start');">Where to Start?</a></li>
+								<li><a href="javascript: scroll('#supporting_documents');">Supporting Documents</a></li>
+							</ul>
+						</div>
+					</div>
+				</th>
+				<th style="vertical-align:top;">
+					<div class="columnB">
+						<h3 id="proj" class="stylized_heading">My Projects<button type="submit" class="newProj">Add New Project</button></h3>
+						<div class="content">
+							{% if not projects %}
+								<center><p>You currently have no projects. To begin a new project and start a new prospectus, please click the "Add New Project" Button.</p></center>
+							{% elif projects %}
+								<table class="project_list" style="width: 100%;">
+									<tr class="tableHead">
+										<th>Project Name</th>
+										<th>Percent Complete</th>
+										<th>Status</th>
+									</tr>
+								{% for project in projects %}
+									<tr href="/stepwise/stepwise_detail/{{ project.id }}" class="project_entry">
+										<td>{{project.prospectus_id.title}}</td>
+										<td>{{project.percent_done}}%</td>
+										<td class="class_{{project.overall_status_id.status}}">{{project.overall_status_id.status}}</td>
+									</tr>
+								{% endfor %}
+								</table>
+							{% endif %}
+						</div>
+						<div>
+							<h3 id="about_stepwise" class="stylized_heading">About the Stepwise Process</h3>
+							<div class="content">
+								<p>The Stepwise Process gives a clear and transparent way for partners in the Grande Ronde and Imnaha Subbasins of the Snake River to apply for restoration funds. The process starts with a Prospectus which is submitted in order to give GRMW a brief overview of the project. Once GRMW reviews the prospectus they will then invite the project sponsor to submit a Draft Proposal. The Draft Proposal is used by the Implementation Team to evaluate the project. Draft Proposals are accepted twice a year; once on March 1st and again on September 15th. A site visit is conducted and the sponsor then submits a Final Proposal that reflects the changes requested by the Implementation Team. The Final Proposal is then given to GRMW's <a href="/board/">Board of Directors</a> for a funding decision. The GRMW has an ongoing open solicitation process for all project prospectuses. <a href="/staff/">GRMW staff</a> is available throughout the year to provide technical assistance or guidance in the development of projects and funding applications.</p>
+							</div>
+						</div>
+						<div>
+							<h3 id="where_to_start" class="stylized_heading">Where to Start?</h3>
+							<div class="content">
+								<p>The Stepwise Process starts off by submitting a Prospectus to GRMW. The "Add New Project" link at the top of this page will open the Prospectus form. Completing the first step of the form will automatically save it to your projects (even if you did not complete the entire form) so you can continue to work on it at a later date if you choose. When you select a project from the 'My Projects' area, it will open a new page showing some details of the project and where it is in the Stepwise Process. From there you will also be able to: download the prospectus, upload proposals, and correspond with the GRMW staff.
+							</div>
+						</div>
+						<div>
+							<h3 id="supporting_documents" class="stylized_heading">Supporting Documents</h3>
+							<div class="content">
+								<p>Here are some supporting documents that might serve to inform your stepwise projects.</p>
+								<ul class="docLinkBox">
+									<a href="{% static 'documents/stepwise/Atlas Implementation Guidelines (6-8-15).pdf'%}" target="_blank"><li class="docLink">Atlas Implementation Guidelines</li></a>
+									<a href="https://www.nwcouncil.org/fw/subbasinplanning/granderonde/plan" target="_blank"><li class="docLink">Grande Ronde Subbasin Plan</li></a>
+									<a href="https://www.nwcouncil.org/fw/subbasinplanning/imnaha/plan" target="_blank"><li>Imnaha Subbasin Plan</li></a>
+									<a href="http://www.westcoast.fisheries.noaa.gov/protected_species/salmon_steelhead/recovery_planning_and_implementation/snake_river/current_snake_river_recovery_plan_documents.html" target="_blank"><li>NMFS Draft ESA Recovery Plan</li></a>
+								</ul>	
+							</div>
+						</div>
+					</div>
+				</th>
+			</tr>
+		</table>
+		<br>
+		<br>
 	</div>
 <script>
-	
+	$(document).ready(function(){
+		var widthInPX = $(window).width();
+		var twoVW = Math.round(widthInPX*.02);
+		var navHeight = $(".logologin").height();
+		var navmenulinks = $(".mainImage").height();
+		$(window).on('scroll', function(){
+			if(window.pageYOffset > (twoVW*3+navHeight+navmenulinks)){
+				if(window.pageYOffset < $(".columnB").height()){
+					$(".navBox").css('margin-top', ((($(window).scrollTop())-(twoVW*2)-navHeight-navmenulinks)+"px"));
+				}
+			}
+			else if(window.pageYOffset < (twoVW+navHeight)){
+				$(".navBox").css('margin-top', (twoVW+"px"));
+			}
+		});
+
+		$('.project_entry').click(function(){
+	        window.location = $(this).attr('href');
+	        return false;
+    	});
+
+
+    	$(".newProj").click(function(e){
+			if(window.confirm("Are you sure you wish to start a new project? Starting a new project will immediately save it the 'My Projects' section in your stepwise portal.")){
+				window.location.href='/stepwise/stepwise_prospectus/clean/1/';
+			}
+		});
+	});
+	function scroll(t){
+		$('html, body').animate({
+    		scrollTop: $(t).offset().top
+		}, 500);
+	}
+
 </script>
 {% endblock %}

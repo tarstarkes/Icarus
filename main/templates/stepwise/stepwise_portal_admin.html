@@ -1,0 +1,102 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Stepwise</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/stepwise/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="stepwise_portal_body">
+		<div class="mainImage">
+			<img src="{% static 'images/stepwise/main.png'%}"/>
+			<h2>Stepwise Admin - {{ user }}</h2>
+		</div>
+		<table style="width: 100%;">
+			<tr style="width: 100%;">
+				<th style="vertical-align:top;">
+					<div class="columnA">
+						<div class="navBox">
+							<h3>TABLE OF CONTENTS</h3>
+							<ul class="navBoxLinks">
+								<li><a href="javascript: scroll('#proj');">All Opportunities</a></li>
+							</ul>
+						</div>
+					</div>
+				</th>
+				<th style="vertical-align:top;">
+					<div class="columnB">
+						<h3 id="proj" class="stylized_heading">All Opportunities</h3>
+						<div class="content">
+							{% if not projects %}
+								<center><p>There are currently no opportunities to manage</p></center>
+							{% elif projects %}
+								<table class="project_list" style="width: 100%;">
+									<tr class="tableHead">
+										<th>Opportunity Name</th>
+										<th>Percent Complete</th>
+										<th>Current Step</th>
+										<th>Status</th>
+										<th>Delete</th>
+									</tr>
+								{% for project in projects %}
+									<tr href="/stepwise/stepwise_portal_admin/stepwise_project_detail_admin/{{ project.id }}/" class="project_entry">
+										<td>{{project.prospectus_id.title}}</td>
+										<td>{{project.percent_done}}%</td>
+										<td>{{project.current_step}} of 7</td>
+										<td class="class_{{project.overall_status_id.status}}">{{project.overall_status_id.status}}</td>
+										<td class="admin_delete" href="/stepwise/stepwise_portal_admin/stepwise_project_delete/{{ project.id }}/"><img class="delete_project" src="{% static 'images/stepwise/remove.png' %}"></td>
+									</tr>
+								{% endfor %}
+								</table>
+							{% endif %}
+						</div>
+						<div>
+					</div>
+				</th>
+			</tr>
+		</table>
+		<br>
+		<br>
+	</div>
+<script>
+	$(document).ready(function(){
+		var widthInPX = $(window).width();
+		var twoVW = Math.round(widthInPX*.02);
+		var navHeight = $(".navBox").height();
+		$(window).on('scroll', function(){
+			console.log(window.pageYOffset);
+			if(window.pageYOffset > (twoVW+navHeight)){
+				if(window.pageYOffset < $(".columnB").height()){
+					$(".navBox").css('margin-top', ((window.pageYOffset-navHeight)+"px"));
+				}
+			}
+			else if(window.pageYOffset < (twoVW+navHeight)){
+				$(".navBox").css('margin-top', (twoVW+"px"));
+			}
+		});
+
+		$('.project_entry').click(function(e){
+			if(e.target.closest('td').className != 'admin_delete'){
+		        window.location = $(this).attr('href');
+		        return false;
+			}
+			else if(e.target.closest('td').className == 'admin_delete'){
+				if(window.confirm("Are you sure you want to permanently delete this Opportunity?")){
+					window.location = $(e.target.closest('td')).attr('href');
+		        	return false;
+				}
+			}
+    	});
+
+	});
+	function scroll(t){
+		$('html, body').animate({
+    		scrollTop: $(t).offset().top
+		}, 500);
+	}
+
+</script>
+{% endblock %}

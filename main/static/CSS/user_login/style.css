@@ -71,3 +71,11 @@
 .submitButtons a{
     display: inline-block !important;
 }
+#inputs ul.errorlist {
+    margin-top: 2vw;
+    margin-left: 37vw;
+    width: 20vw;
+    color: red;
+    font-weight: bold;
+    list-style: none;
+}

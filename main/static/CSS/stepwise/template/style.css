@@ -1,0 +1,31 @@
+.prospectus_template_box{
+    font-size: 16px;
+}
+.prospectus_template_logo img{
+    width: 100%;
+}
+.prospectus_template_body {
+    background: #ffffff;
+}
+.prospectus_template_date{
+    text-align: center;
+}
+.large_bold{
+    font-size:24px;
+    font-weight:bold;
+}
+.bold{
+    font-weight: bold;
+}
+.indent{
+    margin-left: 20px;
+}
+.text_indent{
+    text-indent: 20px;
+}
+.prospectus_template_container{
+    background: #ffffff;
+}
+.italic {
+    font-style:italic;
+}

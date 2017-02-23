@@ -1,0 +1,9 @@
+Hello,
+
+Please click the activation link below to finish activating your account with grmw.org. You may reply to this email with any questions or concerns you may have about the contents of this email or its sender. You will have {{ expiration_days }} days from the date you recieved this message to activate your account.
+
+REMEMBER! To login you must use your created username NOT your email address. 
+
+your username is: {{ user }}
+
+{{ site }}/accounts/activate/{{ activation_key }}

@@ -1,0 +1,154 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Stepwise</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/stepwise/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="stepwise_prospectus_body">
+		<div class="mainImage">
+			<img src="{% static 'images/stepwise/main.png'%}"/>
+			<h2>Stepwise - {{ user }}</h2>
+		</div>
+
+		<table style="width: 100%;">
+			<tr style="width: 100%;">
+				<th style="vertical-align:top;">
+					<div class="columnA">
+						<div class="navBox">
+							<h3>TABLE OF CONTENTS</h3>
+							<ul class="navBoxLinks">
+								<li><a href="/stepwise/stepwise_prospectus/1/">Step 1 - Title, Technical Contact</a></li>
+								<li><a href="/stepwise/stepwise_prospectus/2/">Step 2 - Opportunity Lead</a></li>
+								<li><a href="/stepwise/stepwise_prospectus/3/">Step 3 - Landowners</a></li>
+								<li><a href="/stepwise/stepwise_prospectus/4/">Step 4 - 
+								River/Stream</a></li>
+								<li><a href="/stepwise/stepwise_prospectus/5/">Step 5 - Atlas</a></li>
+								<li><a href="/stepwise/stepwise_prospectus/6/">Step 6 - Restoration Activities</a></li>
+								<li><a href="/stepwise/stepwise_prospectus/7/">Step 7 - Species</a></li>
+								<li><a href="/stepwise/stepwise_prospectus/8/">Step 8 - Description & Objectives
+								</a></li>
+								<li><a href="/stepwise/stepwise_prospectus/9/">Step 9 - Major Risks</a></li>
+								<li><a href="/stepwise/stepwise_prospectus/10/">Step 10 - Permits & Consultations</a></li>
+								<li><a href="/stepwise/stepwise_prospectus/11/">Step 11 - Implementation & Montioring</a></li>
+								<li><a href="/stepwise/stepwise_prospectus/12/">Step 12 - Phase & Approach
+								</a></li>
+								<li><a href="/stepwise/stepwise_prospectus/13/">Step 13 - Estimated Cost & Funding
+								</a></li>
+
+								{% if project.prospectus_id.grmw_design_funds == True %}
+									<li><a href="/stepwise/stepwise_prospectus/14/">Step 14 - Funding Options
+									</a></li>
+									<li><a href="/stepwise/stepwise_prospectus/15/">Step 15 - Work & Specialties Needed
+									</a></li>	
+								{% endif %}						
+
+							</ul>
+						</div>
+						<a href="/stepwise/stepwise_detail/{{ project.id }}"><div class="back_to_stepwise menu_button link_button">Back to Project</div></a>
+						<a href="/stepwise/stepwise_portal"><div class="back_to_stepwise menu_button link_button">Back to Stepwise Portal</div></a>
+					</div>
+				</th>
+				<th style="vertical-align:top;">
+					<div class="columnB">
+						{% if current_step %}
+						<center>
+							<p class="stepTracker">Step {{current_step}} of 15</p>
+						</center>
+						{% endif %}
+						<div id="form_progress_bar">
+							<div class="progress">
+								  <div class="progress-bar" role="progressbar" aria-valuenow="0"
+								  aria-valuemin="0" aria-valuemax="100" style="width:0%">
+								  </div>
+							</div>
+						<div>
+
+						{% if current_step != 3 %}
+						<form class="prospectus_form" method="POST" action="/stepwise/stepwise_prospectus{{action}}">{% csrf_token %}
+							{{ form.as_p }}
+							<button class="nextStep" type="submit">{{submit}}</button>
+						</form>
+						{% elif current_step == 3 %}
+							<form class="prospectus_form" method="POST" action="/stepwise/stepwise_prospectus{{action}}">{% csrf_token %}
+							<table style="width: 100%">
+								<tr>
+									<th>Name</th>
+									<th>Email</th>
+									<th>Remove</th>
+								</tr>
+								{% if landowners %}
+									{% for landowner in landowners %}
+									<tr>
+										<td><p>{{landowner.landowner_name}}</p></td>
+										<td><p>{{landowner.landowner_email}}</p></td>
+										<td><a href="/stepwise/stepwise_prospectus/delete_landowner/{{ landowner.id }}">Delete</a></td>
+									</tr>
+									{% endfor %}
+								{% else %}
+									<tr>
+										<td style="padding:1vw; font-size:1vw; font-weight:bold" colspan=3><center><p>There are no landowners involved</p></center></td>
+									</tr>
+								{% endif %}
+							</table>
+							{{ form.as_p }}
+							<button style="font-size:1.5vw;" class="nextStep" type="button" onclick="window.location.href='/stepwise/stepwise_prospectus/add_landowner/'">Add a Landowner</button>
+							<button style="font-size:1.5vw;" class="nextStep" type="submit">{{submit}}</button>
+						</form>
+						{% endif %}
+					</div>
+				</th>
+			</tr>
+		</table>
+	</div>
+<script>
+	$(document).ready(function(){
+		{% if current_step %}
+			var percentage = Math.ceil(({{current_step}}/16)*100);
+			$(".progress-bar").attr('aria-valuenow', percentage)
+			$(".progress-bar").attr('style', 'width: '+percentage+'%')
+		{% endif %}
+
+		var widthInPX = $(window).width();
+		var twoVW = Math.round(widthInPX*.02);
+		var scrollOffset = $(".mainImage").height()+$(".logoLogin").height();
+		$(window).on('scroll', function(){
+			console.log(window.pageYOffset);
+			if((window.pageYOffset+twoVW+scrollOffset) > $('.columnB').height()){
+				//do nothing
+			}
+			else if(window.pageYOffset > (twoVW+scrollOffset)){
+				if(window.pageYOffset < $(".columnB").height()){
+					$(".navBox").css('margin-top', ((window.pageYOffset+twoVW-scrollOffset)+"px"));
+				}
+			}
+			else if(window.pageYOffset < (twoVW+scrollOffset)){
+				$(".navBox").css('margin-top', (twoVW+"px"));
+			}
+		});
+
+		$('.project_entry').click(function(){
+	        window.location = $(this).attr('href');
+	        return false;
+    	});
+    	highlight_current_step()
+
+
+	});
+	function scroll(t){
+		$('html, body').animate({
+    		scrollTop: $(t).offset().top
+		}, 500);
+	}
+	{% if current_step %}
+	function highlight_current_step(){
+		var step = {{current_step}};
+		$(".navBoxLinks li:nth-child("+step+") a").css('color', '#a0a0a0');
+	}
+	{% endif %}
+</script>
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Stepwise</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/stepwise/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="stepwise_prospectus_body">
+		<div class="mainImage">
+			<img src="{% static 'images/stepwise/main.png'%}"/>
+			<h2>Stepwise - {{ user }}</h2>
+		</div>
+		<form class="prospectus_form" method="POST" action="/stepwise/stepwise_prospectus{{action}}">{% csrf_token %}
+			{{ form.as_p }}
+			<button class="nextStep" type="button" onclick="javascript: window.history.back();">Back</button>
+			<button class="nextStep" type="submit">{{submit}}</button>
+		</form>
+	</div>
+<script>
+
+</script>
+{% endblock %}

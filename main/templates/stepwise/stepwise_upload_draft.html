@@ -1,0 +1,80 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Stepwise</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/stepwise/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="stepwise_draft_proposal_body">
+		<div class="mainImage">
+			<img src="{% static 'images/stepwise/main.png'%}"/>
+			<h2>Stepwise - {{ user }}</h2>
+		</div>
+
+		<table style="width: 100%;">
+			<tr style="width: 100%;">
+				<th style="vertical-align:top;">
+					<div class="columnA">
+						<a href="/stepwise/stepwise_detail/{{ project.id }}"><div class="back_to_stepwise menu_button link_button">Back to Project</div></a>
+						<a href="/stepwise/stepwise_portal"><div class="back_to_stepwise menu_button link_button">Back to Stepwise Portal</div></a>
+					</div>
+				</th>
+				<th style="vertical-align:top;">
+					<div class="columnB">
+						<h3 id="project_details" class='stylized_heading'>Draft Proposal</h3>
+						<div class="content">
+							<p>
+							Congratulations! Your prospectus has been selected to move forward in the stepwise process. GRMW has asked that you now submit your draft proposal for this opportunity. Our draft proposal format has changed and now follows the OWEB format as outlined <a href="#">here</a>. Once you have completed the OWEB application, please upload the draft using the upload button below, select the file for the draft, and then click the 'Submit Draft' button.
+							</p>
+							<form class="upload_draft_form" enctype="multipart/form-data" method="POST" action="">{% csrf_token %}
+							<div><center>
+								{{ form.as_p }}
+								<button class="nextStep" type="submit">Submit Draft</button>
+							</center></div>
+							</form>
+						</div>
+					</th>
+				</th>
+			</tr>
+		</table>
+	</div>
+<script>
+	$(document).ready(function(){
+		//style parent of upload button (can't be done with css)
+		$('label[for="id_draft_file"]').parent().css('verical-align', 'top');
+		$('label[for="id_draft_file"]').parent().css('margin-bottom', '0');
+
+		//prepend upload icon to upload label
+		$('label[for="id_draft_file"]').html("<img class='upload_icon' src='{% static 'images/stepwise/upload.png'%}'/>  Upload Draft");
+
+		var id_draft_file = document.querySelectorAll( '#id_draft_file' );
+		Array.prototype.forEach.call( id_draft_file, function( input )
+		{
+			var label	 = $('label[for="id_draft_file"]');
+				labelVal = label.html;
+			console.log("made it")
+			input.addEventListener( 'change', function( e )
+			{
+				console.log("something changed: ")
+				var fileName = '';
+				if( this.files && this.files.length > 1 )
+					fileName = ( this.getAttribute( 'data-multiple-caption' ) || '' ).replace( '{count}', this.files.length );
+				else
+					fileName = e.target.value.split( '\\' ).pop();
+
+				if( fileName )
+					$('label[for="id_draft_file"]').html("Chosen File: "+fileName);
+				else
+					$('label[for="id_draft_file"]').html("<img class='upload_icon' src='{% static 'images/stepwise/upload.png'%}'/>  Upload Draft");
+			});
+		});
+
+
+	});
+
+</script>
+{% endblock %}

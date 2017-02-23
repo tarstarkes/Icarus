@@ -1,0 +1,24 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Activation Success</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/user_login/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="login_body">
+		<div class="mainImage">
+			<img src="{% static 'images/user_login/mainImage.png' %}">
+			<h2>Activation</h2>
+		</div>
+		<div>
+			<center style="padding: 2vw; color: green; font-size: 1.5vw"><h2 style="margin-top: 2vw;font-size: 2vw;">Success!</h2><br>You Account has been successfully activated. You may now <a href="/login/" style="color:#ef9502">Sign In</a>.</center>
+		</div>
+	</div>
+<script>
+	
+</script>
+{% endblock %}

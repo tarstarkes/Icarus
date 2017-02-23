@@ -1,0 +1,24 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Activate</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/register/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="login_body">
+		<div class="mainImage">
+			<img src="{% static 'images/user_login/mainImage.png' %}">
+			<h2>Activation</h2>
+		</div>
+		<div>
+			<center style="padding: 2vw; color: red; font-size: 1.5vw">Activation Failed. Your activation key has either expired or your activation key is not valid. Please contact the site administrator at <b>infotech@grmw.org</b>.</center>
+		</div>
+	</div>
+<script>
+	
+</script>
+{% endblock %}

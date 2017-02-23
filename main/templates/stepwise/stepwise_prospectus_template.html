@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Prospectus</title>
+	<meta charset="utf-8" />
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<!-- 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+
+	<!-- Latest compiled and minified CSS -->
+	<!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+
+
+	{% load staticfiles %}
+	<!-- <script type="text/javascript" src="{% static '\js\jquery.bootstrap-dropdown-hover.min.js' %}"></script> -->
+	<link rel="stylesheet" href="{% static 'CSS/stepwise/template/style.css' %}" type="text/css">
+</head>
+<body class="prospectus_template_body">
+	<div class="prospectus_template_container">
+		<div class="prospectus_template_logo">
+			<img src="{{BASE_URL}}/static/images/stepwise/GRMW_template_logo.jpg">
+		</div>
+		<div class="prospectus_template_box">
+			<div class="prospectus_template_date">
+				<p><span class="large_bold">Prospectus of Proposed Project Opportunity</span><br>
+				<span class="bold">Submitted {{ project.prospectus_id.date_created|date:"M d, Y" }}</span><br><br></p>
+			</div>
+
+
+			<span class="bold">Opportunity Title</span> 
+			<p class="indent">
+				{{project.prospectus_id.title}}<br><br>
+			</p>
+
+			<span class="bold">Opportunity Lead</span><br>
+			<p class="indent">
+				{{project.prospectus_id.opp_lead_name}}<br>
+
+				{% if project.prospectus_id.opp_lead_org %}
+					<span class="indent">Organization: {{project.prospectus_id.opp_lead_org}}</span><br>
+				{% endif %}
+
+				{% if project.prospectus_id.opp_lead_ph %}
+					<span class="indent">Phone: {{ project.prospectus_id.opp_lead_ph }}</span><br>
+				{% endif %}
+
+				{% if project.prospectus_id.opp_lead_email %}
+					<span class="indent">Email: {{project.prospectus_id.opp_lead_email}}</span><br>
+				{% endif %}
+			</p>
+
+			<br>
+
+			<span class="bold">Technical Contact</span><br>
+			<p class="indent">
+				{% if project.prospectus_id.tech_contact_name %}
+					{{project.prospectus_id.tech_contact_name}}<br>
+				{% endif %}
+
+				{% if project.prospectus_id.tech_contact_org %}
+					<span class="indent">Organization: {{project.prospectus_id.tech_contact_org}}</span><br>
+				{% endif %}
+
+				{% if project.prospectus_id.tech_contact_ph %}
+					<span class="indent">Phone: {{ project.prospectus_id.tech_contact_ph }}</span><br>
+				{% endif %}
+
+				{% if project.prospectus_id.tech_contact_email %}
+					<span class="indent">Email: {{project.prospectus_id.tech_contact_email}}</span><br>
+				{% endif %}
+			</p>
+
+			<br>
+
+			<span class="bold">Landowners</span><br>
+			<p class="indent">
+				{% for landowner in landowners %}
+					{% if landowner.landowner_name %}
+						{{landowner.landowner_name}}<br>
+					{% endif %}
+					{% if landowner.landowner_address %}
+						<span class="indent">Address: {{landowner.landowner_address}}</span><br>
+					{% endif %}
+
+					{% if landowner.landowner_phone %}
+						<span class="indent">Phone: {{landowner.landowner_phone}}</span><br>
+					{% endif %}
+
+					{% if landowner.landowner_email %}
+						<span class="indent">Email: {{landowner.landowner_email}}</span><br>
+					{% endif %}
+					<br>
+				{% endfor %}
+				Contacted: 
+				{% if project.prospectus_id.landowners_contacted == True %}
+					Yes<br>
+				{% else %}
+					No<br>
+				{% endif %}
+				Supportive: {{project.prospectus_id.landowners_supportive}}<br>
+				Contribution: {{project.prospectus_id.landowners_contribution}}<br>
+			</p>
+
+			<br>
+
+			<span class="bold">River</span><br>
+			<p class="indent">
+				Name: {{project.prospectus_id.river_stream_name}}<br>
+				Mile: {{project.prospectus_id.river_miles}}<br>
+				Tributary: {{project.prospectus_id.tributary_to}}<br>
+			</p>
+
+			<br>
+
+			<span class="bold">Restoration Atlas</span><br>
+			<p class="indent">
+				BSR: {{project.prospectus_id.bsr.bsr}}<br>
+				Tier: {{project.prospectus_id.bsr_tier.bsr_tier}}<br>
+				Initial Score: {{project.prospectus_id.original_atlas_opp_score}}<br>
+				Proposed Score: {{project.prospectus_id.proposed_atlas_opp_score}}<br>
+			</p>
+
+			<br>
+
+			<span class="bold">Restoration Activities</span><br>
+			<p class="indent">
+				{% for activity in activities %}
+					{{activity.activity_number}}. {{activity.activity_name}}<br>
+				{% endfor %}
+			</p>
+
+			<br>
+
+			<span class="bold">Species Affected</span><br>
+			<p class="indent">
+				Focal: {{project.prospectus_id.focal_species}}<br>
+				Other: {{project.prospectus_id.other_species}}<br>
+			</p>
+
+			<br>
+
+			<span class="bold">Description</span><br>
+			<p class="text_indent">
+				{{project.prospectus_id.project_description|linebreaksbr}}<br>
+			</p>
+
+			<br>
+
+			<span class="bold">Objectives</span><br>
+			<p class="text_indent">
+				{{project.prospectus_id.project_objectives}}<br>
+			</p>
+
+			<br>
+
+			<span class="bold">Major Risks</span><br>
+			<p class="text_indent">
+				{{project.prospectus_id.major_risks}}<br>
+			</p>
+
+			<br>
+
+			<span class="bold">Permits and Consultation</span><br>
+			<p class="indent">
+				{% for all_p in all_permits %}
+					{{all_p.permit_consult_name}}:
+					{%for p in permits%}
+						{% if p.permit_consult_name in all_p.permit_consult_name %}
+							Applicable
+						{% endif %}
+					{% endfor %}
+					<br>
+				{% endfor %}
+			</p>
+			
+			<br>
+
+			<span class="bold">Project Schedule</span><br>
+			<p class="indent">
+				Year: {{ project.prospectus_id.anticipated_year }}<br>
+			</p>
+			<p class="text_indent">Monitoring: {{project.prospectus_id.monitoring|linebreaksbr}}</p>
+
+			<br>
+
+			<span class="bold">Project Relations</span><br>
+			<p class="indent">
+				Multi-phase Effort: 
+				{% if project.prospectus_id.multi_phase == True %}
+					Yes<br>
+					Phase Description: {{project.prospectus_id.multi_phase_desc}}<br>
+					Could Phase 1 be a Stand Alone Project: {{project.prospectus_id.ph1_standalone}}<br>
+					Would the project lose value if future phases don’t happen: {{project.prospectus_id.phase_approach_value_loss}}<br>
+				{% else %}
+					No<br>
+				{% endif %}
+			</p>
+
+			<br>
+
+			<span class="bold">Preliminary Cost Estimate</span><br>
+			<p class="indent">
+				Total: {{project.prospectus_id.project_cost}}<br>
+				BPA Funding: {{project.prospectus_id.bpa_funding}}<br>
+				OWEB Funding: {{project.prospectus_id.fip_funding}}<br>
+			</p>
+
+			<br>
+
+			<span class="bold">Design Funding</span><br>
+			<p class="indent">
+				Design Funds Requested: 
+				{% if project.prospectus_id.grmw_design_funds == True %}
+					Yes<br>
+					Design Option: {{project.prospectus_id.funds_request_option}}<br>
+					Type of Work: <br>
+					{% for workType in workTypes %}
+						<span class="indent">{{workType.work_type_desc}}</span><br>
+					{% endfor %}<br>
+
+					Specialties:<br>
+					{% for specialty in specialties %}
+						<span class="indent">{{specialty.work_specialty}}</span><br>
+					{% endfor %}
+				{% elif project.prospectus_id.grmw_design_funds == False %}
+					No<br>
+				{% endif %}
+			</p>
+		</div>
+	</div>
+
+	<script>
+	</script>
+</body>
+</html>
+
+

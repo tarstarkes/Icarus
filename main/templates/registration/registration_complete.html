@@ -1,0 +1,27 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Register-Complete</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/register/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="login_body">
+		<div class="mainImage">
+			<img src="{% static 'images/user_login/mainImage.png' %}">
+			<h2>Registration - Complete</h2>
+		</div>
+		<div>
+			<center style="padding: 2vw; font-size: 1.5vw">Your registration is now complete, but you will
+			not be able to login until you verify your email. Please check your email for a message from
+			infotech@grmw.org. Click the activation link in the email within 3 days of this message to 
+			finalize your registration and activate your account.</center>
+		</div>
+	</div>
+<script>
+	
+</script>
+{% endblock %}

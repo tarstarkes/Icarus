@@ -15,8 +15,14 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from . import views
+from django.contrib.auth.views import password_reset, password_reset_done, password_reset_confirm, password_reset_complete
 
 urlpatterns = [
     url(r'^$', views.index, name='user_login'),
     url(r'^register/$', views.register, name="user_register"),
+    url(r'^logout/$', views.logout , name="logout"),
+    url(r'^password/reset/$', password_reset, {'template_name': 'user_login/password_reset.html', 'post_reset_redirect': '/login/password/reset/done/'}, name="reset_password"),
+    url(r'^password/reset/done/$', password_reset_done, {'template_name': 'user_login/password_reset_done.html'}, name="reset_password_done"),
+    url(r'^password/reset/confirm/(?P<uidb64>[0-9A-Za-z]+)-(?P<token>.+)/$', password_reset_confirm, {'template_name': 'user_login/password_reset_new_pass.html', 'post_reset_redirect': '/login/password/reset/complete'}, name="password_reset_confirm"),
+    url(r'^password/reset/complete/$', password_reset_complete, {'template_name': 'user_login/password_reset_complete.html'}, name="password_reset_confirm"),
 ]

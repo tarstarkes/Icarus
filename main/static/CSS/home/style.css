@@ -280,18 +280,17 @@ ul.article_content {
 }
 .panelA{
 	width: 30vw;
-	font-weight: bold;
-	margin-left: 1vw;
-	font-family: 'bodoni';
-	display: inline-block;
-	font-size: 1.5vw;
-	padding-bottom: 1vw;
+    margin-left: 1vw;
+    display: inline-block;
+    font-size: 1.25vw;
+    padding-bottom: 1vw;
 }
 .panelB{
 	width: 40vw;
-	vertical-align: top;
-	display: inline-block;
-	float:right;
+    vertical-align: top;
+    display: inline-block;
+    float: right;
+    margin-bottom: 2vw;
 }
 .best_country{
 	margin-top: 2vw;
