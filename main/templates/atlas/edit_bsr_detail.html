@@ -1,0 +1,945 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Atlas</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/atlas/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="atlas_body">
+		<div class="mainImage">
+			<img src="{% static 'images/atlas/mainImage.png' %}">
+			<h2>{%for x in bsr%}{{x.atlas_id.atlas_name}}: {{x.name}}{%endfor%}</h2>
+		</div>
+		<div class="window_nav_bar"><a href="/atlas/">Atlas</a>/<a href="/atlas/go_to_atlas/{%for x in bsr%}{{x.atlas_id.id}}{%endfor%}">{%for x in bsr%}{{x.atlas_id.atlas_name}}{%endfor%}</a>/<span class="page_landed">{%for x in bsr%}{{x.name}}{%endfor%} (EDITING)</span>
+		</div>
+		<div class="bsr_detail">
+			<h2 class="stylized_heading">Score & Tier</h2>
+			<div class="content" style="padding-bottom: 2vw;">
+				<center>
+					<p style="margin: 0;padding-bottom:0;">{%for x in bsr%}{{x.name}}{%endfor%} has a cumulative score of: <span style="font-weight: bold">{%for x in bsr%}{{x.cumulative_score}}{%endfor%}</span>
+					</p>
+					<div id="edit_tier" style="display: inline-block; padding:1vw; margin-top:1vw;">
+						<div class="tier_{%for x in bsr%}{{x.tier_id}}{%endfor%}">
+							{%for x in bsr%}{{x.tier_id}}{%endfor%}
+						</div>
+					</div>
+					<div id="update_tier_button" style="display: none;margin-top:2vw;">
+						<div id="update_tier" class="link_button link_button_hover">Update Tier</div>
+					</div>
+					<form id="tier_form" style="display: none;" method="post" action="/atlas/update_tier/{%for x in bsr%}{{x.id}}{%endfor%}/">{% csrf_token %}
+						{{tier_form}}
+						<input class="link_button submit" type="submit" value="Submit"></input>
+					</form>
+				</center>
+			</div>
+
+			<h2 class="stylized_heading">Periodicity</h2>
+				<div class="content">
+					<div style="padding:2vw;">
+						<table id="periodicity" >
+							<tbody>
+								<tr id="periodicity_head">
+									<th>Species</th>
+									<th>Life Stage</th>
+									<th class="month_label" colspan="2">Jan</th>
+									<th class="month_label" colspan="2">Feb</th>
+									<th class="month_label" colspan="2">Mar</th>
+									<th class="month_label" colspan="2">Apr</th>
+									<th class="month_label" colspan="2">May</th>
+									<th class="month_label" colspan="2">Jun</th>
+									<th class="month_label" colspan="2">Jul</th>
+									<th class="month_label" colspan="2">Aug</th>
+									<th class="month_label" colspan="2">Sep</th>
+									<th class="month_label" colspan="2">Oct</th>
+									<th class="month_label" colspan="2">Nov</th>
+									<th class="month_label" colspan="2">Dec</th>
+								</tr>
+								<tr>
+									<td class="subscript" style="border:0"></td>
+									<td class="subscript" style="border:0"></td>
+									<td class="subscript" colspan="2">1-15 | 16-31</td>
+									<td class="subscript" colspan="2">1-15 | 16-28</td>
+									<td class="subscript" colspan="2">1-15 | 16-31</td>
+									<td class="subscript" colspan="2">1-15 | 16-30</td>
+									<td class="subscript" colspan="2">1-15 | 16-31</td>
+									<td class="subscript" colspan="2">1-15 | 16-30</td>
+									<td class="subscript" colspan="2">1-15 | 16-31</td>
+									<td class="subscript" colspan="2">1-15 | 16-31</td>
+									<td class="subscript" colspan="2">1-15 | 16-30</td>
+									<td class="subscript" colspan="2">1-15 | 16-31</td>
+									<td class="subscript" colspan="2">1-15 | 16-30</td>
+									<td class="subscript" colspan="2">1-15 | 16-31</td>
+								</tr>
+								{% for life_stage in life_stages %}
+								<tr class="periodicity_data" data-species="{{life_stage.species.species_name}}" data-life-stage="{{life_stage.life_stage_name}}" data-life-stage-id="{{life_stage.id}}">
+									<th class="species">{{life_stage.species.species_name}}</th>
+									<td class="ls_name">{{life_stage.life_stage_name}}</td>
+									<!--January -->
+									<td class="edit_p_cell" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" colspan="1" data-period="jan_a" 
+									{% if life_stage.jan_a.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.jan_a.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="jan_b" 
+									{% if life_stage.jan_b.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.jan_b.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<!--February -->
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="feb_a" 
+									{% if life_stage.feb_a.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.feb_a.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="feb_b" 
+									{% if life_stage.feb_b.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.feb_b.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<!--March -->
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="mar_a" 
+									{% if life_stage.mar_a.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.mar_a.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="mar_b" 
+									{% if life_stage.mar_b.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.mar_b.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<!--April-->
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="apr_a" 
+									{% if life_stage.apr_a.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.apr_a.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="apr_b" 
+									{% if life_stage.apr_b.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.apr_b.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<!--May-->
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="may_a" 
+									{% if life_stage.may_a.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.may_a.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="may_b" 
+									{% if life_stage.may_b.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.may_b.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<!--June-->
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="jun_a" 
+									{% if life_stage.jun_a.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.jun_a.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="jun_b" 
+									{% if life_stage.jun_b.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.jun_b.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<!--July-->
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="jul_a" 
+									{% if life_stage.jul_a.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.jul_a.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="jul_b" 
+									{% if life_stage.jul_b.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.jul_b.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<!--August-->
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="aug_a" 
+									{% if life_stage.aug_a.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.aug_a.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="aug_b" 
+									{% if life_stage.aug_b.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.aug_b.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<!--September-->
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="sep_a" 
+									{% if life_stage.sep_a.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.sep_a.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="sep_b" 
+									{% if life_stage.sep_b.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.sep_b.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<!--October-->
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="oct_a" 
+									{% if life_stage.oct_a.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.oct_a.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="oct_b" 
+									{% if life_stage.oct_b.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.oct_b.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<!--November-->
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="nov_a" 
+									{% if life_stage.nov_a.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.nov_a.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="nov_b" 
+									{% if life_stage.nov_b.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.nov_b.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<!--December-->
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="dec_a"  
+									{% if life_stage.dec_a.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.dec_a.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+									<td class="edit_p_cell" colspan="1" data-soft-color= "{{life_stage.species.soft_color}}" data-hard-color="{{life_stage.species.hard_color}}" data-period="dec_b"  
+									{% if life_stage.dec_b.period == 'Full' %}
+										style="background:{{life_stage.species.hard_color}}"
+									{% elif life_stage.dec_b.period == 'Partial' %}
+										style="background:{{life_stage.species.soft_color}}"
+									{% endif %}
+									></td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+						<p style="font-size:1.5vw; font-weight: bold; padding-bottom:0;"><span class="normal"># of Life Stages:</span> {%for x in bsr%}{{x.raw_p_score}}{%endfor%}</p>
+					</div>
+					<center>
+						<div id="update_p" class="link_button link_button_hover">Update Periodicity Table</div>
+						<div id="add_new_life_stage" class="link_button  link_button_hover">Add New Life Stage</div>
+						<form id="new_life_stage_form" method="post" action="/atlas/add_new_life_stage/{%for x in bsr%}{{x.id}}{%endfor%}/">{% csrf_token %}
+							{{p_addnew}}
+							<input class="link_button submit" type="submit" value="Submit"></input>
+						</form>
+					</center>
+				</div>
+
+				<h2 class="stylized_heading">Fish Use</h2>
+				<div class="content">
+					<div style="padding:2vw">
+						<table id="fish_use" style="max-width:92vw">
+							<tbody>
+							<tr>
+								<th style="padding:.5vw">Life Stage</th>
+								{% for util in utils %}
+									<th style="padding:.5; text-align: center;">{{util.species.species_name}}</th>
+								{% endfor %}
+								<th style="padding:.5; text-align:center;">Comments</th>
+							</tr>
+							{% for utilization in utilizations %}
+							<tr class="fish_use_row">
+								<td class="utilization_name" data-utilization-id="{{utilization.utilization_id.id}}" data-utilization-name="{{utilization.utilization_id.utilization_name}}"style="padding:.5vw">{{utilization.utilization_id.utilization_name}}</td>
+							</tr>
+							{% endfor %}
+							</tbody>
+						</table>
+					</div>
+					<center>
+						<div style="display: none;" id="update_fish_use" class="link_button link_button_hover">Update Fish Use</div>
+						<div id="add_new_fish_util" class="link_button  link_button_hover">Add Fish Utilization</div>
+						<form id="new_fish_util_form" method="post" action="/atlas/add_new_fish_use/{%for x in bsr%}{{x.id}}{%endfor%}/">{% csrf_token %}
+							{{new_fish_util_form}}
+							<input class="link_button submit" type="submit" value="Submit"></input>
+						</form>
+					</center>
+				</div>
+
+				<h2 class="stylized_heading">Limiting Factors</h2>
+				<div class="content">
+					<div style="padding:2vw">
+						<table id="limiting_factors" style="max-width:92vw">
+							<tbody>
+								<tr>
+									<th style="padding:.5vw">Limiting Factor</th>
+									{% for util in utils %}
+										<th style="padding:.5vw; text-align:center;">{{util.species.species_name}}</th>
+									{% endfor %}
+									<th style="padding:.5vw;text-align:center;">Comments</th>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<center>
+						<div style="display: none;" id="update_limiting_factors" class="link_button link_button_hover">Update Limiting Factors</div>
+						<div id="add_new_limiting_factor" class="link_button  link_button_hover">Add New Limiting Factor</div>
+						<form id="new_limiting_factor_form" method="post" action="/atlas/add_new_limiting_factor/{%for x in bsr%}{{x.id}}{%endfor%}/">{% csrf_token %}
+							{{new_limiting_factor_form}}
+							<input class="link_button submit" type="submit" value="Submit">
+						</form>
+					</center>
+				</div>
+			</div>
+
+			<h2 class="stylized_heading">Restoration Actions</h2>
+			<div class="content">
+				<div style="padding:2vw">
+					<table id="rest_actions" style="max-width:92vw">
+						<tbody>
+							<tr class="rest_action">
+								<th style="padding:.5vw">Restoration Action</th>
+
+								{% for atlas_bsr in bsr %}
+								{% if atlas_bsr.atlas_id.id == 2 or atlas_bsr.atlas_id.id == 4 %}
+								<th style="padding:.5vw; text-align:center;">Immediate</th>
+								<th style="padding:.5vw; text-align:center;">Long-term</th>
+								{% elif atlas_bsr.atlas_id.id == 3 %}
+								<th style="padding:.5vw; text-align:center;">Priority</th>
+								{% endif %}
+								{% endfor %}
+								<th style="padding:.5vw;text-align:center;">Limiting Factor Score</th>
+								<th style="padding:.5vw;text-align:center;">Comments</th>
+							</tr>
+							{% for action in rest_action %}
+							<tr class="rest_action">
+								<td style="padding:.5vw;">{{action.restoration_action_id}}</td>
+
+								{% for atlas_bsr in bsr %}
+								{% if atlas_bsr.atlas_id.id == 2 or atlas_bsr.atlas_id.id == 4 %}
+								<td class="rating" style="padding:.5vw; text-align:center; border: 1vw solid #ECECEC;">{{action.immediate}}</td>
+								<td class="rating" style="padding:.5vw; text-align:center; border: 1vw solid #ECECEC;">{{action.long_term}}</td>
+								{% elif atlas_bsr.atlas_id.id == 3 %}
+								<td class="rating" style="padding:.5vw; text-align:center;">{{action.priority}}</td>
+								{% endif %}
+								{% endfor %}
+
+								<td style="padding:.5vw; text-align:center;">{{action.limiting_factor_score}}</td>
+								<td class="comment" style="padding:.5vw;"> {% autoescape off %}
+    							{{action.comment}}
+								{% endautoescape %}</td>
+
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+				<center>
+					<div style="display: none;" id="update_RA" class="link_button link_button_hover">Update Restoration Actions</div>
+				</center>
+			</div>
+
+			<h2 class="stylized_heading">Opportunities</h2>
+			<div class="content">
+				<div style="padding:2vw">
+					<table id="opportunities" style="width: 100%">
+						<tbody>
+							<tr>
+								<td style="border-right: .1vw solid gray"></td>
+								<td style="border-right: .1vw solid gray"></td>
+								<td style="border-right: .1vw solid gray"></td>
+								<td style="border-right: .1vw solid gray"></td>
+								<td style="border-right: .1vw solid gray"></td>
+								<td class="green_field"></td>
+								<td style="text-align:center; background:gray; color: white;" colspan="9">Feasability Criteria</td>
+							</tr>
+							<tr>
+								<th><div><span>Opportunity Name</span></div></th>
+								<th><div><span>Limiting Factor</span></div></th>
+								{% for x in bsr %}
+								{% if x.atlas_id.id == 2 or x.atlas_id.id == 4%}
+									<th><div><span>Immediate Score</span></div></th>
+									<th><div><span>Long-Term Score</span></div></th>
+								{% else %}
+									<th><div><span>Restoration Action Priority</span></div></th>
+								{% endif %}
+								{% endfor %}
+								<th><div><span>Natural Process</span></div></th>
+								<th class="green_field"><div><span>Total Biological Benefit Score</span></div></th>
+								<th><div><span>Landowner Willingness</span></div></th>
+								<th><div><span>Design Effort</span></div></th>
+								<th><div><span>Construction Effort</span></div></th>
+								<th><div><span>Site Access Effort</span></div></th>
+								<th><div><span>SM - Dewatering, Erosion Control Effort</span></div></th>
+								<th><div><span>Risk & Uncertainty (Goals & Objectives)</span></div></th>
+								<th><div><span>Risk & Uncertainty (Public Safety)</span></div></th>
+								<th><div><span>Regulatory Requirements</span></div></th>
+								<th><div><span>Value</span></div></th>
+							</tr>
+
+							{% for opportunity in opportunities%}
+
+								<tr class="clickable-row" data-href="/atlas/go_to_opportunity/{{opportunity.id}}">
+									<td style="padding:.5vw;">{{opportunity.opportunity_name}}</td>
+									<td style="padding:.5vw;text-align:center;">{{opportunity.limiting_factor_score}}</td>
+								{% for x in bsr %}
+								{% if x.atlas_id.id == 2 or x.atlas_id.id == 4%}
+									<td style="padding:.5vw;text-align:center;">{{opportunity.immediate_score}}</td>
+									<td style="padding:.5vw;text-align:center;">{{opportunity.long_term_score}}</td>
+								{% else %}
+									<td style="padding:.5vw;text-align:center;">{{opportunity.restoration_action_priority_score}}</td>
+								{% endif %}
+								{% endfor %}
+									<td style="padding:.5vw;text-align:center;">{{opportunity.natural_process_score}}</td>
+									<td class="green_field" style="padding:.5vw;text-align:center;">{{opportunity.total_bbs_score}}</td>
+									<td style="padding:.5vw;text-align:center;">{{opportunity.fc_landowner_willingness}}</td>
+									<td style="padding:.5vw;text-align:center;">{{opportunity.fc_design_effort}}</td>
+									<td style="padding:.5vw;text-align:center;">{{opportunity.fc_constuction_effort}}</td>
+									<td style="padding:.5vw;text-align:center;">{{opportunity.fc_site_access_effort}}</td>
+									<td style="padding:.5vw;text-align:center;">{{opportunity.fc_sm_dewatering_erosion_ctrl_effort}}</td>
+									<td style="padding:.5vw;text-align:center;">{{opportunity.fc_risk_goal_objectives}}</td>
+									<td style="padding:.5vw;text-align:center;">{{opportunity.fc_risk_public_safety}}</td>
+									<td style="padding:.5vw;text-align:center;">{{opportunity.fc_regulatory_requirements}}</td>
+									<td style="padding:.5vw;text-align:center;">{{opportunity.fc_value}}</td>
+								</tr>
+							{% endfor %}
+						</tbody>
+					</table>
+				</div>
+
+				<center>
+					<div id="add_new_opp" class="link_button link_button_hover">Add New Opportunity</div>
+					<form id="new_opp_form" style="display: none;" method="post" action="/atlas/add_new_opp/{%for x in bsr%}{{x.id}}{%endfor%}/">{% csrf_token %}
+						{{new_opp_form}}
+						<input class="link_button submit" type="submit" value="Submit">
+					</form>
+				</center>
+			</div>
+
+			<!--DJANGO FORMS USED TO UPDATE DATABASE-->
+			<form id="fish_use_data_form" style="display: none;" method="post" action="/atlas/update_fish_use/{%for x in bsr%}{{x.id}}{%endfor%}/">{% csrf_token %}
+			{{ util_formset.management_form }}
+			{% for form in util_formset %}
+				{{form}}<br><br>
+			{%endfor%}
+			<input id="submit_util_form" type="submit" value="submit"></input>
+			</form>
+
+			<form id="p_data_form" style="display:none;" method="post">{% csrf_token %}
+			{{ p_formset.management_form }}
+			{% for form in p_formset %}
+				{{form}}<br><br>
+			{%endfor%}
+			<input id="submit_p_form" type="submit" value="submit"></input>
+			</form>
+
+			<form id="lf_data_form" style="display:none;" method="post" action="/atlas/update_limiting_factors/{%for x in bsr%}{{x.id}}{%endfor%}/">{%csrf_token%}
+			{{ lf_formset.management_form }}
+			{% for form in lf_formset %}
+				{{form}}<br><br>
+			{%endfor%}
+			<input id="submit_lf_form" type="submit" value="submit"></input>
+			</form>
+
+			<form id="ra_data_form" style="display:none;" method="post" action="/atlas/update_rest_actions/{%for x in bsr%}{{x.id}}{%endfor%}/">{%csrf_token%}
+			{{ ra_formset.management_form }}
+			{% for form in ra_formset %}
+				{{form}}<br><br>
+			{%endfor%}
+			<input id="submit_ra_form" type="submit" value="submit"></input>
+			</form>
+
+			<!-- **************************************** -->
+	</div>
+<script>
+	$(document).ready(function(e){
+		$(".clickable-row").click(function() {
+       		window.location = $(this).data("href");
+    	});
+
+    	//TIER UPDATE
+    	$("#edit_tier").click(function(e){
+    		$("#update_tier_button").css("display", "block");
+    		if($("#edit_tier div").hasClass("tier_I")){
+    			$("#edit_tier div").removeClass("tier_I");
+    			$("#edit_tier div").addClass("tier_II");
+    			$("#edit_tier div").html("II");
+    			$("#id_tier_id").val("2")
+    		}
+    		else if($("#edit_tier div").hasClass("tier_II")){
+    			$("#edit_tier div").removeClass("tier_II");
+    			$("#edit_tier div").addClass("tier_III");
+    			$("#edit_tier div").html("III");
+    			$("#id_tier_id").val("3")
+    		}
+    		else if($("#edit_tier div").hasClass("tier_III")){
+    			$("#edit_tier div").removeClass("tier_III");
+    			$("#edit_tier div").addClass("tier_I");
+    			$("#edit_tier div").html("I");
+    			$("#id_tier_id").val("1")
+    		}
+    	});
+
+    	$("#update_tier").click(function(e){
+    		$("#tier_form .submit").trigger("click");
+    	});
+    	//-----------------------------------------//
+
+    	// PERIODICITY FORM UPDATE
+    	$('.edit_p_cell').click(function(e){
+    		$('#update_p').css('display', 'inline-block');
+    		column = ($(this).index());
+    		row = $(e.target).parent().index();
+    		if(rgb2hex($(e.target).css('backgroundColor')) != $(e.target).attr('data-soft-color') && 
+    			rgb2hex($(e.target).css('backgroundColor')) != $(e.target).attr('data-hard-color')){
+    			//SOFT COLOR
+    			update_form(e, 2, column, row);
+    			$(e.target).css('backgroundColor', $(e.target).attr('data-soft-color'));
+    		}
+    		else if(rgb2hex($(e.target).css('backgroundColor')) == $(e.target).attr('data-soft-color')){
+    			//HARD COLOR
+    			update_form(e, 1, column, row);
+    			$(e.target).css('backgroundColor', $(e.target).attr('data-hard-color'));
+    		}
+    		else if(rgb2hex($(e.target).css('backgroundColor')) == $(e.target).attr('data-hard-color')){
+    			//INITIAL COLOR
+    			update_form(e, 3, column, row);
+    			$(e.target).css('backgroundColor', '#ececec');
+    		}
+
+    	});
+
+    	function rgb2hex(rgb){
+			rgb = rgb.match(/^rgba?[\s+]?\([\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?,[\s+]?(\d+)[\s+]?/i);
+			return (rgb && rgb.length === 4) ? "#" +
+			("0" + parseInt(rgb[1],10).toString(16)).slice(-2) +
+			("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
+			("0" + parseInt(rgb[3],10).toString(16)).slice(-2) : '';
+		}
+
+		function update_form(e, newValue, x, y){
+			var species = $(e.target).parent().closest('tr').attr('data-species')
+			var elem = $(e.target).parent().closest('tr').attr('data-life-stage')
+			var period = $(e.target).attr('data-period');
+			for(var i=0; i < parseInt($('#p_data_form #id_form-TOTAL_FORMS').val()); i++){
+				if($("#p_data_form #id_form-"+i+"-species").find(':selected')[0].innerHTML == species && $("#p_data_form #id_form-"+i+"-life_stage_name").val() == elem){
+					$("#p_data_form #id_form-"+i+"-"+period).val(newValue);
+				}
+			}
+		}
+
+		$('#update_p').click(function(){
+			$('#submit_p_form').trigger("click");
+		});
+
+		$('#add_new_life_stage').click(function(){
+			$('#new_life_stage_form').animate({
+				height: "toggle"
+			}, 300, function() {
+				// Animation complete.
+			});
+		});
+
+		$('.ls_name').mouseenter(function(e){
+			$(e.target)[0].innerHTML = "DELETE";
+			$(e.target).css('background', "#AF2A2A");
+			$(e.target).css('text-align', "center");
+			$(e.target).css('outline', '.25vw solid black');
+			$(e.target).css('color', 'white');
+			$(e.target).css('cursor', 'pointer');
+		});
+		$('.ls_name').mouseleave(function(e){
+			$(e.target)[0].innerHTML = $(e.target).closest('tr').attr('data-life-stage');
+			$(e.target).css('background', "initial");
+			$(e.target).css('text-align', "initial");
+			$(e.target).css('outline', 'initial');
+			$(e.target).css('color', 'initial');
+			$(e.target).css('cursor', 'initial');
+		});
+		$('.ls_name').click(function(e){
+			if(window.confirm("Are you sure you want to delete this Life Stage?")){
+				//DELETE THE LIFE STAGE
+				id = $(e.target).closest('tr').attr('data-life-stage-id');
+				window.location.href = "/atlas/delete_life_stage/"+id+"/";
+			}
+		})
+    	//-----------------------------------------//
+
+    	//FISH UTILIZATION FORM UPDATE//
+    	$('.fish_use_score_edit.rating').click(function(e){
+    		$('#update_fish_use').css('display', 'inline-block');
+    		var val = $(e.target)[0].innerHTML;
+    		if(val.toLowerCase() == "low"){
+    			$(e.target)[0].innerHTML = "Med";
+    			$(e.target).css('background', '#efaa3b');
+    			fish_use_update_form(e, "Med");
+    		}
+    		else if(val.toLowerCase() == "med"){
+    			$(e.target)[0].innerHTML = "High";
+    			$(e.target).css('background', '#af2a2a');
+    			fish_use_update_form(e, "High");
+    		}
+    		else if(val.toLowerCase() == "high"){
+    			$(e.target)[0].innerHTML = "N/A";
+    			$(e.target).css('background', 'gray');
+    			fish_use_update_form(e, "N/A");
+    		}
+    		else if(val.toLowerCase() == "n/a"){
+    			$(e.target)[0].innerHTML = "Low";
+    			$(e.target).css('background', '#1692cc');
+    			fish_use_update_form(e, "Low");
+    		}
+    	});
+
+    	function fish_use_update_form(e, newValue){
+    		var life_stage = $(e.target).closest('tr')[0].children[0].innerHTML;
+    		var species = $(e.target).parent().parent().find('th')[$(e.target).index()].innerHTML;
+
+    		for(var i=0; i < parseInt($('#fish_use_data_form #id_form-TOTAL_FORMS').val()); i++){
+				if($("#fish_use_data_form #id_form-"+i+"-species").find(':selected')[0].innerHTML == species && $("#fish_use_data_form #id_form-"+i+"-utilization_id").find(':selected')[0].innerHTML.includes(life_stage)){
+					console.log("form"+i)
+					$("#fish_use_data_form #id_form-"+i+"-rating").val(newValue);
+				}
+			}
+    	}
+
+    	$('#update_fish_use').click(function(e){
+    		$('#submit_util_form').trigger('click')
+    	});
+
+    	$('#add_new_fish_util').click(function(){
+			$('#new_fish_util_form').animate({
+				height: "toggle"
+			}, 300, function() {
+				// Animation complete.
+			});
+		});
+
+		$('.utilization_name').mouseenter(function(e){
+			$(e.target)[0].innerHTML = "DELETE";
+			$(e.target).css('background', "#AF2A2A");
+			$(e.target).css('text-align', "center");
+			$(e.target).css('outline', '.25vw solid black');
+			$(e.target).css('color', 'white');
+			$(e.target).css('cursor', 'pointer');
+		});
+		$('.utilization_name').mouseleave(function(e){
+			$(e.target)[0].innerHTML = $(e.target).attr('data-utilization-name');
+			$(e.target).css('background', "initial");
+			$(e.target).css('text-align', "initial");
+			$(e.target).css('outline', 'initial');
+			$(e.target).css('color', 'initial');
+			$(e.target).css('cursor', 'initial');
+		});
+		$('.utilization_name').click(function(e){
+			if(window.confirm("Are you sure you want to delete this Fish Utilization?")){
+				//DELETE THE LIFE STAGE
+				id = $(e.target).attr('data-utilization-id');
+				window.location.href = "/atlas/delete_fish_use/"+id+"/";
+			}
+		})
+    	//-----------------------------------------//
+
+    	//LIMITING FACTORS FORM UPDATE//
+    	$('.limiting_factor_score.rating').click(function(e){
+    		$('#update_limiting_factors').css('display', 'inline-block');
+    		var val = $(e.target)[0].innerHTML;
+    		if(val.toLowerCase() == "low"){
+    			$(e.target)[0].innerHTML = "Med";
+    			$(e.target).css('background', '#efaa3b');
+    			limiting_factor_form_update(e, "Med");
+    		}
+    		else if(val.toLowerCase() == "med"){
+    			$(e.target)[0].innerHTML = "High";
+    			$(e.target).css('background', '#af2a2a');
+    			limiting_factor_form_update(e, "High");
+    		}
+    		else if(val.toLowerCase() == "high"){
+    			$(e.target)[0].innerHTML = "N/A";
+    			$(e.target).css('background', 'gray');
+    			limiting_factor_form_update(e, "N/A");
+    		}
+    		else if(val.toLowerCase() == "n/a"){
+    			$(e.target)[0].innerHTML = "Low";
+    			$(e.target).css('background', '#1692cc');
+    			limiting_factor_form_update(e, "Low");
+    		}
+    	});
+
+    	$('#add_new_limiting_factor').click(function(){
+			$('#new_limiting_factor_form').animate({
+				height: "toggle"
+			}, 300, function() {
+				// Animation complete.
+			});
+		});
+
+		function limiting_factor_form_update(e, newValue){
+			var limiting_factor = $(e.target).closest('tr')[0].children[0].innerHTML;
+    		var species = $(e.target).parent().parent().find('th')[$(e.target).index()].innerHTML;
+
+    		for(var i=0; i < parseInt($('#lf_data_form #id_form-TOTAL_FORMS').val()); i++){
+				if($("#lf_data_form #id_form-"+i+"-species").find(':selected')[0].innerHTML == species && $("#lf_data_form #id_form-"+i+"-limiting_factor_instance_id").find(':selected')[0].innerHTML.includes(limiting_factor)){
+					$("#lf_data_form #id_form-"+i+"-rating").val(newValue);
+				}
+			}
+		}
+
+		$('#update_limiting_factors').click(function(){
+			$("#submit_lf_form").trigger("click");
+		});
+
+		$('.limiting_factor_name').mouseenter(function(e){
+			$(e.target).css('height', $(e.target).height()+"px");
+			$(e.target)[0].innerHTML = "DELETE";
+			$(e.target).css('background', "#AF2A2A");
+			$(e.target).css('text-align', "center");
+			$(e.target).css('outline', '.25vw solid black');
+			$(e.target).css('color', 'white');
+			$(e.target).css('cursor', 'pointer');
+		});
+
+		$('.limiting_factor_name').mouseleave(function(e){
+			$(e.target)[0].innerHTML = $(e.target).attr('data-limiting-factor-name');
+			$(e.target).css('background', "initial");
+			$(e.target).css('text-align', "initial");
+			$(e.target).css('outline', 'initial');
+			$(e.target).css('color', 'initial');
+			$(e.target).css('cursor', 'initial');
+		});
+		$('.limiting_factor_name').click(function(e){
+			if(window.confirm("Are you sure you want to delete this Limiting Factor?")){
+				//DELETE THE LIMITING FACTOR
+				id = $(e.target).attr('data-id');
+				window.location.href = "/atlas/delete_limiting_factor/"+id+"/";
+			}
+		})
+    	//-----------------------------------------//
+
+
+    	//RESTORATION ACTIONS FORM UPDATE//
+    	$('.rest_action .rating').click(function(e){
+    		$('#update_RA').css('display', 'inline-block');
+    		var val = $(e.target)[0].innerHTML;
+    		if(val.toLowerCase() == "n/a"){
+    			$(e.target)[0].innerHTML = "Low";
+    			$(e.target).css('background', '#1692cc');
+    			ra_form_update(e, "Low");
+    		}
+    		else if(val.toLowerCase() == "low"){
+    			$(e.target)[0].innerHTML = "Med";
+    			$(e.target).css('background', '#efaa3b');
+    			ra_form_update(e, "Med");
+    		}
+    		else if(val.toLowerCase() == "med"){
+    			$(e.target)[0].innerHTML = "High";
+    			$(e.target).css('background', '#af2a2a');
+    			ra_form_update(e, "High");
+    		}
+    		else if(val.toLowerCase() == "high"){
+    			$(e.target)[0].innerHTML = "N/A";
+    			$(e.target).css('background', 'gray');
+    			ra_form_update(e, "N/A");
+    		}
+    	});
+
+    	$("#rest_actions .comment").click(function(e){
+    		$(e.target).attr("contenteditable", "true");
+    	});
+
+    	$("#rest_actions .comment").focusout(function(e){
+    		$('#update_RA').css('display', 'inline-block');
+    		value = $(e.target)[0].innerHTML;
+    		update_ra_comment(e, value);
+    	});
+
+    	function update_ra_comment(e, newValue){
+    		var restoration_action = $(e.target).closest('tr')[0].children[0].innerHTML;
+
+    		for(var i=0; i < parseInt($('#ra_data_form #id_form-TOTAL_FORMS').val()); i++){
+				if($("#ra_data_form #id_form-"+i+"-restoration_action_id").find(':selected')[0].innerHTML.includes(restoration_action)){
+					$("#ra_data_form #id_form-"+i+"-comment").val(newValue);
+				}
+			}
+    	}
+
+    	function ra_form_update(e, newValue){
+    		var restoration_action = $(e.target).closest('tr')[0].children[0].innerHTML;
+    		var action = $(e.target).parent().parent().find('th')[$(e.target).index()].innerHTML.toLowerCase();
+    		action = action.replace('-', '_');
+    		
+    		for(var i=0; i < parseInt($('#ra_data_form #id_form-TOTAL_FORMS').val()); i++){
+				if($("#ra_data_form #id_form-"+i+"-restoration_action_id").find(':selected')[0].innerHTML.includes(restoration_action)){
+					$("#ra_data_form #id_form-"+i+"-"+action).val(newValue);
+				}
+			}
+    	}
+
+    	$('#update_RA').click(function(e){
+    		$('#submit_ra_form').trigger("click");
+    	});
+    	//-----------------------------------------//
+
+    	//ADD NEW OPPORTUNITY//
+    	$('#add_new_opp').click(function(){
+			$('#new_opp_form').animate({
+				height: "toggle"
+			}, 300, function() {
+				// Animation complete.
+			});
+		});
+    	//-----------------------------------------//
+
+	});
+
+	//sets the window location to the YOffset While editing
+	if(window.localStorage.getItem('YOffset')){
+		$(window).scrollTop(window.localStorage.getItem('YOffset'));
+	}
+
+	{% if atlas == "Upper Grande Ronde" %}
+		var x = $(window).width();
+		var ugr_width = $("#ugr_map").width()/2;
+		console.log(ugr_width);
+		$(".svg_box").css('max-width', ugr_width+'px');
+		$(".svg_box").css('margin-left', ((.5*x)-(.5*ugr_width))+'px');
+	{% endif %}
+
+	if($('.periodicity_data').length > 0){
+		total = $('#periodicity .species').length
+		var distinct_species = [];
+		for(var x = 0; x < total; x++){
+			if(jQuery.inArray($('#periodicity .species:nth('+x+')').html(), distinct_species) == -1){
+				distinct_species.push($('#periodicity .species:nth('+x+')').html());
+			}
+		}
+		var occurances = []
+		for(var i=0; i < distinct_species.length; i++){
+			occurances.push(0);
+		}
+		for(var i = 0; i < distinct_species.length; i++){
+			for(var j=0; j < total; j++){
+				if(distinct_species[i] == $('#periodicity .species:nth('+j+')').html()){
+					occurances[i]++;
+				}
+			}
+		}
+		$('#periodicity .species').remove();
+		previous = 0;
+		for(var i=0; i < distinct_species.length; i++){
+			if(i== 0){
+				$('#periodicity .periodicity_data:nth('+i+')').prepend("<th class='species' rowspan='"+occurances[i]+"'>"+distinct_species[i]+"</th>");
+			}
+			else{
+				$('#periodicity .periodicity_data:nth('+((occurances[i-1])+previous)+')').prepend("<th class='species' rowspan='"+occurances[i]+"'>"+distinct_species[i]+"</th>");
+				previous=(occurances[i-1]);
+			}
+		}
+
+		$('#periodicity .species').css('border', '.25vw solid lightgray');
+		$('#periodicity .species').css('text-align', 'center');
+	}
+
+	var ratings = [ {% regroup u_ratings by utilization_id as u_ratings%}{% for u_rating in u_ratings %}{% for item in u_rating.list %}"{{ item.rating }}",{% endfor %}{% endfor %} ];
+	var species = [{% for util in utils %}"{{util.species.species_name}}",{% endfor %}];
+	var comments = [{% for utilization in utilizations %}"{{utilization.utilization_id.comment}}",{% endfor%}]
+	j=0;
+	for(var x=0; x < $('.fish_use_row').length; x++){
+		for(var i=0; i < species.length; i++){
+			$('.fish_use_row:nth('+x+')').append('<td class="fish_use_score_edit rating" style="padding:.5vw">'+ratings[j]+'</td>');
+			j++;
+		}
+	}
+
+	for(var j=0; j < $('.rating').length; j++){
+		$('.fish_use_row:nth('+j+')').append('<td class="comment" style="padding:.5vw">'+comments[j]+'</td>')
+	}
+
+	var lf_all_factors = [ {% for lf_factor in lf_score %}"{{ lf_factor.limiting_factor_instance_id.limiting_factor_id.sub_id }} - {{ lf_factor.limiting_factor_instance_id.limiting_factor_id.ecological_concern }}: {{ lf_factor.limiting_factor_instance_id.limiting_factor_id.sub_concern }}",{% endfor %} ];
+	var lf_species = [ {% for lf in lf_score %}"{{ lf.species }}",{% endfor %} ];
+	var lf_ratings = [ {% for lf in lf_score %}"{{ lf.rating }}",{% endfor %} ];
+	var lf_factors = [ {% for lf_factor in lfs %}"{{ lf_factor.limiting_factor_instance_id.limiting_factor_id.sub_id }} - {{ lf_factor.limiting_factor_instance_id.limiting_factor_id.ecological_concern }}: {{ lf_factor.limiting_factor_instance_id.limiting_factor_id.sub_concern }}",{% endfor %}];
+	var lf_comments = [{% for lf in lfs %}"{{lf.limiting_factor_instance_id.comment}}",{% endfor %}];
+	var lf_ids = [{% for lf in lfs %}"{{lf.limiting_factor_instance_id.id}}",{% endfor %}];
+	var row = "";
+
+	for (var x=0; x < lf_factors.length; x++){
+		row = '<tr class="limiting_factor_row"><td data-id="'+lf_ids[x]+'" data-limiting-factor-name="'+lf_factors[x]+'"  class="limiting_factor_name">'+lf_factors[x]+'</td>';
+		for(var i=0; i < species.length; i++){
+			for(var j=0; j < lf_species.length; j++){
+				if(lf_species[j] == species[i] && lf_all_factors[j] == lf_factors[x]){
+					row = row + "<td class='limiting_factor_score rating'>"+lf_ratings[j]+"</td>";
+				}
+			}
+		}
+		row = row + "<td style='padding: .5vw' class='limiting_factor_comments comment'>"+lf_comments[x]+"</td>";
+		row = row + "</tr>"
+		$('#limiting_factors').append(row);
+	}
+
+	for(var j=0; j < $('.rating').length; j++){
+		if($('.rating:nth('+j+')').html() == "Low"){
+			$('.rating:nth('+j+')').css('background', '#1692cc');
+			$('.rating:nth('+j+')').css('color', 'white');
+		}
+		else if($('.rating:nth('+j+')').html() == "Med"){
+			$('.rating:nth('+j+')').css('background', '#efaa3b');
+			$('.rating:nth('+j+')').css('color', 'white');
+		}
+		else if($('.rating:nth('+j+')').html() == "High"){
+			$('.rating:nth('+j+')').css('background', '#af2a2a');
+			$('.rating:nth('+j+')').css('color', 'white');
+		}
+		else if($('.rating:nth('+j+')').html() == "N/A"){
+			$('.rating:nth('+j+')').css('background', 'gray');
+			$('.rating:nth('+j+')').css('color', 'white');
+		}
+	}
+
+	//Stores the pageYOffset for editing the page. This way when a user is editing they don't need to scroll back to the same item in order to continue editing
+	$(window).scroll(function(e){
+		var storage = window.localStorage;
+		storage.setItem("YOffset", window.pageYOffset)
+	});
+
+	
+</script>
+{% endblock %}

@@ -27,7 +27,7 @@
 		<div class="panel">
 			<div class="projectSpot">
 				<h2 id="project_title"></h2>
-				<div style="width: 27vw; display: inline-block; margin-left: 1vw">
+				<div style="width: 33%; display: inline-block;">
 					<img id="project_spotlight" />
 					<a id="project_link" href=""><img class="gotoproject" src="{% static 'images/home/gotoproject.png' %}"/></a>
 				</div>
@@ -38,7 +38,7 @@
 					<div id="gallery_content">		
 					</div>
 				</div>
-				<div style="display: inline-block; vertical-align: top;">
+				<div style="width: 33%; height: 20vw; display: inline-block; vertical-align: top;">
 					<ul id='project_scrollBox'></ul>
 				</div>
 			</div>
@@ -52,15 +52,17 @@
 						The newsletter highlights collaborative projects in the Grande Ronde Basin, serves as a media source for other natural resource agencies, and includes a variety of water-related information equally interesting to adults and children. You may select newsletters below and view them in PDF format. If you would like a printed copy of the Ripples, contact the GRMW office.
 					</p>
 				</div>
-				<div class="ripples_years">
-					<ul class="yearList">
-						<!-- All years that have ripples -->
-					</ul>
-				</div>
-				<div class="ripples_editions">
-					<ul class="editions">
-						<!-- All editions for the selected year-->
-					</ul>
+				<div class="ripples_scrollbox">
+					<div class="ripples_years">
+						<ul class="yearList">
+							<!-- All years that have ripples -->
+						</ul>
+					</div>
+					<div class="ripples_editions">
+						<ul class="editions">
+							<!-- All editions for the selected year-->
+						</ul>
+					</div>
 				</div>
 				<div class="edition_detail" style="display:inline-block; vertical-align: top;">
 					<div class="article_subpanel">
@@ -76,25 +78,110 @@
 				</div>
 				<div class="subscription">
 					<h2 style="font-size: 2vw;" class="title">Subscribe to Ripples In The Grande Ronde</h2>
-					<input class="subscriber_email" placeholder="Email Address"/>
-					<img class="subscribe" src="{% static 'images/home/subscribe.png' %}">
+					<form id="new_subscriber">{% csrf_token %}
+						<input class="subscriber_email" type="email" placeholder="Email Address" required/>
+						<button style="display: inline-block;" class="subscribe" type="submit"></button>
+						<img id="loader" src="{% static 'images/home/loader.gif'%}">
+					</form>
 				</div>
 			</div>
-			<br>
+			<hr class="panelSeparator">
 			<div class="best_country">
+				<h2 class="title">People Restoring Rivers</h2>
 				<div class="panelA">
-					<h2 class="title">People Restoring Rivers</h2>
 					<p>In 2009, the GRMW teamed up with Green Fire Productions to create a documentry of the Six Ranch Restoration project called "The Best Country".<br><br>Today we have a great opportunity to restore salmon and steelhead habitat in northeastern Oregon.<br><br>In The Best Country two longtime Wallowa valley ranching families tell their stories about restoring salmon and steelhead habitat on their land. </p>
+					<br>
+					<p class="vid_details">Runtime: 35 min<br>Filmed in High Definition<br>Music by Brady Goss, Thatcher Carter, Matt Cooper.<br>Produced by Greenfire Productions</p>
 				</div>
 				<div class="panelB">
-					<iframe style="width: 36vw; height: 20vw;" src="http://player.vimeo.com/video/23509400?title=0&amp;byline=0&amp;portrait=0&amp;color=c9ff23" frameborder="1"></iframe>
-					<p>Runtime: 35 min<br>Filmed in High Definition<br>Music by Brady Goss, Thatcher Carter, Matt Cooper.<br>Produced by Greenfire Productions</p>
+					<iframe style="width: 100%; height: 20vw;" src="http://player.vimeo.com/video/23509400?title=0&amp;byline=0&amp;portrait=0&amp;color=c9ff23" frameborder="1"></iframe>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div id="notifBox">
+		<div style="position: relative;">
+			<h3 class="notifHead"></h3>
+			<p class="msg"></p>
+			<p class="err"></p>
+			<button class="ok_close">OK</button>
+		</div>
+	</div>
 <script>
 	{% static "" as baseUrl %}
+
+	$(document).ready(function(){
+		$(window).scroll(function(e){
+			var scroll = $(window).scrollTop();
+			var height = $(window).height();
+			var boxHeight = $("#notifBox").height();
+			$("#notifBox").css("top", (scroll+((height*.5)-(height*.2))+"px"));
+		});
+
+		function notify(msg, head, error){
+			if(head === undefined){
+				head = 'SUCCESS';
+			}
+			if(error === undefined){
+				error = false;
+			}
+			$("#notifBox .notifHead").html("");
+			$("#notifBox .msg").html("");
+			$("#notifBox .err").html("");
+			$("#notifBox").show(function(e){
+				$("#notifBox .notifHead").html(head);
+				$("#notifBox .msg").html(msg);
+				if(error != false){
+					$("#notifBox .err").html(error);
+				}
+			});
+			var scroll = $(window).scrollTop();
+			var height = $(window).height();
+			var boxHeight = $("#notifBox").height();
+			$("#notifBox").css("top", (scroll+((height*.5)-(height*.2))+"px"));
+		}
+
+		$(".subscribe").click(function(e){
+			if($(".subscriber_email").is(":valid")){
+				e.preventDefault();
+				var subscriber_email = $(".subscriber_email").val();
+				$("#loader").css('display', 'inline-block');
+				$.ajax({
+					type: 'POST',
+					url: '/subscribe/',
+					data: {
+						email: subscriber_email,
+						csrfmiddlewaretoken: $("input[name='csrfmiddlewaretoken']").val(),
+					},
+					success: function(e){
+						$(".subscriber_email").val("");
+						if(e.success == true){
+							notify(e.message);
+						}
+						else{
+							if(e.data['error']['email'] != undefined){
+								notify(e.message, "FAILURE",e.data['error']['email'][0]);
+							}
+							else if (e.data['error']['confirmation_key'] != undefined){
+								notify(e.message, "FAILURE",e.data['error']['confirmation_key'][0]);
+							}
+							else{
+								notify(e.message, "FAILURE");
+							}
+						}
+						$("#loader").hide();
+					},
+					failure: function(e){
+						notify("Something went wrong, please reload the page and try again.", "FAILURE");
+					}
+				});
+			}
+		});
+
+		$(".ok_close").click(function(e){
+			$("#notifBox").hide();
+		});
+	});
 	var projects_list = [ {% for project in projects %}{name: '{{ project.name }}', id: {{ project.id}} }, {% endfor %} ];
 	var projects_img_url = [ {% for project in projects %}'{{ baseUrl }}images/projects/{{ project.grmw_id }}/main.jpg', {% endfor %} ];
 	var projects_desc = [ {% for project in projects %}'{{ project.description }}', {% endfor %} ];
@@ -135,10 +222,10 @@
 			if (i == 0){
 				$('.yearList').append('<li class="year_selected">'+years_list[i]+'</li>');
 				for (var j=0; j < ripples.length; j++){
-					if (ripples[j].fields.year.includes(years_list[i])){
+					if (ripples[j].fields.year.indexOf(years_list[i]) >= 0){
 						if (j == 0){
 							$('.editions').append('<li class="ripple_selected" data-index="'+j+'">'+getSeason(ripples[j].fields.edition_id)+'</li>');
-							$('.edition_detail a').attr('href', ripples[j].fields.url)
+							$('.edition_detail a').attr('href', "/"+ripples[j].fields.file)
 							$('.edition_detail a .article_thumb').attr('src', '{{baseUrl}}images/ripples/'+years_list[j]+'/'+getSeason(ripples[j].fields.edition_id)+'.jpg')
 							loadArticles(ripples[j].pk);
 						}
@@ -188,7 +275,7 @@
 		selectObject(e, '.yearList li', 'year_selected', 'year_unselected');
 		$('.editions li').remove(); //get rid of whatever was in the box before
 		for (var j=0; j < ripples.length; j++){
-			if (ripples[j].fields.year.includes($(e.target).html())){
+			if (ripples[j].fields.year.indexOf($(e.target).html()) >= 0){
 				$('.editions').append('<li class="ripple_unselected" data-index="'+j+'">'+getSeason(ripples[j].fields.edition_id)+'</li>');
 			}
 		}
@@ -205,8 +292,8 @@
 	$(".editions").on('click', 'li', function(e){
 		selectObject(e, '.editions li', 'ripple_selected', 'ripple_unselected');
 		var i = $(e.target).attr('data-index');
-		$('.edition_detail a').attr('href', ripples[i].fields.url);
-		$('.edition_detail a .article_thumb').attr('src', '{{baseUrl}}images/ripples/'+$('.year_selected').html()+'/'+$('.ripple_selected').html()+'.jpg');
+		$('.edition_detail a').attr('href', "/"+ripples[i].fields.file);
+		$('.edition_detail a .article_thumb').attr('src', "/"+ripples[i].fields.thumb_file);
 		loadArticles(ripples[i].pk)
 	});
 

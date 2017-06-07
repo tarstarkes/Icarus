@@ -51,6 +51,7 @@ small{
 	background: #ececec;
 	margin-left:2vw;
 	margin-right:2vw;
+    margin-bottom:2vw;
 }
 .content p{
 	font-size: 1.5vw;
@@ -62,4 +63,27 @@ small{
     margin-left: 20vw;
     margin-bottom: 0vw;
     margin-top: .5vw;
+}
+@media screen and (min-width: 1500px){
+    .precipData {
+        height: 30vw;
+        width: 100%;
+        margin-bottom: 0;
+        margin-top: .5vw;
+        margin-left: 0;
+        box-shadow: 0 0 black;
+    }
+    .stylized_heading{
+        margin-left: 0vw;
+        margin-right: 0vw;
+        font-size:1.5vw;
+    }
+    .content p{
+        font-size: 1vw;
+        padding: 2vw;
+    }
+    .content{
+        margin-left:0;
+        margin-right:0;
+    }
 }

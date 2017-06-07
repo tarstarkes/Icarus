@@ -1,5 +1,6 @@
 p{
-	margin-bottom: .2vw;	
+	margin-bottom: .2vw;
+	font-size: 1vw;	
 }
 hr {
     /* color: black; */
@@ -26,25 +27,15 @@ h2{
     margin-top: 1vw;
     margin-bottom: 1vw;
 }
-/*.loginSnip{
-    margin-right: 1vw;
-    font-size: 1.5vw;
-    position: absolute;
-    top: 4vw;
-    right: 0;
-    margin-right: 2vw;
-    font-weight: bold;
-    color: #ef9502;
-}*/
 .loginSnip{
-    font-size: 1.5vw;
+	font-size: 1vw;
     display: inline-block;
     font-weight: bold;
     color: #ef9502;
-    text-align: right;
-    width: 40vw;
-    padding-right: 1vw;
-    vertical-align:bottom;
+    vertical-align: bottom;
+    float: right;
+    margin-right: 2vw;
+    margin-top: 4.7vw;
 }
 .loginSnip a{
 	color: #ef9502;
@@ -102,15 +93,15 @@ h3.findUsLG{
 }
 .navBarLinks {
 	display: block;
-	background: #ef9502;
-	margin-right: .1%;
-	position: absolute;
-	right: 0;
-	top: 0;
-	z-index: 50;
-	-webkit-box-shadow: -9px 9px 20px -9px rgba(0,0,0,0.75);
-	-moz-box-shadow: -9px 9px 20px -9px rgba(0,0,0,0.75);
-	box-shadow: -9px 9px 20px -9px rgba(0,0,0,0.75);
+    background: #ef9502;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 50;
+    margin-right: -2px;
+    -webkit-box-shadow: -9px 9px 20px -9px rgba(0,0,0,0.75);
+    -moz-box-shadow: -9px 9px 20px -9px rgba(0,0,0,0.75);
+    box-shadow: -9px 9px 20px -9px rgba(0,0,0,0.75);
 }
 .navBarLinks tbody {
 	display: inline-block;
@@ -135,7 +126,7 @@ h3.findUsLG{
 	width: auto !important;
 	background: none;
 	font-family: "Bodoni MT" !important;
-	font-size: calc(.85vw + .85vh);
+	font-size: 2vw;
     font-weight: bold !important;
     padding: 1vw;
     color: white;
@@ -238,4 +229,124 @@ hr {
 }
 .data {
 	margin-left: calc(9.5vw + 9.5vh);
+}
+#back_to_top{
+	position: absolute;
+	top:0;
+	left: calc(50% - 10vw);
+	left: -moz-calc(50% - 10vw);
+	left: -webkit-calc(50% - 10vw);
+	width: 20vw;
+	text-align: center;
+	z-index: 100;
+	opacity: .75;
+	background: #ef9502;
+	display: none;
+}
+#back_to_top:hover{
+	cursor: pointer;
+	opacity: 1;
+	border: .25vw solid #4E7DB8;
+	border-top: none;
+}
+#back_to_top p{
+	opacity: 1 !important;
+	font-size: 1.5vw;
+	color: white;
+}
+#notifBox{
+    position: absolute;
+    display: none;
+    background: #ffffff;
+    border: .2vw solid black;
+    z-index: 100;
+    width: 50%;
+    left: 0;
+    margin-left: 25%;
+}
+#notifBox div{
+	padding: 2vw;
+}
+#notifBox p{
+	padding-top: 1vw;
+	padding-bottom: 1vw;
+	font-size: 1vw;
+}
+#notifBox .notifHead{
+	margin-top:0;
+	text-align: center;
+	font-size: 1.5vw;
+}
+.ok_close, .link_button{
+	color: white;
+    padding: .5vw;
+    background: #ef9502;
+    -webkit-border-radius: .5vw;
+    -moz-border-radius: .5vw;
+    border-radius: .5vw;
+    font-size: 1vw;
+    font-weight: bold;    
+    border:0;
+    outline:0;
+    display: inline-block;
+    margin-bottom: 1vw;
+}
+.ok_close:hover, .link_button:hover{
+	background: #4e7db8;
+    cursor: pointer;
+    text-decoration: none;
+}
+#loader{
+	width: 2vw;
+	display: none;
+	vertical-align: top;
+}
+@media screen and (min-width: 1500px){
+
+	div#page_header {
+	    width: 100vw;
+	    margin-left: -12.5vw;
+	}
+
+	.mainImage {
+	    position: relative;
+	    width: 100vw;
+	    margin-left: -12.5vw;
+	}
+	.footer {
+	    width: 100vw;
+	    color: white;
+	    background: #4E7DB8;
+	    padding: 2vw;
+	    margin-left: -12.5vw;
+	}
+	.container-fluid {
+	    padding-left: 2px;
+	    padding-right: 2px;
+	    width: 75vw;
+	}
+
+	.opp_edit, .bsr_edit {
+	    font-size: 1vw;
+	}
+	.navBarLinks .btn {
+	    width: auto !important;
+	    background: none;
+	    font-family: "Bodoni MT" !important;
+	    font-size: 1.5vw;
+	    font-weight: bold !important;
+	    color: white;
+	    margin-left: 0;
+	    padding-left: 1vw;
+	    padding-right: 1vw;
+	    padding-top: .5vw;
+	    padding-bottom: .5vw;
+	}
+	.navBarLinks .dropdown-item {
+	    display: block;
+	    padding-left: 1vw;
+	    padding-right: 1vw;
+	    font-size: 1vw;
+	    color: #ef9502;
+	}
 }

@@ -1,0 +1,117 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Atlas</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/atlas/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="atlas_body">
+		<div class="mainImage">
+			<img src="{% static 'images/atlas/mainImage.png' %}">
+			<h2>Restoration Atlas</h2>
+		</div>
+		<div>
+			<h3 class="stylized_heading">Welcome to Restoration Atlas</h3>
+
+			<div class="content">
+				<table>
+					<tbody>
+						<tr>
+							<td>
+								<p>This is GRMW's Restoration Atlas Page. Below you will see one or more Restoration Atlases. If you do not see an Atlas below and require access, please select the appropraite link from below. 
+								<!-- Ideally, this button should send an email to infotech.org with the user's information. --><br><br>
+								<!-- <a href="/atlas/get_access/Wallowa/">Request Wallowa Restoration Atlas Access</a><br> -->
+								<a href="/atlas/get_access/Catherine Creek/">Request Catherine Creek Restoration Atlas Access</a><br>
+								<a href="/atlas/get_access/Upper Grande Ronde/">Request Upper Grande Ronde Restoration Atlas Access</a>
+								</p>
+							<td>
+							<td style="width: 30vw; vertical-align:top">
+								<p class="bold">Important Links</p>
+								<a href="{% static 'documents/atlas/Atlas Implementation Guidelines (6-8-15).pdf'%}" download>
+								<div style="margin-left: 2vw;display:inline-block;" class="link_button">Implementation Guidelines</div>
+								</a>
+								<a href="{% static 'documents/atlas/Atlas Exec Summ_2_8_13s.pdf'%}" download>
+								<div style="margin:2vw; margin-top: 1vw; display:inline-block;" class="link_button">Executive Summary</div>
+								</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div style="margin: 2vw;">
+				<table id="atlases" style="width: 100%;">
+					<tbody>
+						<tr>
+							{% load filters %}
+							{% for atlas in atlases %}
+								{% if atlas.id != 3 %}
+									<td id="atlas-{{atlas.id}}" onClick="document.location.href='/atlas/go_to_atlas/{{atlas.id}}/'" class="atlas-pane bold">
+											<p style="text-align: center;">{{atlas.atlas_name}}</p>
+									</td>
+								{%endif%}
+							{% endfor %}
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<h2 class="stylized_heading">Science TAC Resources</h2>
+			<div id="science_tac_div" class="content">
+			<p>The Science TAC is a small working group of local biologists and outside the basin experts with knowledge and familiarity of focal species utilization within the specific stream system. The Science TAC performs the initial evaluation of spatial data layers to interpret how fish are using specific river reaches, identify the primary limiting factors by reach, and recommend restoration activity types that have the greatest ability to address those key limiting factors. The Science TAC member composition is focused on the fisheries biologist discipline with representation from the fields of restoration practitioners, researchers and monitoring coordinators. Team composition represents a tactical decision in grounding the process on the biological needs of the fish species and defining the habitat and activity types that can best address the key limiting factors affecting those species. Outcomes from the Science TAC effort include the specific reaches, limiting factors and habitat action types that will be utilized by geomorphologists and engineers in the project opportunity and identification phase of Atlas preparation.</p>
+			<center>
+				<div>
+					<a href="http://grmw.maps.arcgis.com/apps/webappviewer/index.html?id=d6d4fc6521ee4b7e817ea4e6d1e9ded8" target="_blank"><img src="{% static '/images/atlas/webapps/UGRHabitatData.jpg' %}"/></a>  
+
+					<a href="http://grmw.maps.arcgis.com/apps/PublicInformation/index.html?appid=37b0dc3b94534f1782534c49e8882fb8" target="_blank"><img src="{% static '/images/atlas/webapps/UGRProjectOpps.jpg' %}" /></a> 
+					      
+					<a href="http://grmw.maps.arcgis.com/apps/webappviewer/index.html?id=4f0ba85d0d5b4a608d49ab871f00aabe" target="_blank"><img src="{% static '/images/atlas/webapps/CatherineCreekHabitatData.jpg' %}"/></a>  
+
+					<a href="http://grmw.maps.arcgis.com/apps/PublicInformation/index.html?appid=6981ba00caba4255a2aa46b0697c6e7c" target="_blank"><img src="{% static '/images/atlas/webapps/CCProjectOpps.jpg' %}"/></a>
+					      
+					<a href="http://grmw.maps.arcgis.com/apps/Viewer/index.html?appid=6816c9921fdb4c75aad49fa55070a069" target="_blank"><img src="{% static '/images/atlas/webapps/UGRCCTempDAta.jpg' %}"/></a>
+				</div>
+			</center>
+			</div>
+		</div>
+		<style>
+			#science_tac_div img{
+				width:16%;
+				margin-right:1vw !important;
+				margin-bottom:2vw;
+
+			}
+			#science_tac_div img:hover{
+				outline: .2vw solid black;
+			}
+			#science_tac_div img:last-child{
+				margin-right:0;
+			}
+		</style>
+	</div>
+<script>
+	$(document).ready(function(e){
+		{% for atlas in atlases %}
+			$("#atlas-{{atlas.id}}").mouseenter(function(e){
+				e.target.closest("td").style.background = "#4E7DB8";
+				e.target.closest("td").style.color = "#ffffff";
+			});
+			$("#atlas-{{atlas.id}}").mouseleave(function(e){
+				e.target.closest("td").style.background = "#ECECEC";
+				e.target.closest("td").style.color = "#000000";
+			});
+		{% endfor %}
+
+		//dynamically set the width of the table based on how many data sets we have
+		//this ensures a single atlas will not span the width of the page.
+		box_width = $("#atlases td").length;
+		box_width = box_width*33.3;
+		$("#atlases").attr('style', box_width+'%;');
+
+	});
+	
+</script>
+{% endblock %}

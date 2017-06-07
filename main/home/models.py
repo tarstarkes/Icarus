@@ -360,10 +360,17 @@ class Ripplesedition(models.Model):
     def __str__(self):
     	return self.editionname
 
+def get_ripple_path(instance, filename):
+    return os.path.join( "static", "documents", "ripples", str(instance.year), filename)
+
+def get_ripple_thumb_path(instance, filename):
+    return os.path.join( "static", "images", "ripples", str(instance.year), filename)
+
 class Ripples(models.Model):
     id = models.AutoField(primary_key=True)
     year = models.CharField(max_length=4)
-    url = models.CharField(max_length=200)
+    file = models.FileField(upload_to=get_ripple_path, null=True)
+    thumb_file = models.FileField(upload_to=get_ripple_thumb_path, null=True)
     size = models.CharField(max_length=7)
     pub_date = models.DateField()
     edition_id = models.ForeignKey(Ripplesedition, db_column="edition_id")
@@ -387,3 +394,14 @@ class Ripplesarticle(models.Model):
     def __str__(self):
         return (self.article)
 
+class RipplesSubscribers(models.Model):
+    email = models.EmailField(max_length=100, blank=True, null=True, unique=True)
+    confirmation_key = models.CharField(max_length=100, blank=True, null=True, unique=True)
+    confirmed = models.NullBooleanField(blank=True, default=False)
+    date_created = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        db_table = "publications_subscribers"
+
+    def __str__(self):
+        return (self.email)

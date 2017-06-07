@@ -48,7 +48,7 @@
 						</div>
 					{% endif %}
 					<h5>Project Site Locations</h5>
-					<div id="map_canvas" style="width: 45vw; height: 40vw;"></div>
+					<div id="map_canvas"></div>
 				</div>
 			</div>
 		</div>
@@ -132,7 +132,8 @@
 						<tr>
 							<td>{{contract.fundingorg_id.name}}</td>
 							<td>{{contract.contractnumber}}</td>
-							<td>{{contract.amount}}</td>
+
+							<td>${{contract.amount}}</td>
 						</tr>
 						{% endfor %}
 					</table>
@@ -154,7 +155,7 @@
 					{% for doc in docs %}
 					<tr>
 						<td>{{doc.type_id.name}}</td>
-						<td><a href="{% static ''%}{{doc.file}}">View Document</a></td>
+						<td>{% if ".pdf" in doc.file|stringformat:'s' %}<a href="{% static ''%}{{doc.file}}">View Document</a>{% else %}N/A{% endif %}</td>
 						<td><a href="{% static ''%}{{doc.file}}" download>Download Document</a></td>
 					</tr>
 					{% endfor %}

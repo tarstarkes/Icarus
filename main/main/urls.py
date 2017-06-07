@@ -28,4 +28,5 @@ urlpatterns = [
     url(r'^stepwise/', include('stepwise.urls'), name="stepwise"),
     url(r'^education/', include('education.urls'), name="edu"),
     url(r'^login/', include('user_login.urls'), name="login"),
+    url(r'^atlas/', include('atlas.urls'), name="atlas"),
 ]

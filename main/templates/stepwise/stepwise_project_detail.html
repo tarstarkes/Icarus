@@ -38,6 +38,9 @@
 							{% elif project.current_step == 3 %}
 							<a href="/stepwise/upload_draft/{{ project.id }}">
 							<div class="link_button menu_button" style="display:inline-block; cursor:pointer;">Upload Draft Proposal</div></a>
+							{% elif project.current_step == 5 %}
+							<a href="/stepwise/upload_final/{{ project.id }}">
+							<div class="link_button menu_button" style="display:inline-block; cursor:pointer;">Upload Final Proposal</div></a>
 							{% endif %}
 							<a href="/stepwise/stepwise_portal"><div class="back_to_stepwise menu_button link_button">Back to Stepwise Portal</div></a>
 						</div>
@@ -98,7 +101,7 @@
 								<br><br>
 								<span class="normal">GRMW will present the completed prospectus to the Implementation Team which will vote on whether to advance the prospectus to the proposal phase.  The Implementation Team will rank the opportunity presented in the prospectus using the Atlas scoring matrices which evaluate the following:</span><br><br></p>
 								<div style="margin-left:4vw;">
-								<ul class="normal" style="font-size: 1.5vw; margin:1vw;">
+								<ul class="normal bulleted">
 									<li> Is this opportunity in a high ranking Biologically Significant Reach (BSR)?</li>
 									<li> Does this opportunity address the critical  life stages of the focal fish species occupying the BSR?</li>
 									<li>Will this opportunity address the most critical limiting factors in the BSR?</li>
@@ -110,7 +113,7 @@
 								Once the opportunity presented in the prospectus is scored, the Implementation Team will determine whether the opportunity is a high priority for current fish populations and should advance to Step 2, the Draft Proposal. The Opportunity Lead will be notified within 6 weeks  of submitting a prospectus whether they are invited to submit a draft proposal.</span></p>
 							{% elif project.current_step == 3 %}
 								<p>
-									This step is intended to explain the proposed project in more detail. Using the OWEB Proposal format found <a href="http://apps.wrd.state.or.us/apps/oweb/oa/Home.aspx" target="_blank">here</a>, the Opportunity Lead should clearly describe the project goals, objective, design, schedule, and budget. The Implementation Team should be able to understand all aspects of the proposed project after reviewing the proposal. If you do not have the proper GRMW credentials for logging into the OWEB Grant Application, please call GRMW at <a href="tel:1-541-663-0570">541-663-0570</a> or email us at <a href="emailto:projects@grmw.org">projects@grmw.org</a> so we may provide them for you. Once logged in, you should be able to create a new application.<br><br>
+									This step is intended to explain the proposed project in more detail. Using the OWEB Application System found <a href="http://apps.wrd.state.or.us/apps/oweb/oa/Home.aspx" target="_blank">here</a>, the Opportunity Lead should clearly describe the project goals, objective, design, schedule, and budget. The Implementation Team should be able to understand all aspects of the proposed project after reviewing the proposal. If you do not have the proper GRMW credentials for logging into the OWEB Grant Application, please call GRMW at <a href="tel:1-541-663-0570">541-663-0570</a> or email us at <a href="emailto:projects@grmw.org">projects@grmw.org</a> so we may provide them for you. Once logged in, you should be able to create a new application.<br><br>
 
 									<span class="normal">Once the Opportunity Lead has submitted an application to OWEB, depending on whether OWEB funding was requested, a copy of the application may be downloaded. If a copy of the application was obtained from OWEB, we ask that you upload it here as a draft proposal. The 'upload draft proposal' button located on the left-hand menu will take you to the appropriate page to upload the application. If you were unable to obtain a copy of the application for any reason, we instead ask that you email us at projects@grmw.org and let us know that your application has been submitted to OWEB.<br><br>
 
@@ -177,8 +180,11 @@
 							{% endif %}
 							{% if draft_files %}
 								{% for draft in draft_files %}
-									<a href="/{{draft.draft_file}}" download><div class="link_button document_link">{{draft.draft_title}}</div></a>
+									<a href="/{{draft.draft_file}}" download><div class="link_button document_link">Draft: {{draft.draft_title}}</div></a>
 								{% endfor %}
+							{% endif %}
+							{% if project.proposal_id.proposal_file %}
+									<a href="/{{project.proposal_id.proposal_file}}" download><div class="link_button document_link">Final: {{project.proposal_id.file_title}}</div></a>
 							{% endif %}
 						</div>
 
@@ -214,7 +220,7 @@
 													<div class="attachment_box">
 														{% if comment.attachment %}
 														<span class="bold smallFont">Attachment:<br/></span>
-														<a class="attachment_link" href="/{{comment.attachment}}" download>
+														<a class="attachment_link other-attachment" href="/{{comment.attachment}}" download>
 															{{comment.attachment.file.name}}
 														</a>
 														{% endif %}
@@ -299,7 +305,7 @@
 		});
 
 		//use filename instead of path for all attachments
-		attachments = $(".comment .attachment_link");
+		attachments = $(".attachment_link");
 		for(var i=0; i < attachments.length; i++){
 			filename = attachments[i].innerHTML 
 			filename = filename.split('\\');

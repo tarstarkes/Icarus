@@ -5,16 +5,17 @@ from django.http import HttpResponse
 from django.db.models import Q
 from html.parser import HTMLParser
 from django.conf import settings
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
-
+import time
 import os
 
 def index(request):
 	#get the username, password, redirect params
-	user = request.GET.get("user")
-	pwd = request.GET.get("pass")
+	usr = request.GET.get("user")
+	pas = request.GET.get("pass")
 	redirect = request.GET.get("redirect")
 	err = request.GET.get("error")
 	variableList = {}
@@ -27,22 +28,22 @@ def index(request):
 	
 	returnHtml = render(request, "user_login/login.html", variableList)
 
-	#user and pwd were not entered
-	if(user != None and pwd != None):
+	#usr and pas were not entered
+	if(usr != None and pas != None):
 		parser = HTMLParser()
-		pwd = parser.unescape(pwd)
-		user = parser.unescape(user)
-		user=authenticate(username=user, password=pwd) #authenticate the username and password
-		print(redirect)
+		password = parser.unescape(pas)
+		username = parser.unescape(usr)
+		user = authenticate(username=username, password=password) #authenticate the username and password
 		#user authenticated successfully, there should be no errors beyond this point so we may use HttpResponseRedirect without fear of losing an error message
 		if user is not None:
-			login(request, user) #log the user in
+			auth_login(request, user) #log the user in
+			print(request.user.is_authenticated())
 			returnHtml = HttpResponseRedirect("/")
 			if(redirect != None and redirect != ""):
 				#there is a redirect link
 				redirect = parser.unescape(redirect)
 				returnHtml = HttpResponseRedirect(redirect) #redirect the user to the requested page
-		else:
+		elif user == None:
 			#user failed to authenticate
 			print("going back to login")
 			variableList['error'] = "Sorry, but that username and password combination is invalid. Please check your credentials and try again or contact the server admin at infotech@gmail.com."

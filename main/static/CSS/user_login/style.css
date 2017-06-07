@@ -46,12 +46,11 @@
 #inputs input{
     display: block;
     -webkit-appearance: none;
-    width: 20vw;
-    margin-left: 40vw;
+    width: 25%;
     padding: 1vw;
     font-size: 1.5vw;
-    border:0;
-    margin-top:1vw;
+    border: 0;
+    margin-top: 1vw;
 }
 .submitButtons input{
     width: auto !important;
@@ -65,8 +64,9 @@
     border-radius: .5vw;
 }
 .submitButtons{
-    margin-left:40vw;
     width: 20vw;
+    text-align: left;
+    margin-left: 1.25vw;
 }
 .submitButtons a{
     display: inline-block !important;

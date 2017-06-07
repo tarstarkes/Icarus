@@ -12,12 +12,12 @@
 	<div class="stepwise_prospectus_body">
 		<div class="mainImage">
 			<img src="{% static 'images/stepwise/main.png'%}"/>
-			<h2>Stepwise - {{ user }}</h2>
+			<h2>Stepwise - Prospectus Form</h2>
 		</div>
 
 		<table style="width: 100%;">
 			<tr style="width: 100%;">
-				<th style="vertical-align:top;">
+				<th class="navBoxContainer" style="vertical-align:top;">
 					<div class="columnA">
 						<div class="navBox">
 							<h3>TABLE OF CONTENTS</h3>
@@ -75,30 +75,32 @@
 						</form>
 						{% elif current_step == 3 %}
 							<form class="prospectus_form" method="POST" action="/stepwise/stepwise_prospectus{{action}}">{% csrf_token %}
-							<table style="width: 100%">
-								<tr>
-									<th>Name</th>
-									<th>Email</th>
-									<th>Remove</th>
-								</tr>
+								<p class="prospectus_note">CAUTION - Please add all landowners before filling out the rest of this form; adding a landowner will reset all form fields for this step. This is intentional.</p>
 								{% if landowners %}
-									{% for landowner in landowners %}
+								<label>Landowners:</label>
+								<table class="landownerTable">
 									<tr>
-										<td><p>{{landowner.landowner_name}}</p></td>
-										<td><p>{{landowner.landowner_email}}</p></td>
-										<td><a href="/stepwise/stepwise_prospectus/delete_landowner/{{ landowner.id }}">Delete</a></td>
+										<th>Name</th>
+										<th>Address</th>
+										<th>Phone</th>
+										<th>Email</th>
+										<th>Click to Remove</th>
 									</tr>
-									{% endfor %}
-								{% else %}
-									<tr>
-										<td style="padding:1vw; font-size:1vw; font-weight:bold" colspan=3><center><p>There are no landowners involved</p></center></td>
-									</tr>
+										{% for landowner in landowners %}
+										<tr>
+											<td><p>{{landowner.landowner_name}}</p></td>
+											<td><p>{{landowner.landowner_address}}</p></td>
+											<td><p>{{landowner.landowner_phone}}</p></td>
+											<td><p>{{landowner.landowner_email}}</p></td>
+											<td><a href="/stepwise/stepwise_prospectus/delete_landowner/{{ landowner.id }}">Delete</a></td>
+										</tr>
+										{% endfor %}
+								</table>
 								{% endif %}
-							</table>
-							{{ form.as_p }}
-							<button style="font-size:1.5vw;" class="nextStep" type="button" onclick="window.location.href='/stepwise/stepwise_prospectus/add_landowner/'">Add a Landowner</button>
-							<button style="font-size:1.5vw;" class="nextStep" type="submit">{{submit}}</button>
-						</form>
+								{{ form.as_p }}
+								<button class="add_landowner" class="nextStep" type="button" onclick="window.location.href='/stepwise/stepwise_prospectus/add_landowner/'">Add a Landowner</button>
+								<button class="nextStep" type="submit">{{submit}}</button>
+							</form>
 						{% endif %}
 					</div>
 				</th>

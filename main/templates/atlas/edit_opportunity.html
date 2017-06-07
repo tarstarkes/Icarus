@@ -1,0 +1,623 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Atlas</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/atlas/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="atlas_body">
+		<div class="mainImage">
+			<img src="{% static 'images/atlas/mainImage.png' %}">
+			<h2>Opportunity - {{opportunity.opportunity_name}}</h2>
+		</div>
+		<div class="window_nav_bar"><a href="/atlas/">Atlas</a>/<a href="/atlas/go_to_atlas/{{opportunity.bsr_id.atlas_id.id}}">{{opportunity.bsr_id.atlas_id}}</a>/<a href="/atlas/go_to_bsr/{{opportunity.bsr_id.id}}/">{{opportunity.bsr_id}}</a>/<span class="page_landed">{{opportunity.opportunity_name}} (Editing)</span>
+		</div>
+		<div id="opportunity_body">
+			<div id="opportunity_map" style="width:96%;height:30vw; margin: 2%;">
+			</div>
+
+			{% if opportunity.location %}
+				<input class="link_button link_button_hover" style="display: none; margin-left:2vw; margin-top: 0vw;" type="submit" id="update_map" value="Update Opportunity Area"/>
+			{% else %}
+				<input class="link_button link_button_hover" style="margin-left:2vw; margin-top: 0vw;" type="submit" id="set_map" value="Set Opportunity Area"/>
+			{% endif %}
+			<script>
+				function opp_map() {
+					var cent = {% if opportunity.center %}{{opportunity.center}}{% else %}{lat:45.343671, lng:-118.116116}{% endif %};
+			        var map = new google.maps.Map(document.getElementById('opportunity_map'), {
+						zoom: {% if opportunity.zoom %}{{opportunity.zoom}}{% else %}12{% endif %},
+						center: cent,
+						mapTypeId: 'terrain',
+						scrollwheel: false,
+			        });
+
+			        {% if opportunity.location %}
+				        // Define the LatLng coordinates for the polygon's path.
+				        var triangleCoords = {{opportunity.location}};
+
+				        // Construct the polygon.
+				        var opp_polygon = new google.maps.Polygon({
+							paths: triangleCoords,
+							strokeColor: '#000000',
+							strokeOpacity: 0.8,
+							strokeWeight: 2,
+							fillColor: '{{opportunity.status.color}}',
+							fillOpacity: 0.35,
+							editable: true,
+							draggable:true,
+						});
+
+				        opp_polygon.setMap(map);
+				        var infowindow = new google.maps.InfoWindow({
+				        	content: "{{opportunity.status.status}}"
+				        })
+				        infowindow.setPosition(cent);
+				        opp_polygon.addListener('click', function(){
+				        	infowindow.open(map);
+				        });
+
+				        // Add a listener for the click event.
+						var place_polygon_path = opp_polygon.getPath()
+	       	 			google.maps.event.addListener(place_polygon_path,'set_at', make_update_visible);
+	       	 			google.maps.event.addListener(place_polygon_path,'insert_at', make_update_visible);
+	       	 			function make_update_visible(event) {
+							$("#update_map").css("display", "inline-block");
+					    }
+					{% endif %}
+
+				    $("#set_map").click(function(e){
+				    	$("#opp_map_setup #id_zoom").val(map.getZoom());
+				    	var center = map.getCenter().toString();
+				    	center = center.split(',');
+				    	var lat = center[0];
+				    	var lng = center[1];
+				    	lat = parseFloat(lat.replace("(", ""));
+				    	lng = parseFloat(lng.replace(")", ""));
+				    	var TLlat = lat;
+				    	var TLlng = lng-.01;
+				    	var TRlat = lat;
+				    	var TRlng = lng+.01;
+				    	var BLlat = lat-.01;
+				    	var BLlng = lng-.01;
+				    	var BRlat = lat-.01;
+				    	var BRlng = lng+.01;
+				    	var square = "[{lat:"+TLlat+", lng:"+TLlng+"}, {lat:"+TRlat+", lng:"+TRlng+"}, {lat:"+BRlat+", lng:"+BRlng+"}, {lat:"+BLlat+", lng:"+BLlng+"}, {lat:"+TLlat+", lng:"+TLlng+"}]"
+				    	$("#opp_map_setup #id_location").val(square);
+				    	$("#opp_map_setup #id_center").val("{lat:"+lat+", lng:"+lng+"}");
+				    	$("#submit_opp_map").trigger("click");
+				    });
+
+				    $("#update_map").click(function(e){
+				    	$("#opp_map_setup #id_zoom").val(map.getZoom());
+				    	var center = map.getCenter().toString();
+				    	center = center.split(',');
+				    	var lat = center[0];
+				    	var lng = center[1];
+				    	center = "{lat:"+parseFloat(lat.replace("(", ""))+", lng:"+parseFloat(lng.replace(")", ""))+"}";
+				    	var vertices = opp_polygon.getPath();
+						var latlng = "["
+						for(var x=0; x<vertices.length; x++){
+							latlng=latlng+"{lat: "+vertices.b[x].lat()+", lng: "+vertices.b[x].lng()+"},";
+						}
+						latlng=latlng+"]"
+				    	$("#opp_map_setup #id_location").val(latlng);
+				    	$("#opp_map_setup #id_center").val(center);
+				    	$("#submit_opp_map").trigger("click");
+				    });
+				 }
+			</script>
+			<form style="display: none;" id="opp_map_setup" method="post" action="/atlas/update_opp_map/{{opportunity.id}}/">{% csrf_token %}
+				{{opp_map_form}}
+				<input id="submit_opp_map" type="submit" value="Submit"/>
+			</form>
+
+			<h2 class="stylized_heading">Description</h2>
+			<div class="content" style="padding: 2vw;">
+				<div id="edit_desc" style="padding: 2vw;">
+				{% if opportunity.description %}
+					{% autoescape off %}{{opportunity.description|linebreaks}}{% endautoescape %}
+				{% else %}
+					<p>There is no description for this opportunity</p>
+				{% endif %}
+				</div>
+				<center>
+					<div id="update_description" style="display: none; margin-top: 2vw;" class="link_button  link_button_hover">Update Description</div>
+					<form id="desc_form" style="display: none;" method="post" action="/atlas/update_opp_desc/{{opportunity.id}}/">{% csrf_token %}
+						{{opp_desc_form}}
+						<input id="desc_submit" style="margin-top:1vw;" class="link_button link_button_hover submit" type="submit" value="Submit"></input>
+					</form>
+				</center>
+			</div>
+
+			<h2 class="stylized_heading">Limiting Factors Score</h2>
+			<div class="content">
+				<center>
+					<p class="other_score">{{opportunity.lf_score}}</p>
+					<div>
+						<span class="score_label">Limiting Factor Score</span>
+					</div>
+				</center>
+				<table style="width: 100%;">
+					<tbody>
+						{% if rest_actions %}
+						<tr style="border: 1vw solid #ECECEC">
+							<th style="padding: .5vw">Action Name</th>
+							<th style="padding: .5vw; text-align: center;">Limiting Factors</th>
+							<th style="padding: .5vw; text-align: center;">Immediate</th>
+							<th style="padding: .5vw; text-align: center;">Long-term</th>
+						</tr>
+						{% endif %}
+						{% for action in rest_actions %}
+						<tr style="border: 1vw solid #ECECEC" data-action="{{action.action_id.restoration_action_id}}">
+							<td style="padding: .5vw;" class="action_name" data-action-id="{{action.id}}">{{action.action_id.restoration_action_id}}</td>
+							<td style="padding: .5vw; text-align: center;">{{action.action_id.limiting_factor_score}}</td>
+							<td class="rating" style="padding: .5vw; text-align: center; border: 1vw solid #ECECEC;">{{action.action_id.immediate}}</td>
+							<td class="rating" style="padding: .5vw; text-align: center; border: 1vw solid #ECECEC;">{{action.action_id.long_term}}</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<center>
+					<div id="add_new_limiting_factor" class="link_button  link_button_hover">Add Limiting Factor</div>
+					<form style="display:none;" id="add_opp_lf" method="post" action="/atlas/add_opp_limiting_factor/{{opportunity.id}}/">{% csrf_token %}
+						{{lf_form}}
+						<input style="margin-top:1vw;" class="link_button link_button_hover submit" type="submit" value="Submit"></input>
+					</form>
+				</center>
+			</div>
+
+			<h2 class="stylized_heading">Restoration Activities Score</h2>
+			<div class="content">
+				<center>
+					<div style="display:inline-block">
+						<p class="other_score">{{opportunity.imm_score}}</p>
+						<div>
+							<span class="score_label">Immediate Score</span>
+						</div>
+					</div>
+					<div style="display:inline-block">
+						<p class="other_score">{{opportunity.lt_score}}</p>
+						<div>
+							<span class="score_label">Long-Term Score</span>
+						</div>
+					</div>
+				</center>
+			</div>
+
+			<h2 class="stylized_heading">Natural Process Score</h2>
+			<div class="content" style="padding-bottom: 2vw;">
+				<center>
+					<p class="other_score">{{opportunity.np_score}}</p>
+					<div>
+						<span class="score_label">Natural Process Score</span>
+					</div>
+				</center>
+				<center>
+					<div class="np_container">
+						<p id="np_change" class="natural_process">{{opportunity.natural_process}}</p>
+					</div>
+				</center>
+				<center>
+					<div id="update_np" style="display: none;" class="link_button  link_button_hover">Update Natural Process</div>
+					<form id="np_form" style="display: none;" method="post" action="/atlas/update_opp_np/{{opportunity.id}}/">{% csrf_token %}
+						{{np_form}}
+						<input id="np_submit" style="margin-top:1vw;" class="link_button link_button_hover submit" type="submit" value="Submit"></input>
+					</form>
+				</center>
+			</div>
+
+			<h2 class="stylized_heading">Longitudinal Score</h2>
+			<div class="content" style="padding-bottom:2vw;">
+				<center>
+					<p class="other_score">{{opportunity.l_score}}</p>
+					<div>
+						<span class="score_label">Longitudinal Score</span>
+					</div>
+				</center>
+				<table class="long_score">
+					<tbody>
+						<tr style="border: 1vw solid #ECECEC">
+							<th style="padding: .5vw; text-align: center;">Water Right Date</th>
+							<th style="padding: .5vw; text-align: center;">Water Flow Rate</th>
+							<th style="padding: .5vw; text-align: center;">Water Right Score</th>
+							<th style="padding: .5vw; text-align: center;">Water Flow Score</th>
+						</tr>
+						<tr style="border: 1vw solid #ECECEC">
+							<td class="edit_water_right" style="padding: .5vw; text-align: center;">{{opportunity.water_right_date}}</td>
+							<td class="edit_water_flow"style="padding: .5vw; text-align: center;">{{opportunity.water_flow_rate}}</td>
+							<td style="padding: .5vw; text-align: center;">{{opportunity.wrd_score}}</td>
+							<td style="padding: .5vw; text-align: center;">{{opportunity.wfr_score}}</td>
+						</tr>
+					</tbody>
+				</table>
+				<center>
+					<div id="update_water" style="display: none; margin-top: 2vw;" class="link_button  link_button_hover">Update Longitudinal Score</div>
+					<form id="water_form" style="display: none;" method="post" action="/atlas/update_longitudinal_score/{{opportunity.id}}/">{% csrf_token %}
+						{{opp_water_form}}
+						<input id="water_submit" style="margin-top:1vw;" class="link_button link_button_hover submit" type="submit" value="Submit"></input>
+					</form>
+				</center>
+			</div>
+
+			<h2 class="stylized_heading">Feasability Criteria</h2>
+			<div class="content" style="padding-bottom:2vw;">
+				<table class="feasability" style="width: 100%;">
+					<tbody>
+						<tr style="border: 1vw solid #ECECEC; border-bottom:0;">
+							<th style="padding: .5vw;">
+								<div><span>
+									Landowner Willingness
+								</span></div>
+							</th>
+							<th style="padding: .5vw;">
+								<div><span>
+								Design Effort
+								</span></div>
+							</th>
+							<th style="padding: .5vw;">
+								<div><span>
+								Construction Effort
+								</span></div>
+							</th>
+							<th style="padding: .5vw;">
+								<div><span>
+								Site Access Effort
+								</span></div>
+							</th>
+							<th style="padding: .5vw;">
+								<div><span>
+								SM - Dewatering, Erosion Control Effort
+								</span></div>
+							</th>
+							<th style="padding: .5vw;">
+								<div><span>
+								Risk & Uncertainty (Goals & Objectives)
+								</span></div>
+							</th>
+							<th style="padding: .5vw; ">
+								<div><span>
+								Risk & Uncertainty (Public Safety)
+								</span></div>
+							</th>
+							<th style="padding: .5vw;">
+								<div><span>
+								Regulatory Requirements
+								</span></div>
+							</th>
+							<th style="padding: .5vw;">
+								<div><span>
+								Value
+								</span></div>
+							</th>
+						</tr>
+						<tr>
+							<td class="fc_td" data-col="#id_fc_landowner_willingness" style="padding: .5vw; text-align: center;">{{opportunity.fc_landowner_willingness}}</td>
+							<td class="fc_td" data-col="#id_fc_design_effort" style="padding: .5vw; text-align: center;">{{opportunity.fc_design_effort}}</td>
+							<td class="fc_td" data-col="#id_fc_constuction_effort" style="padding: .5vw; text-align: center;">{{opportunity.fc_constuction_effort}}</td>
+							<td class="fc_td" data-col="#id_fc_site_access_effort" style="padding: .5vw; text-align: center;">{{opportunity.fc_site_access_effort}}</td>
+							<td class="fc_td" data-col="#id_fc_sm_dewatering_erosion_ctrl_effort" style="padding: .5vw; text-align: center;">{{opportunity.fc_sm_dewatering_erosion_ctrl_effort}}</td>
+							<td class="fc_td" data-col="#id_fc_risk_goal_objectives" style="padding: .5vw; text-align: center;">{{opportunity.fc_risk_goal_objectives}}</td>
+							<td class="fc_td" data-col="#id_fc_risk_public_safety" style="padding: .5vw; text-align: center;">{{opportunity.fc_risk_public_safety}}</td>
+							<td class="fc_td" data-col="#id_fc_regulatory_requirements" style="padding: .5vw; text-align: center;">{{opportunity.fc_regulatory_requirements}}</td>
+							<td class="fc_td" data-col="#id_fc_value" style="padding: .5vw; text-align: center;">{{opportunity.fc_value}}</td>
+						</tr>
+					</tbody>
+				</table>
+				<center>
+					<div id="update_fc" style="display: none; margin-top: 2vw;" class="link_button  link_button_hover">Update Feasability Criteria</div>
+					<form id="fc_form" style="display: none;" method="post" action="/atlas/update_fc/{{opportunity.id}}/">{% csrf_token %}
+						{{fc_form}}
+						<input id="fc_submit" style="margin-top:1vw;" class="link_button link_button_hover submit" type="submit" value="Submit"></input>
+					</form>
+				</center>
+			</div>
+
+			<h2 class="stylized_heading">Total Biological Benefit Score</h2>
+			<div class="content" style="padding-bottom:2vw;">
+				<center>
+					<p class="bbs">{{opportunity.tbbs_score}}</p>
+					<div>
+						<span class="total_label">Total Biological Benefit Score</span>
+					</div>
+				</center>
+				<table class="bioben">
+					<tbody>
+						<tr style="border: 1vw solid #ECECEC">
+							<th style="padding: .5vw; text-align: center;">Limiting Factor Score</th>
+							<th style="padding: .5vw; text-align: center;">Immediate Score</th>
+							<th style="padding: .5vw; text-align: center;">Long Term Score</th>
+							<th style="padding: .5vw; text-align: center;">Natural Process Score</th>
+							<th style="padding: .5vw; text-align: center;">Longitudinal Score</th>
+						</tr>
+						<tr style="border: 1vw solid #ECECEC">
+							<td style="padding: .5vw; text-align: center;">{{opportunity.lf_score}}</td>
+							<td style="padding: .5vw; text-align: center;">{{opportunity.imm_score}}</td>
+							<td style="padding: .5vw; text-align: center;">{{opportunity.lt_score}}</td>
+							<td style="padding: .5vw; text-align: center;">{{opportunity.np_score}}</td>
+							<td style="padding: .5vw; text-align: center;">{{opportunity.l_score}}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<h2 class="stylized_heading">Comments</h2>
+			<div class="content" style="padding: 2vw;">
+				<div class="edit_opp_comment">
+					{% if opportunity.comments %}
+						<p>{% autoescape off %}{{opportunity.comments|linebreaks}}{% endautoescape %}</p>
+					{% else %}
+						<p>There are no comments at this time</p>
+					{% endif %}
+				</div>
+				<center>
+					<div id="update_comment" style="display: none; margin-top: 2vw;" class="link_button  link_button_hover">Update Comments</div>
+					<form id="comment_form" style="display: none;" method="post" action="/atlas/update_opp_comment/{{opportunity.id}}/">{% csrf_token %}
+						{{opp_comment_form}}
+						<input id="comment_submit" style="margin-top:1vw;" class="link_button link_button_hover submit" type="submit" value="Submit"></input>
+					</form>
+				</center>
+
+			</div>
+
+		</div>
+		
+	</div>
+<script>
+	$(document).ready(function(e){
+		//LIMITING FACTORS
+		$("#add_new_limiting_factor").click(function(){
+			$('#add_opp_lf').animate({
+				height: "toggle"
+			}, 300, function() {
+				// Animation complete.
+			}
+			);
+		});
+
+		//DELETE LIMITING FACTOR SCORE
+		$('.action_name').mouseenter(function(e){
+			$(e.target)[0].innerHTML = "DELETE";
+			$(e.target).css('background', "#AF2A2A");
+			$(e.target).css('text-align', "center");
+			$(e.target).css('outline', '.25vw solid black');
+			$(e.target).css('color', 'white');
+			$(e.target).css('cursor', 'pointer');
+		});
+		$('.action_name').mouseleave(function(e){
+			$(e.target)[0].innerHTML = $(e.target).closest('tr').attr('data-action');
+			$(e.target).css('background', "initial");
+			$(e.target).css('text-align', "initial");
+			$(e.target).css('outline', 'initial');
+			$(e.target).css('color', 'initial');
+			$(e.target).css('cursor', 'initial');
+		});
+		$('.action_name').click(function(e){
+			if(window.confirm("Are you sure you want to delete this Limiting Factor Score?")){
+				//DELETE THE LIFE STAGE
+				var id = $(e.target).attr('data-action-id');
+				window.location.href = "/atlas/delete_lf_score/"+id+"/";
+			}
+		})
+
+		//DESCRIPTION
+		$("#edit_desc").click(function(e){
+			$("#edit_desc").attr('contenteditable', true);
+		});
+
+		$("#edit_desc").focusout(function(e){
+			$("#update_description").show();
+			var result = $("#edit_desc")[0].innerHTML;
+
+			$("#id_description").val(result);
+		});
+
+		$("#update_description").click(function(e){
+			$("#desc_submit").trigger("click");
+		});
+		//-------------------------------------------------
+
+		//COMMENT
+		$(".edit_opp_comment").click(function(e){
+			$(".edit_opp_comment").attr('contenteditable', true);	
+		});
+
+		$(".edit_opp_comment").focusout(function(e){
+			$("#update_comment").show();
+			var lines = $(".edit_opp_comment p")
+			var comment = ""
+			for (var x=0; x<lines.length; x++){
+				comment = comment + lines[x].innerHTML+"\n"
+			}
+			var result = comment.replace(/<br>/g, "\n");
+
+			$("#id_comments").val(result);
+		});
+
+		$("#update_comment").click(function(e){
+			$("#comment_submit").trigger("click");
+		});
+		//-------------------------------------------------
+
+		//sets the window location to the YOffset While editing
+		if(window.localStorage.getItem('YOffset')){
+			$(window).scrollTop(window.localStorage.getItem('YOffset'));
+		}
+		//-------------------------------------------------
+
+		//NATURAL PROCESS
+		$("#np_change").click(function(e){
+			$("#update_np").css("display", "inline-block");
+			if($("#np_change").html() == "Habitat Creation"){
+				$("#np_change").html("Partial Restoration");
+				$("#id_natural_process").val("Partial Restoration");
+				$("#np_change").css("background", "#1692cc");
+			}
+			else if($("#np_change").html() == "Partial Restoration"){
+				$("#np_change").html("Full Restoration");
+				$("#id_natural_process").val("Full Restoration");
+				$("#np_change").css("background", "#008000");
+			}
+			else if($("#np_change").html() == "Full Restoration"){
+				$("#np_change").html("Habitat Creation");
+				$("#id_natural_process").val("Habitat Creation");
+				$("#np_change").css("background", "#a01c1c");
+			}
+		});
+
+		$("#update_np").click(function(e){
+			$("#np_submit").trigger("click");
+		});
+		//-------------------------------------------------
+
+
+		//LONGITUINAL SCORE
+		$(".edit_water_flow").click(function(e){
+			$("#update_water").css("display", 'inline-block');
+			var html = $(".edit_water_flow")[0].innerHTML;
+			if (html == "N/A"){
+				$(".edit_water_flow").html("< 0.5");
+				$("#id_water_flow_rate").val("< 0.5");
+			}
+			else if (html == "&lt; 0.5"){
+				$(".edit_water_flow").html("0.5 - 2.5");
+				$("#id_water_flow_rate").val("0.5 - 2.5");
+			}
+			else if (html == "0.5 - 2.5"){
+				$(".edit_water_flow").html("> 2.5");
+				$("#id_water_flow_rate").val("> 2.5");
+			}
+			else if (html == "&gt; 2.5"){
+				$(".edit_water_flow").html("N/A");
+				$("#id_water_flow_rate").val("N/A");
+			}
+		});
+
+		$(".edit_water_right").click(function(e){
+			$("#update_water").css("display", 'inline-block');
+			var html = $(".edit_water_right")[0].innerHTML;
+			if (html == "N/A"){
+				$(".edit_water_right").html("1867-1869");
+				$("#id_water_right_date").val("1867-1869");
+			}
+			else if (html == "1867-1869"){
+				$(".edit_water_right").html("1870-1879");
+				$("#id_water_right_date").val("1870-1879");
+			}
+			else if (html == "1870-1879"){
+				$(".edit_water_right").html("1880-1889");
+				$("#id_water_right_date").val("1880-1889");
+			}
+			else if (html == "1880-1889"){
+				$(".edit_water_right").html("1890-1899");
+				$("#id_water_right_date").val("1890-1899");
+			}
+			else if (html == "1890-1899"){
+				$(".edit_water_right").html("1900-1909");
+				$("#id_water_right_date").val("1900-1909");
+			}
+			else if (html == "1900-1909"){
+				$(".edit_water_right").html("N/A");
+				$("#id_water_right_date").val("N/A");
+			}
+		});
+
+		$("#update_water").click(function(e){
+			$("#water_submit").trigger("click");
+		});
+		//-------------------------------------------------
+
+		//FEASABILITY CRITERIA
+		$(".fc_td").click(function(e){
+			$("#update_fc").css("display", "inline-block");
+			if ($(e.target).attr('data-col') == "#id_fc_landowner_willingness"){
+				var html = $(e.target)[0].innerHTML;
+				var selector = $(e.target).attr('data-col');
+				if (html == "TBD"){
+					$(e.target)[0].innerHTML = "Yes";
+					$(selector).val("Yes");
+				}
+				else if (html =="Yes"){
+					$(e.target)[0].innerHTML = "No";
+					$(selector).val("No");
+				}
+				else if (html =="No"){
+					$(e.target)[0].innerHTML = "TBD";
+					$(selector).val("TBD");
+				}
+			}	
+			else{
+				var html = $(e.target)[0].innerHTML;
+				var selector = $(e.target).attr('data-col');
+				if (html == "TBD"){
+					$(e.target)[0].innerHTML = "Low";
+					$(selector).val("Low");
+				}
+				else if (html =="Low"){
+					$(e.target)[0].innerHTML = "Med";
+					$(selector).val("Med");
+				}
+				else if (html =="Med"){
+					$(e.target)[0].innerHTML = "High";
+					$(selector).val("High");
+				}
+				else if (html =="High"){
+					$(e.target)[0].innerHTML = "TBD";
+					$(selector).val("TBD");
+				}
+
+			}
+		});
+
+		$("#update_fc").click(function(e){
+			$("#fc_submit").trigger("click");
+		});
+		//-------------------------------------------------
+
+		for(var j=0; j < $('.rating').length; j++){
+			if($('.rating:nth('+j+')').html() == "Low"){
+				$('.rating:nth('+j+')').css('background', '#1692cc');
+				$('.rating:nth('+j+')').css('color', 'white');
+			}
+			else if($('.rating:nth('+j+')').html() == "Med"){
+				$('.rating:nth('+j+')').css('background', '#efaa3b');
+				$('.rating:nth('+j+')').css('color', 'white');
+			}
+			else if($('.rating:nth('+j+')').html() == "High"){
+				$('.rating:nth('+j+')').css('background', '#af2a2a');
+				$('.rating:nth('+j+')').css('color', 'white');
+			}
+			else if($('.rating:nth('+j+')').html() == "N/A"){
+				$('.rating:nth('+j+')').css('background', 'gray');
+				$('.rating:nth('+j+')').css('color', 'white');
+			}
+		}
+
+		for(var j=0; j < $('.natural_process').length; j++){
+			if($('.natural_process:nth('+j+')').html() == "Full Restoration"){
+				$('.natural_process:nth('+j+')').css('background', '#008000');
+				$('.natural_process:nth('+j+')').css('color', 'white');
+			}
+			else if($('.natural_process:nth('+j+')').html() == "Partial Restoration"){
+				$('.natural_process:nth('+j+')').css('background', '#1692cc');
+				$('.natural_process:nth('+j+')').css('color', 'white');
+			}
+			else if($('.natural_process:nth('+j+')').html() == "Habitat Creation"){
+				$('.natural_process:nth('+j+')').css('background', '#a01c1c');
+				$('.natural_process:nth('+j+')').css('color', 'white');
+				//$('.natural_process:nth('+j+')').css('border', '.2vw solid black');
+			}
+		}
+		
+		//Stores the pageYOffset for editing the page. This way when a user is editing they don't need to scroll back to the same item in order to continue editing
+		$(window).scroll(function(e){
+			var storage = window.localStorage;
+			storage.setItem("YOffset", window.pageYOffset)
+		});
+	});
+
+</script>
+{% endblock %}

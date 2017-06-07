@@ -26,14 +26,18 @@
 	<!-- google api css -->
 	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 	
-	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
 
 
 	{% block head %}
 	{% endblock %}
 
 	{% load staticfiles %}
+	<!-- Favicon.ico -->
+	<link rel="shortcut icon" href="{% static 'favicon/favicon-small.png' %}"/>
+
 	<script src="{% static '/js/jquery.dotdotdot.min.js' %}"></script>
+
 	<script type="text/javascript" src="{% static '\js\jquery.bootstrap-dropdown-hover.min.js' %}"></script>
 
 	<link rel="stylesheet" href="{% static 'CSS/style.css' %}" type="text/css" >
@@ -41,72 +45,89 @@
 </head>
 <body>
 	<div class="container-fluid">
-		<div class="logoLogin">
-			<img class="logo" src="{% static 'images/home/logo.png' %}">
-			{% if user.is_authenticated %}
-				<div class="loginSnip">
-					<p>Welcome, {{ user.username }} (<a href="/login/logout/">Sign Out</a>)</p>
-				</div>
-			{% else %}
-				<div class="loginSnip">
-					<p><a href="/login/">Sign In</a> / <a href="/accounts/register/">Register</a></p>
-				</div>
-			{% endif %}
-		</div>
-		<div style="position: relative;">
-			<table class="navBarLinks">
-				<tbody>
-					<tr>
-						<th colspan="1">
-							<button class="btn btn-secondary dropdown-toggle homeButton" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="window.location.href='/'">
-							    Home
-							</button>
-							<div class="dropdown-menu" id="homeMenu" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="/about/">About Us</a>
-								<a class="dropdown-item" href="/staff/">Staff</a>
-								<a class="dropdown-item" href="/board/">Board of Directors</a>
-								<a class="dropdown-item" href="/home/sitemap/">Site Map</a>
-							</div>
-						</th>
-						<th colspan="1">
-							<button onclick="window.location.href='/board/meetings'" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-								Board Meetings
-							</button>
-						</th>
-						<th colspan="1">
-							<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							    Data
-							</button>
-							<div class="dropdown-menu data" aria-labelledby="dropdownMenuButton">
-								<a class="dropdown-item" href="/data/database/">Project Database</a>
-								<a class="dropdown-item" href="http://grmw.maps.arcgis.com/" target="_blank">ArcGIS online</a>
-								<a class="dropdown-item" href="/data/assessments/">Assessments</a>
-								<a class="dropdown-item" href="/data/stream/">Stream Precipitation & Flow</a>
-							</div>
-						</th>
-						<th colspan="1">
-							<button onclick="window.location.href='/education/'" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							    Education
-							</button>
-						</th>
-						<th colspan="1">
-							<button onclick="window.location.href='/stepwise/'" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							    Stepwise
-							</button>
-						</th>
-						<th colspan="1">
-							<button onclick="window.location.href='/atlas/'" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							    Atlas
-							</button>
-						</th>
-						<script>
-							$('[data-toggle="dropdown"]').bootstrapDropdownHover({
-							  // see next for specifications
-							});
-						</script>
-					</tr>
-				</tbody>
-			</table>
+		<div id="page_header">
+			<div id="back_to_top">
+				<p>Back to Top ▲</p>
+			</div>
+			<div class="logoLogin">
+				<img class="logo" src="{% static 'images/home/logo.png' %}">
+				{% if user.is_authenticated %}
+					<div class="loginSnip">
+						<p>Welcome, {{ user.username }} (<a href="/login/logout/">Sign Out</a>)</p>
+					</div>
+				{% else %}
+					<div class="loginSnip">
+						<p><a href="/login/">Sign In</a> / <a href="/accounts/register/">Register</a></p>
+					</div>
+				{% endif %}
+			</div>
+			<div style="position: relative;">
+				<table class="navBarLinks">
+					<tbody>
+						<tr>
+							{% load filters %}
+							{% if request.user|has_group:"Site Admin" %}
+							<th colspan="1">
+								<button class="btn btn-secondary dropdown-toggle homeButton" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="window.location.href='/'">
+								    Admin
+								</button>
+								<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+									<a class="dropdown-item" href="/admin/">Admin Console</a>
+									<a class="dropdown-item" href="/ripples-admin/">Ripples Console</a>
+								</div>
+							</th>
+							{% endif %}
+							<th colspan="1">
+								<button class="btn btn-secondary dropdown-toggle homeButton" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onclick="window.location.href='/'">
+								    Home
+								</button>
+								<div class="dropdown-menu" id="homeMenu" aria-labelledby="dropdownMenuButton">
+									<a class="dropdown-item" href="/about/">About Us</a>
+									<a class="dropdown-item" href="/staff/">Staff</a>
+									<a class="dropdown-item" href="/board/">Board of Directors</a>
+									<a class="dropdown-item" href="/home/sitemap/">Site Map</a>
+								</div>
+							</th>
+							<th colspan="1">
+								<button onclick="window.location.href='/board/meetings'" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									Board Meetings
+								</button>
+							</th>
+							<th colspan="1">
+								<button class="btn btn-secondary dropdown-toggle data_dropdown" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    Data
+								</button>
+								<div class="dropdown-menu data" aria-labelledby="dropdownMenuButton">
+									<a class="dropdown-item" href="/data/database/">Project Database</a>
+									<a class="dropdown-item" href="http://grmw.maps.arcgis.com/" target="_blank">ArcGIS online</a>
+									<a class="dropdown-item" href="/data/assessments/">Assessments</a>
+									<a class="dropdown-item" href="/data/stream/">Stream Precipitation & Flow</a>
+								</div>
+							</th>
+							<!-- <th colspan="1">
+								<button onclick="window.location.href='/education/'" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    Education
+								</button>
+							</th> -->
+							<th colspan="1">
+								<button onclick="window.location.href='/stepwise/'" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    Stepwise
+								</button>
+							</th>
+							<th colspan="1">
+								<button onclick="window.location.href='/atlas/'" class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    Atlas
+								</button>
+							</th>
+							<script>
+								$('[data-toggle="dropdown"]').bootstrapDropdownHover({
+								  // see next for specifications
+								});
+							</script>
+						</tr>
+					</tbody>
+				</table>
+			</div>
 		</div>
 		{% block content %}
 		{% endblock %}
@@ -171,39 +192,36 @@
 		        </div>
 		    </div>
 		</div>
-</div>
 	</div>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpBNFyNgmMi3MjRxHmkaAel2z020k1CIw&callback=initMap" async defer>
-	</script>
 	<script>
 		function initMap() {
-			var map;
-			var marker;
-			var wallowaMap;
-			var wallowaMarker;
-			var lgLoc = {lat: 45.320, lng: -118.097};
-			var walLoc = {lat: 45.4259203, lng: -117.2904193};
-			// Create a map object and specify the DOM element for display.
-			map = new google.maps.Map(document.getElementById('map'), {
-				center: lgLoc,
-				scrollwheel: true,
-				zoom: 17
-			});
-			marker = new google.maps.Marker({
-				position: lgLoc,
-				map: map,
-				title: 'GRMW - La Grande Office'
-			});
-			map = new google.maps.Map(document.getElementById('walMap'), {
-				center: walLoc,
-				scrollwheel: true,
-				zoom: 17
-			});
-			marker = new google.maps.Marker({
-				position: walLoc,
-				map: map,
-				title: 'GRMW - Wallowa Office'
-			});
+			// var map;
+			// var marker;
+			// var wallowaMap;
+			// var wallowaMarker;
+			// var lgLoc = {lat: 45.320, lng: -118.097};
+			// var walLoc = {lat: 45.4259203, lng: -117.2904193};
+			// // Create a map object and specify the DOM element for display.
+			// map = new google.maps.Map(document.getElementById('map'), {
+			// 	center: lgLoc,
+			// 	scrollwheel: true,
+			// 	zoom: 17
+			// });
+			// marker = new google.maps.Marker({
+			// 	position: lgLoc,
+			// 	map: map,
+			// 	title: 'GRMW - La Grande Office'
+			// });
+			// map = new google.maps.Map(document.getElementById('walMap'), {
+			// 	center: walLoc,
+			// 	scrollwheel: true,
+			// 	zoom: 17
+			// });
+			// marker = new google.maps.Marker({
+			// 	position: walLoc,
+			// 	map: map,
+			// 	title: 'GRMW - Wallowa Office'
+			// });
 
 			if(typeof initBoardMap == 'function'){
 				initBoardMap();
@@ -212,12 +230,29 @@
 			if(typeof initProjectSiteMap == 'function'){
 				initProjectSiteMap();
 			}
+
+			if(typeof opp_map == 'function'){
+				opp_map();
+			}
+
+			if(typeof atlas_opp_map == 'function'){
+				atlas_opp_map();
+			}
 		}
 	</script>
+	<script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpBNFyNgmMi3MjRxHmkaAel2z020k1CIw&callback=initMap">
+    </script>
 	<script>
 		$(document).ready(function() {
 		    bindHandlers();
+		    positionData();
 		});
+		$(window).resize(function(){
+			positionData();
+		});
+		
+
 		function bindHandlers(){
 			var $lightbox = $('#lightbox');
 		    
@@ -242,20 +277,39 @@
 		    });
 
 		    
-		    $( ".panel-box" ).hover(function(e) {
-				$(e.target).closest('.panel-box').animate({
-					width: '23vw',
-					'min-height': '34vw'
-				}, 200, function() {
-					// Animation complete.
-				});
-				}, function(e){
-					$(e.target).closest('.panel-box').animate({
-						width: '22vw',
-						'min-height': '33vw'
-					});
-			});
 		}
+
+		$(window).on("scroll", function(e){
+			if ($(window).scrollTop() > 2000){
+				$("#back_to_top").css("top", ($(window).scrollTop())+"px");
+				if($("#back_to_top:visible").length == 0){
+					$("#back_to_top").animate({
+						height: "toggle"
+					}, 300, function() {
+						// Animation complete.
+					});
+				}
+			}
+			else if ($(window).scrollTop() < 2000){
+				$("#back_to_top").css("display", "None");
+			}
+		});
+
+		$("#back_to_top").click(function(){
+			$('body').animate({
+				scrollTop: 0
+	        }, 150);
+		});
+
+		function positionData(){
+			var bar = $(".navBarLinks")[0]
+			var data = $(".data_dropdown")[0]
+			var barRect = bar.getBoundingClientRect()
+			var dataRect = data.getBoundingClientRect()
+			pixels = (dataRect['left'] - barRect['left'])+"px";
+			$(".navBarLinks .data").css("margin-left", pixels)
+		}
+
 	</script>
 </body>
 </html>

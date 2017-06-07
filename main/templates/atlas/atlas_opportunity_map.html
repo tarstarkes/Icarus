@@ -1,0 +1,95 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Atlas</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/atlas/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="atlas_body">
+		<div class="mainImage">
+			<img src="{% static 'images/atlas/mainImage.png' %}">
+			<h2>{{atlas.atlas_name}} Opportunity Map</h2>
+		</div>
+		<div class="window_nav_bar"><a href="/atlas/">Atlas</a>/<a href="/atlas/go_to_atlas/{{atlas.id}}">{{atlas.atlas_name|safe}}</a>/<span class="page_landed">Opportunity Map</span></div>
+
+		<div>
+			<div id="atlas_opportunity_map" style="width:96%;margin: 2%;">
+			</div>
+			<script>
+				function atlas_opp_map() {
+					var cent = {lat: 45.292565, lng: -117.824576};
+			        var map = new google.maps.Map(document.getElementById('atlas_opportunity_map'), {
+						zoom: Math.round(($(window).width()/1000)+10)-1,
+						center: cent,
+						mapTypeId: 'terrain',
+						scrollwheel: false,
+			        });
+
+			        opportunity_info = 
+			        	[{% for opp in opportunities %}
+				        	{% if opp.location %}{
+				        		opp_loc: {{opp.location}}, 
+				        		opp_name: '{{opp.opportunity_name}}', 
+				        		opp_color: '{{opp.status.color}}', 
+				        		opp_status: '{{opp.status.status}}', 
+				        		opp_center: {{opp.center}},
+				        		opp_id: {{opp.id}},
+				        	},
+				        	{% endif %}
+			        	{% endfor %}];
+
+			        var polygons = new Array();
+			        setTimeout(function(){
+				        for(var x =0; x < opportunity_info.length; x++){
+				        	if(opportunity_info[x].opp_loc != null) {
+					        	var triangleCoords = opportunity_info[x].opp_loc;
+
+						        //Construct the polygon.
+						        polygons[x] = new google.maps.Polygon({
+						        	id: x,
+									paths: triangleCoords,
+									strokeColor: '#000000',
+									strokeOpacity: 0.8,
+									strokeWeight: 2,
+									fillColor: opportunity_info[x].opp_color,
+									fillOpacity: 0.35,
+									atlas_opp_center: opportunity_info[x].opp_center,
+									atlas_opp_status: opportunity_info[x].opp_status,
+									atlas_opp_name: opportunity_info[x].opp_name,
+									atlas_opp_id: opportunity_info[x].opp_id,
+								});
+
+						        polygons[x].setMap(map);
+						        polygons[x].addListener('click', function(){
+						        	infowindow = new google.maps.InfoWindow({
+						        		content: this.atlas_opp_name+"<br><a href='/atlas/go_to_opportunity/"+this.atlas_opp_id+"/'>View Opportunity</a><br>"+this.atlas_opp_status,
+						        	})
+						        	infowindow.setPosition(this.atlas_opp_center);
+						        	infowindow.open(map);
+						        });
+					       	}
+				        }
+					}, 1000);
+				}
+			</script>
+		</div>
+	</div>
+<script>
+	$(document).ready(function(){
+		resizeMap();
+	});
+
+	$(window).resize(function(){
+		resizeMap();
+	});
+
+	function resizeMap(){
+		var pixels = $("#atlas_opportunity_map").css('width');
+		$("#atlas_opportunity_map").css('height', pixels)
+	}
+</script>
+{% endblock %}

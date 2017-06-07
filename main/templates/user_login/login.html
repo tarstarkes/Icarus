@@ -23,21 +23,23 @@
 			</div>
 			{% if error %}
 			<div>
-				<p style="color: red; text-align:center; width: 50vw; margin-left: 25vw; padding:1vw;font-weight: bold; font-size: 2vw;">{{ error }}</p>
+				<p style="color: red; text-align: center; padding: 1vw; font-weight: bold; margin-top: 1vw; margin-bottom: 1vw; font-size: 1.5vw;">{{ error }}</p>
 			</div>
 			{% endif %}
-			<form class="submitLogin" method="GET" action="">
-				<div id="inputs">
-					<input id="username" name="user" placeholder="username"/>
-					<input id="password" name="pass" placeholder="password" type="password"/>
-					<input style="display: none" name="redirect" value="{{ redirect }}"/>
-					<div style="margin-top:1vw;margin-left: 40vw;width: 20vw;padding:1vw; font-size:1vw; background: #ececec;"><a href="/login/password/reset">Forgotten Password?</a></div>
-					<div class="submitButtons">
-						<input id="login" class="button" type="submit" value="Login"/>
-						<a href="/accounts/register/"><input id="register" class="button" type="button" value="Register"/></a>
+			<center>
+				<form class="submitLogin" method="GET" action="">
+					<div id="inputs">
+						<input id="username" name="user" placeholder="username"/>
+						<input id="password" name="pass" placeholder="password" type="password"/>
+						<input style="display: none" name="redirect" value="{{ redirect }}"/>
+						<div style="margin-top: 1vw; width: 25%; padding: 1vw; font-size: 1vw; background: #ececec;"><a href="/login/password/reset">Forgotten Password?</a></div>
+						<div class="submitButtons">
+							<input id="login" class="button" type="submit" value="Login"/>
+							<a href="/accounts/register/"><input id="register" class="button" type="button" value="Register"/></a>
+						</div>
 					</div>
-				</div>
-			</form>
+				</form>
+			</center>
 		</div>
 	</div>
 <script>

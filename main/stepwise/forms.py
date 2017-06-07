@@ -332,7 +332,6 @@ class stepwise_comment_form(forms.ModelForm):
 
 	def clean_attachment(self):
 		value = self.cleaned_data.get('attachment')
-		print(self.cleaned_data)
 		if value != None:
 			ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
 			valid_extensions = ['.pdf', '.doc', '.docx', '.jpg', '.png', '.xlsx', '.xls']
@@ -361,7 +360,25 @@ class upload_draft_form(forms.ModelForm):
 
 	def clean_draft_file(self):
 		value = self.cleaned_data.get('draft_file')
-		print(self.cleaned_data)
+		if value != None:
+			ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
+			valid_extensions = ['.pdf', '.doc', '.docx', '.jpg', '.png', '.xlsx', '.xls']
+			if not ext.lower() in valid_extensions:
+				raise forms.ValidationError(u'Unsupported file extension. Allowed extensions are: .pdf, .doc, .docx, .jpg, .png, .xlsx, and .xls')
+		return value
+
+class upload_final_form(forms.ModelForm):
+	class Meta:
+		model = Proposal
+		fields = [
+			'proposal_file'
+		]
+		labels = {
+			'proposal_file': 'Upload Final'
+		}
+
+	def clean_proposal_file(self):
+		value = self.cleaned_data.get('proposal_file')
 		if value != None:
 			ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
 			valid_extensions = ['.pdf', '.doc', '.docx', '.jpg', '.png', '.xlsx', '.xls']

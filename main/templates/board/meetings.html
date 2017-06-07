@@ -11,7 +11,7 @@
 
 {% block content %}
 	<div>
-		<div class="mainPhoto">
+		<div class="mainImage">
 			<img id="meetings" src="{% static 'images/board/meetings.jpg' %}">
 			<h2>Board Meetings</h2>
 		</div>
@@ -20,30 +20,34 @@
 				<h2>Next Meeting</h2>
 				<p></p>
 			</div>
-		<div id="selectMenuLabel">
-			<h4>Year</h4>
-			<h4 style="margin-left: 5.5vw;">Date</h4>
-			<h4 style="margin-left: 13.5vw;">Documents & Links</h4>
-		</div>
-		<div id="selectMenu">
-			<div class="board_years">
-				<ul class="yearList">
-					<!-- All years that have ripples -->
-				</ul>
+		<div class="panelA">
+			<div id="selectMenuLabel">
+				<h4>Year</h4>
+				<h4 id="scrollDate">Date</h4>
+				<h4 id="docLinkDate">Documents & Links</h4>
 			</div>
-			<div class="board_date">
-				<ul class="date">
-					<!-- All editions for the selected year-->
-				</ul>
-			</div>
-			<div class="docBox">
-				<ul class="docs">
-					<!-- All editions for the selected year-->
-				</ul>
+			<div id="selectMenu">
+				<div class="board_years">
+					<ul class="yearList">
+						<!-- All years that have ripples -->
+					</ul>
+				</div>
+				<div class="board_date">
+					<ul class="date">
+						<!-- All editions for the selected year-->
+					</ul>
+				</div>
+				<div class="docBox">
+					<ul class="docs">
+						<!-- All editions for the selected year-->
+					</ul>
+				</div>
 			</div>
 		</div>
 		<!-- Map Placeholder -->
-		<div id="boardMap"></div>
+		<div class="panelB">
+			<div id="boardMap"></div>
+		</div>
 
 	</div>
 	<script>

@@ -18,4 +18,13 @@ urlpatterns = [
     url(r'^stepwise_portal_admin/$', views.stepwise_portal_admin, name="stepwise_portal_admin"),
 	url(r'^stepwise_portal_admin/stepwise_project_delete/(?P<process_id>[0-9]*)/$', views.stepwise_project_delete, name="stepwise_project_delete"),
 	url(r'^stepwise_portal_admin/stepwise_project_detail_admin/(?P<process_id>[0-9]*)/$', views.stepwise_project_detail_admin, name="stepwise_project_detail_admin"),
+	url(r'^stepwise_portal_admin/review_prospectus_approve/(?P<process_id>[0-9]*)/$', views.review_prospectus_approve, name="review_prospectus_approve"),
+	url(r'^stepwise_portal_admin/review_prospectus_deny/(?P<process_id>[0-9]*)/$', views.review_prospectus_deny, name="review_prospectus_deny"),
+	url(r'^stepwise_portal_admin/oweb_app_submitted/(?P<process_id>[0-9]*)/$', views.oweb_app_submitted, name="oweb_app_submitted"),
+	url(r'^stepwise_portal_admin/evaluate_draft_approve/(?P<process_id>[0-9]*)/$', views.evaluate_draft_approve, name="evaluate_draft_approve"),
+	url(r'^stepwise_portal_admin/evaluate_draft_deny/(?P<process_id>[0-9]*)/$', views.evaluate_draft_deny, name="evaluate_draft_deny"),
+	url(r'^stepwise_portal_admin/final_approval_approve/(?P<process_id>[0-9]*)/$', views.final_approval_approve, name="final_approval_approve"),
+	url(r'^stepwise_portal_admin/final_approval_deny/(?P<process_id>[0-9]*)/$', views.final_approval_deny, name="final_approval_deny"),
+	url(r'^upload_final/(?P<process_id>[0-9]*)/$', views.stepwise_upload_final, name="stepwise_upload_final"),
+
 ]

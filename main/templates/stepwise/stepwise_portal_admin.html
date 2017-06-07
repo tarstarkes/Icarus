@@ -67,7 +67,6 @@
 		var twoVW = Math.round(widthInPX*.02);
 		var navHeight = $(".navBox").height();
 		$(window).on('scroll', function(){
-			console.log(window.pageYOffset);
 			if(window.pageYOffset > (twoVW+navHeight)){
 				if(window.pageYOffset < $(".columnB").height()){
 					$(".navBox").css('margin-top', ((window.pageYOffset-navHeight)+"px"));

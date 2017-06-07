@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<title>Ripples Admin</title>
+<head>
+{% load staticfiles %}
+	<meta charset="utf-8" />
+
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<!-- Font Awesome -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+	
+	<!-- Bootstrap social-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-social/5.0.0/bootstrap-social.min.css">
+
+	<!-- google api css -->
+	<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+	
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+	<!-- Favicon.ico -->
+	<link rel="shortcut icon" href="{% static 'favicon/favicon-small.png' %}"/>
+
+	<script src="{% static '/js/jquery.dotdotdot.min.js' %}"></script>
+
+	<script type="text/javascript" src="{% static '\js\jquery.bootstrap-dropdown-hover.min.js' %}"></script>
+	<link rel="stylesheet" href="{% static 'CSS/home/style.css' %}" type="text/css">
+</head>
+<body>
+	{% load filters %}
+	{% if request.user|has_group:"Site Admin" %}
+		<div id="admin-nav" style="bottom: 0; top:0; left:0; width: 100%;">
+			<nav class="navbar navbar-default">
+			  <div class="container-fluid">
+			    <!-- Brand and toggle get grouped for better mobile display -->
+			    <div class="navbar-header">
+			      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+			        <span class="sr-only">Toggle navigation</span>
+			      </button>
+			    </div>
+
+			    <!-- Collect the nav links, forms, and other content for toggling -->
+			    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+			      <ul class="nav navbar-nav">
+			      	<script>
+		      			function hideNav(){
+		      				$("#admin-nav").hide();
+		      			}
+			      	</script>
+			        <li><a href="/">Home</a></li>
+			        <li><a href="/admin/">Admin Console</a></li>
+			        <li><a href="/ripples-admin/">Ripples Console</a></li>
+			      </ul>
+			    </div><!-- /.navbar-collapse -->
+			  </div><!-- /.container-fluid -->
+			</nav>
+		</div>
+		<div id="main-body">
+			<div class="container-fluid">
+				<h3 style="margin-top:0;">Send Ripples Newsletter</h3>
+				<form action="/ripples/send-newsletter/" method="POST">{% csrf_token %}
+					<input name="id_subject" style="width: 100%; font-size:14px;margin-bottom:5px;padding:5px;" placeholder="Subject"></input>
+					<textarea style="width: 100%; height: 20vw; font-size:14px;padding:5px;" name="id_content" placeholder="Message Content" resizable=false></textarea>
+					<select style="height: 26px;" name="id_ripple">
+					{% for ripple in ripples_objects%}
+						<option value="{{ripple.id}}">{{ripple}}</option>
+					{% endfor %}
+					</select>
+					<button type="submit">Send Ripples</button>			
+				</form>
+
+				{% if message %}
+					<p id="msg">{{message}}</p>
+				{% endif %}
+			</div>
+		</div>
+		<style type="text/css">
+			#main-body .container-fluid{
+				-webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
+				-moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
+				box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.75);
+				width:50%; 
+				margin-left: 25; 
+				border-left: 1px solid lightgray;
+				border-right: 1px solid lightgray; 
+				padding:2vw;
+			}
+			#msg{
+				margin: 2vw;
+				margin-left: 0;
+			}
+		</style>
+	{% endif %}
+</body>
+</html>

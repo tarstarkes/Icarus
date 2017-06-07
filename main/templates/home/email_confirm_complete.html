@@ -1,0 +1,25 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Email Confirmed</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/home/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div style="position: relative;">
+		<img class="mainImage" src="{% static 'images/home/main_basin.png' %}">
+	</div>
+	<div class="mid_page">
+		<center>
+			<div style="width: 50%">
+				<h3 style="margin-top:2vw;margin-bottom:1vw; font-size:1.5vw; color:green">Congratulations!</h3>
+				<p style="margin-top:1vw; margin-bottom:1vw;">You are now signed up to recieve our free newsletter: Ripples In The Grande Ronde! When the next issue of ripple becomes available, you will recieve an email with an attached copy of the newsletter. You may click the link below to return to the home page.</p>
+				<a style="margin-bottom: 2vw;" class="link_button" href="/">Return to Home</a>
+			</div>
+		</center>
+	</div>
+
+{% endblock %}

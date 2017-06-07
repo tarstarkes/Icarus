@@ -93,28 +93,25 @@
 									Once you have finished reviewing the prospectus, please select one of the two buttons below. 'Approve' will prompt the owner of this opportunity to submit a draft proposal whereas 'Deny' will send them back to the first step and prompt the user to review their prospectus for resubmission. If you select 'Deny', it is recommended that you leave a comment below to alert the user as to why their prospectus was rejected.<br><br>
 								</span></p>
 								<center>
-								<form class="approve-deny" method="POST" action="#">
-									<button class="link_button approve" value="Approve">Approve</button>
-								</form>
-								<form class="approve-deny" method="POST" action="#">
+								<form class="approve-deny" method="POST" action="/stepwise/stepwise_portal_admin/review_prospectus_deny/{{project.id}}/">{% csrf_token %}
 									<button class="link_button deny" value="Deny">Deny</button>
+								</form>
+								<form class="approve-deny" method="POST" action="/stepwise/stepwise_portal_admin/review_prospectus_approve/{{project.id}}/">{% csrf_token %}
+									<button class="link_button approve" value="Approve">Approve</button>
 								</form>
 								</center>
 							{% elif project.current_step == 3 %}
 								<p>
 									A Draft Proposal has not yet been submitted for this opportunity. Responsibility is currently on the owner of this opportunity to submit a draft proposal.
-								</p><br><br>
+								</p>
 								<p><span class="normal">
-									It is possible that the owner of this opportunity has submitted a draft proposal through the OWEB application process. If this is believed to be the case, please verify the status of the application through OWEB and select 'Approve' or 'Deny' from the buttons below.<br><br>
+									It is possible that the owner of this opportunity has submitted a draft proposal through the OWEB application process. If this is believed to be the case, please verify the status of the application through OWEB and select 'OWEB App Submitted' if an application has indeed been submitted; otherwise, please wait for the owner of this opportunity to upload a draft proposal.<br><br>
 
-									Selecting 'Approve' will move this opportunity to the next phase in the stepwise process (The Site Visit & Feedback Loop) whereas 'Deny' will send the user back to the previous step and prompt them to submit a new draft proposal. If you select 'Deny', it is recommended that you leave a comment below to alert the user as to why their draft proposal was rejected<br><br>
+									Selecting 'OWEB App Submitted' will move this opportunity to the next phase in the stepwise process (The Site Visit & Feedback Loop) and indicates that the draft proposal is ready to be evaluated.
 								</span></p>
 								<center>
-								<form class="approve-deny" method="POST" action="#">
-									<button class="link_button approve" value="Approve">Approve</button>
-								</form>
-								<form class="approve-deny" method="POST" action="#">
-									<button class="link_button deny" value="Deny">Deny</button>
+								<form class="approve-deny" method="POST" action="/stepwise/stepwise_portal_admin/oweb_app_submitted/{{project.id}}/">{% csrf_token %}
+									<button class="link_button approve" value="Approve">OWEB App Submitted</button>
 								</form>
 								</center>
 							{% elif project.current_step == 4 %}
@@ -128,14 +125,14 @@
 
 									Once the draft proposal has been reviewed, and a site visit has been conducted, please select from the two options below.<br><br>
 
-									Selecting 'Approve' will move this opportunity to the next phase in the stepwise process (Final Draft), prompting the owner of this opportunity to submit a revised proposal. Selecting 'Deny' will send the user back to the previous step and prompt them to revise their draft proposal. If you select 'Deny', it is recommended that you leave a comment below to alert the user as to why their draft proposal was rejected.
+									Selecting 'Approve' will move this opportunity to the next phase in the stepwise process (Final Draft), prompting the owner of this opportunity to submit a revised final proposal. Selecting 'Deny' will send the user back to the previous step and prompt them to make changes to their draft proposal. If you select 'Deny', it is recommended that you leave a comment below to alert the user as to why their draft proposal was rejected.
 								</span></p>
 								<center>
-								<form class="approve-deny" method="POST" action="#">
-									<button class="link_button approve" value="Approve">Approve</button>
-								</form>
-								<form class="approve-deny" method="POST" action="#">
+								<form class="approve-deny" method="POST" action="/stepwise/stepwise_portal_admin/evaluate_draft_deny/{{project.id}}/">{% csrf_token %}
 									<button class="link_button deny" value="Deny">Deny</button>
+								</form>
+								<form class="approve-deny" method="POST" action="/stepwise/stepwise_portal_admin/evaluate_draft_approve/{{project.id}}/">{% csrf_token %}
+									<button class="link_button approve" value="Approve">Approve</button>
 								</form>
 								</center>
 							{% elif project.current_step == 5 %}
@@ -157,16 +154,16 @@
 									Selecting 'Approve' represents that the GRMW Board of Directors has elected to approve this project for funding. Selecting 'Deny' represents that the GRMW Board of Directors has elected NOT to fund this project.<br><br>
 								</span></p>
 								<center>
-								<form class="approve-deny" method="POST" action="#">
-									<button class="link_button approve" value="Approve">Approve</button>
-								</form>
-								<form class="approve-deny" method="POST" action="#">
+								<form class="approve-deny" method="POST" action="/stepwise/stepwise_portal_admin/final_approval_deny/{{project.id}}/">{% csrf_token %}
 									<button class="link_button deny" value="Deny">Deny</button>
+								</form>
+								<form class="approve-deny" method="POST" action="/stepwise/stepwise_portal_admin/final_approval_approve/{{project.id}}/">{% csrf_token %}
+									<button class="link_button approve" value="Approve">Approve</button>
 								</form>
 								</center>
 							{% elif project.current_step == 7 %}
 								<p>
-									{% if project.final_approval_id.approval_flag == True %}
+									{% if project.final_approval == True %}
 										This project has been successfully approved for funding!
 									{% else %}
 										This project not been approved for funding.
@@ -195,8 +192,11 @@
 							{% endif %}
 							{% if draft_files %}
 								{% for draft in draft_files %}
-									<a href="/{{draft.draft_file}}" download><div class="link_button document_link">{{draft.draft_title}}</div></a>
+									<a href="/{{draft.draft_file}}" download><div class="link_button document_link">Draft: {{draft.draft_title}}</div></a>
 								{% endfor %}
+							{% endif %}
+							{% if project.proposal_id.proposal_file %}
+									<a href="/{{project.proposal_id.proposal_file}}" download><div class="link_button document_link">Final: {{project.proposal_id.file_title}}</div></a>
 							{% endif %}
 						</div>
 
@@ -232,7 +232,7 @@
 													<div class="attachment_box">
 														{% if comment.attachment %}
 														<span class="bold smallFont">Attachment:<br/></span>
-														<a class="attachment_link" href="/{{comment.attachment}}" download>
+														<a class="attachment_link other-attachment" href="/{{comment.attachment}}" download>
 															{{comment.attachment.file.name}}
 														</a>
 														{% endif %}

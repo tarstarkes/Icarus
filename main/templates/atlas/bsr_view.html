@@ -1,0 +1,252 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Atlas</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/atlas/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="atlas_body">
+		<div class="mainImage">
+			<img src="{% static 'images/atlas/mainImage.png' %}">
+			<h2>{{atlas.atlas_name|safe}} BSRs</h2>
+		</div>
+		<div class="window_nav_bar"><a href="/atlas/">Atlas</a>/<span class="page_landed">{{atlas.atlas_name|safe}}</span></div>
+		<center>
+			<h2 class="stylized_heading">Select a BSR</h2>
+		</center>
+		<div id="map_content" class="content">
+			{% if atlas.atlas_name == "Upper Grande Ronde Atlas"%}
+				<div id="readContainer">
+			    	<p id="readout">&nbsp;</p>
+			    </div>
+				<div class="svg_box">
+				    <div id="ugr_map"></div>
+				</div>
+				<script>
+					function goToLink(link){
+						//build dynamic link for going to a specific BSR
+						var bsr_id = link.split(' ')[1];
+						var all_ids = [{% for bsr in all_bsr %}{id: {{bsr.id}}, name: "{{bsr.name}}" },{%endfor%}];
+						for(var x = 0; x < all_ids.length; x++){
+							var id = all_ids[x].name.split('-')[1];
+							if(id == bsr_id){
+								window.location.href="/atlas/go_to_bsr/"+all_ids[x].id;
+							}
+						}
+    				}
+				</script>
+			    <script async src="{% static 'js/atlas/raphael.js' %}"></script>
+			    <script async src="{% static 'js/atlas/map.js' %}"></script>
+			{% elif atlas.atlas_name == "Catherine Creek Atlas" %}
+				<div id="readContainer">
+			    	<p id="readout">&nbsp;</p>
+			    </div>
+				<div class="svg_box" style="height: 550px; margin-bottom: 2vw;">
+				    <div id="cc_map"></div>
+				</div>
+				<script>
+					function goToLink(link){
+						var all_ids = [{% for bsr in all_bsr %}{id: {{bsr.id}}, name: "{{bsr.name}}" },{%endfor%}];
+						for(var x = 0; x < all_ids.length; x++){
+							var id = all_ids[x].name;
+							if(id == link){
+								window.location.href="/atlas/go_to_bsr/"+all_ids[x].id;
+							}
+						}
+    				}
+				</script>
+			    <script async src="{% static 'js/atlas/raphael.js' %}"></script>
+			    <script async src="{% static 'js/atlas/ccmap.js' %}"></script>
+			{% endif %}
+				<br>
+				<div style="padding:2vw;">
+			{% if all_bsr %}
+				<table class="bsr_table">
+					<tbody>
+						<tr>
+							<th>BSR Name</th>
+							<th>Current Condition Score</th>
+							<th>Current Temp Score</th>
+							<th>Geomorphic Score</th>
+							<th>P-Score</th>
+							<th>U-Score</th>
+							<th>Cumulative Score</th>
+							<th>Tier</th>
+						</tr>
+						{% for bsr in all_bsr %}
+						<tr class="clickable-row" data-href="/atlas/go_to_bsr/{{bsr.id}}/">
+							<td>{{bsr.name|safe}}</td>
+							<td>{{bsr.current_cond_score|safe}}</td>
+							<td>{{bsr.current_temp_score|safe}}</td>
+							<td>{{bsr.geomorphic_score|safe}}</td>
+							<td>{{bsr.p_score|safe}}</td>
+							<td>{{bsr.u_score|safe}}</td>
+							<td>{{bsr.cumulative_score|safe}}</td>
+							<td><center><div class="tier_{{bsr.tier_id.tier|safe}}">{{bsr.tier_id.tier|safe}}</div></center></td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+				<!-- <div class="list-group-head">
+					<p style="width: 10%;">BSR Name</p>
+					<p style="width: 16%;">Currrent Condition Score</p>
+					<p style="width: 14%;">Current Temp Score</p>
+					<p style="width: 13%;">Geomorphic Score</p>
+					<p style="width: 10%;">P Score</p>
+					<p style="width: 10%;">U Score</p>
+					<p style="width: 12%;">Cumulative Score</p>
+					<p style="width: 8%; padding-right:1vw">Tier</p>
+				</div>
+				<div class="content list-group">
+					{% for bsr in all_bsr %}
+					<a href="/atlas/go_to_bsr/{{bsr.id}}" class="list-group-item">	
+						<p style="width: 10%;">{{bsr.name|safe}}</p>
+						<p style="width: 16%;">{{bsr.current_cond_score|safe}}</p>
+						<p style="width: 14%;">{{bsr.current_temp_score|safe}}</p>
+						<p style="width: 13%;">{{bsr.geomorphic_score|safe}}</p>
+						<p style="width: 10%;">{{bsr.p_score|safe}}</p>
+						<p style="width: 10%;">{{bsr.u_score|safe}}</p>
+						<p style="width: 12%;">{{bsr.cumulative_score|safe}}</p>
+						<div style="display: inline-block; width: 8%; padding-right: 1vw; text-align: center;">
+							<p class="tier_{{bsr.tier_id.tier}}" style="padding-right:1vw">{{bsr.tier_id.tier|safe}}</p>
+						</div>
+					</a>
+					{% endfor %}
+				</div> -->
+			{% endif %}
+			</div>
+			{% load filters %}
+			{% if request.user|has_group:perm or request.user|has_group:"Atlas_Admin" %}
+			<center>
+				<div style="display: inline-block; margin:2vw;">
+					<input id="add_bsr" type="submit" class="link_button link_button_hover" value="Add New BSR">
+				</div>
+				<form id="bsr_form" style="display:none;" method="post" action="/atlas/add_new_bsr/{{atlas.id}}/">{% csrf_token %}
+					{{bsr_form|safe}}
+					<input type="submit" class="link_button link_button_hover submit" value="Submit">
+				</form>
+			</center>
+			{% endif %}
+		</div>
+
+		<div>
+			<h2 class="stylized_heading">All Opportunities
+				<button class="view_opp_map link_button" onclick="location.href='/atlas/go_to_opp_map/{{atlas.id}}/'" type="Submit">View Opportunity Map</button>
+			</h2>
+		</div>
+
+		<div class="content">
+			<div style="padding:2vw">
+				<table id="opportunities" style="width: 100%">
+					<tbody>
+						<tr>
+							<td style="border-right: .1vw solid gray"></td>
+							{% if atlas.id == 2 or atlas.id == 4%}
+								<td style="border-right: .1vw solid gray"></td>
+								<td style="border-right: .1vw solid gray"></td>
+							{% else %}
+								<td style="border-right: .1vw solid gray"></td>
+							{% endif %}
+							<td style="border-right: .1vw solid gray"></td>
+							<td style="border-right: .1vw solid gray"></td>
+							<td class="green_field"></td>
+							<td style="text-align:center; background:gray; color: white;" colspan="9">Feasability Criteria</td>
+						</tr>
+						<tr>
+							<th><div><span>Opportunity Name <span style="color: red; font-weight: bold;">(BSR)</span></span></div></th>
+							<th><div><span>Limiting Factor</span></div></th>
+							{% if atlas.id == 2 or atlas.id == 4%}
+								<th><div><span>Immediate Score</span></div></th>
+								<th><div><span>Long-Term Score</span></div></th>
+							{% else %}
+								<th><div><span>Restoration Action Priority</span></div></th>
+							{% endif %}
+							<th><div><span>Natural Process</span></div></th>
+							<th class="green_field"><div><span>Total Biological Benefit Score</span></div></th>
+							<th><div><span>Landowner Willingness</span></div></th>
+							<th><div><span>Design Effort</span></div></th>
+							<th><div><span>Construction Effort</span></div></th>
+							<th><div><span>Site Access Effort</span></div></th>
+							<th><div><span>SM - Dewatering, Erosion Control Effort</span></div></th>
+							<th><div><span>Risk & Uncertainty (Goals & Objectives)</span></div></th>
+							<th><div><span>Risk & Uncertainty (Public Safety)</span></div></th>
+							<th><div><span>Regulatory Requirements</span></div></th>
+							<th><div><span>Value</span></div></th>
+						</tr>
+						{% for key, value in opportunity %}{{key|safe}}{% endfor %}
+						{% for opportunity in opportunities %}
+							<tr class="clickable-row" data-href="/atlas/go_to_opportunity/{{opportunity.id}}">
+								<td style="padding:.5vw;">{{opportunity.opportunity_name|safe}}<br><span style="font-size: .65vw; vertical-align:middle; color: red; font-weight: bold;">({{opportunity.bsr_id.name|safe}})</span></td>
+								<td style="padding:.5vw;text-align:center;">{{opportunity.limiting_factor_score|safe}}</td>
+							{% if atlas.id == 2 or atlas.id == 4%}
+								<td style="padding:.5vw;text-align:center;">{{opportunity.immediate_score|safe}}</td>
+								<td style="padding:.5vw;text-align:center;">{{opportunity.long_term_score|safe}}</td>
+							{% else %}
+								<td style="padding:.5vw;text-align:center;">{{opportunity.restoration_action_priority_score|safe}}</td>
+							{% endif %}
+								<td style="padding:.5vw;text-align:center;">{{opportunity.natural_process_score|safe}}</td>
+								<td class="green_field" style="padding:.5vw;text-align:center;">{{opportunity.total_bbs_score|safe}}</td>
+								<td style="padding:.5vw;text-align:center;">{{opportunity.fc_landowner_willingness|safe}}</td>
+								<td style="padding:.5vw;text-align:center;">{{opportunity.fc_design_effort|safe}}</td>
+								<td style="padding:.5vw;text-align:center;">{{opportunity.fc_constuction_effort|safe}}</td>
+								<td style="padding:.5vw;text-align:center;">{{opportunity.fc_site_access_effort|safe}}</td>
+								<td style="padding:.5vw;text-align:center;">{{opportunity.fc_sm_dewatering_erosion_ctrl_effort|safe}}</td>
+								<td style="padding:.5vw;text-align:center;">{{opportunity.fc_risk_goal_objectives|safe}}</td>
+								<td style="padding:.5vw;text-align:center;">{{opportunity.fc_risk_public_safety|safe}}</td>
+								<td style="padding:.5vw;text-align:center;">{{opportunity.fc_regulatory_requirements|safe}}</td>
+								<td style="padding:.5vw;text-align:center;">{{opportunity.fc_value|safe}}</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+<script>
+	$(document).ready(function(e){
+		$(".clickable-row").click(function() {
+       		window.location = $(this).data("href");
+    	});
+
+
+		$("#add_bsr").click(function(e){
+			$('#bsr_form').animate({
+				height: "toggle"
+			}, 300, function() {
+				// Animation complete.
+			});
+		});
+	});
+
+	{% if atlas.atlas_name == "Upper Grande Ronde Atlas" %}
+		var x = $("#map_content").width();
+		var ugr_width = $(".svg_box").width();
+		$(".svg_box").css('max-width', ugr_width+'px');
+		$(".svg_box").css('margin-left', ((.5*x)-(.5*ugr_width)+'px'));
+	{% elif atlas.atlas_name == "Catherine Creek Atlas" %}
+		var x = $("#map_content").width();
+		var cc_width = $(".svg_box").width();
+		$(".svg_box").css('max-width', cc_width+'px');
+		$(".svg_box").css('margin-left', ((.5*x)-(.5*cc_width)+'px'));
+	{% endif %}
+
+	$(window).resize(function(){
+		{% if atlas.atlas_name == "Upper Grande Ronde Atlas" %}
+			var x = $("#map_content").width();
+			var ugr_width = $(".svg_box").width();
+			$(".svg_box").css('max-width', ugr_width+'px');
+			$(".svg_box").css('margin-left', ((.5*x)-(.5*ugr_width)+'px'));
+		{% elif atlas.atlas_name == "Catherine Creek Atlas" %}
+			var x = $("#map_content").width();
+			var cc_width = $(".svg_box").width();
+			$(".svg_box").css('max-width', cc_width+'px');
+			$(".svg_box").css('margin-left', ((.5*x)-(.5*cc_width)+'px'));
+		{% endif %}
+	});
+	
+</script>
+{% endblock %}

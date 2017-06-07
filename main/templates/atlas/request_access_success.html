@@ -1,0 +1,32 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Atlas</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/atlas/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="atlas_body">
+		<div class="mainImage">
+			<img src="{% static 'images/atlas/mainImage.png' %}">
+			<h2>Atlas - User Access</h2>
+		</div>
+		<div>
+		<br><br>
+			<center>
+			<p class="bold" style="font-size: 1.5vw; color: green;">SUCCESS!</p>
+			<p clas="bold" style="font-size: 1vw; margin-top:1vw;margin-bottom:1vw;">
+				A notification has been sent to the site administrator.
+			</p>
+			<button onClick="window.location.href='/atlas/'" class="link_button" style="display: inline-block;">Return to Atlas</button>
+			</center>
+			<br><br>
+		</div>
+	</div>
+<script>
+	
+</script>
+{% endblock %}

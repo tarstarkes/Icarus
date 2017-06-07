@@ -2,13 +2,13 @@ h3{
 	font-size: 2.5vw;
 	font-family: sans-serif;
 }
-.mainPhoto{
+.mainImage{
     position: relative;
 }
-.mainImage {
+.mainImage img{
 	width: 100%;
 }
-.mainPhoto h2 {
+.mainImage h2 {
     vertical-align: bottom;
     margin: 0;
     position: absolute;
@@ -137,4 +137,41 @@ nav{
 #docs p{
 	display: inline-block;
 	margin: 0;
+}
+.pagination>li>a, .pagination>li>span{
+    font-size: 1vw;
+    padding: 1vw;
+}
+@media screen and (min-width: 1500px){
+    #inputs h3{
+        font-size: 1.5vw;
+        margin-bottom: 1vw;
+    }
+    input#search,
+    select#organizations, 
+    select#year {
+        font-size: 1vw;
+    }
+    #dbSubmit{
+        font-size: 1vw;
+    }
+    .grmw_name {
+        width: 40vw;
+        display: inline-block;
+        margin-left: 0;
+    }
+    .sponsor {
+        margin-bottom: 0;
+        font-size: .75vw;
+    }
+    .list-group-item {
+        font-size: 1vw;
+    }
+    #table-head-label{
+        font-size: 1vw;
+    }
+    .id_label{
+        float: right;
+        margin-right: 5vw !important;
+    }
 }

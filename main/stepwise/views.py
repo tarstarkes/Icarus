@@ -51,7 +51,6 @@ def stepwise_prospectus_clean_model(request, step):
 			model = form.save(commit=False) #allows us to get the instance of the model for setting current_step
 			model.current_step = 1
 			model = form.save()
-			print("\n"+str(Prospectus.objects.get(pk=model.id).id))
 
 			data = {
 				'prospectus_id': Prospectus.objects.get(pk=model.id).id,
@@ -63,7 +62,6 @@ def stepwise_prospectus_clean_model(request, step):
 			#shell model for prospectus
 			PF = process_form(data)
 			if PF.is_valid():
-				print("PF is valid")
 				PF.save()
 			else:
 				print(PF.errors)
@@ -282,18 +280,13 @@ def stepwise_prospectus_step_13(request):
 			model = processedForm.save(commit=False) #allows us to get the instance of the model for setting current_step
 			model.current_step = 13
 			model = processedForm.save()
-			print(request.POST['grmw_design_funds'] == "False")
 			if(request.POST['grmw_design_funds'] == "True"):
 				#go to the next step
 				response = HttpResponseRedirect(reverse('stepwise_prospectus', args=[14]))
 			elif(request.POST['grmw_design_funds'] == "False"):
 				model.complete = True
 				model = processedForm.save()
-				PFModel = Process.objects.get(prospectus_id=model_id)
-				PFModel.percent_done = 15
-				PFModel.current_step = 2
 				request.session['model_id'] = None
-				PFModel.save()
 				response = HttpResponseRedirect(reverse('stepwise_portal'))
 			else:
 				#should not happen unless someone is messing with the forms
@@ -327,11 +320,7 @@ def stepwise_prospectus_step_15(request):
 			model.current_step = 15
 			model.complete = True
 			model = processedForm.save()
-			PFModel = Process.objects.get(prospectus_id=model_id)
 			request.session['model_id'] = None
-			PFModel.percent_done = 15
-			PFModel.current_step = 2
-			PFModel.save()
 			response = HttpResponseRedirect(reverse('stepwise_portal'))
 		else:
 			context['form'] = processedForm
@@ -414,9 +403,6 @@ def stepwise_generate_prospectus(request, process_id):
 
 			template = get_template('stepwise/stepwise_prospectus_template.html')
 			rendered_html = template.render(RequestContext(request, context)).encode(encoding="UTF-8")
-			upload_path = os.path.join(settings.BASE_DIR, 'static', 'documents', 'stepwise', 'prospectus', str(process_id))
-			if not os.path.exists(upload_path):
-				os.makedirs(upload_path)
 			pdf_file = HTML(string=rendered_html, base_url=request.build_absolute_uri()).write_pdf()
 			
 			#final_path = str('/static/documents/stepwise/prospectus/'+str(process_id)+'/prospectus'+str(process_id)+'.pdf')
@@ -424,6 +410,11 @@ def stepwise_generate_prospectus(request, process_id):
 			prospectus_model = Prospectus.objects.get(pk=project.prospectus_id.id)
 			prospectus_model.file = SimpleUploadedFile('prospectus'+str(process_id)+'.pdf', pdf_file, content_type='application/pdf')
 			prospectus_model.save()
+
+			PFModel = Process.objects.get(pk=process_id)
+			PFModel.percent_done = 15
+			PFModel.current_step = 2
+			PFModel.save()
 
 			message = request.user.first_name+' '+request.user.last_name+' has generated a new prospectus for '+project.prospectus_id.title+'. Please login to GRMW.org to review it.'
 			send_mail(
@@ -449,8 +440,9 @@ def stepwise_generate_prospectus(request, process_id):
 
 def stepwise_comment(request, process_id):
 	redir = "/stepwise/stepwise_detail/"+str(process_id)+"/"
-	response = stepwise_auth_user_ownership(request, process_id, redir)
-	if response:
+	owner_id = Process.objects.filter(pk=process_id)[0].user_id.id
+	response = stepwise_auth_user_ownership(request, owner_id, redir)
+	if response == True:
 		project = Process.objects.all().filter(pk=process_id)[0]
 		if request.method == "POST":
 			project = Process.objects.all().filter(pk=process_id)[0]
@@ -478,8 +470,7 @@ def stepwise_comment(request, process_id):
 def stepwise_comment_admin(request, process_id):
 	redir = "/stepwise/stepwise_portal_admin/stepwise_project_detail_admin/"+str(process_id)+"/"
 	response = stepwise_auth_user_in_group(request, "stepwise_manager", redir)
-	print("STEPWISE_COMMENT_ADMIN")
-	if response:
+	if response == True:
 		project = Process.objects.all().filter(pk=process_id)[0]
 		if request.method == "POST":
 			project = Process.objects.all().filter(pk=process_id)[0]
@@ -511,7 +502,8 @@ def stepwise_upload_draft(request, process_id):
 		if request.user.id == project.user_id.id:
 			form = upload_draft_form()
 			context = {
-				'form': form
+				'project': project,
+				'form': form,
 			}
 			if request.method == "POST":
 				form = upload_draft_form(request.POST or None, request.FILES or None)
@@ -539,6 +531,38 @@ def stepwise_upload_draft(request, process_id):
 		err = "You must be logged in to access stepwise, if you don't have a login, you can register by clicking the 'Register' button below."
 		redirect = '/stepwise/stepwise_detail/'+str(process_id)+'/'
 		response = HttpResponseRedirect("/login/?error="+err+"&redirect="+redirect)
+	return response
+
+def stepwise_upload_final(request, process_id):
+	owner_id = Process.objects.filter(pk=process_id)[0].user_id.id
+	print(owner_id)
+	response = stepwise_auth_user_ownership(request, owner_id, '/stepwise/stepwise_detail/'+str(process_id)+'/')
+	print(response)
+	if response == True:
+		project = Process.objects.filter(pk=process_id)[0]
+		form = upload_final_form()
+		context = {
+			'project':project,
+			'form':form,
+		}
+		if request.method == "POST":
+			form = upload_final_form(request.POST or None, request.FILES or None)
+			context['form'] = form
+			if form.is_valid():
+				form = form.save(commit=False)
+				form.file_title = request.FILES['proposal_file'].name
+				form.save()
+
+				PFModel = Process.objects.get(pk=process_id)
+				PFModel.percent_done = 71
+				PFModel.current_step = 6
+				PFModel.proposal_id = Proposal.objects.get(pk=form.id)
+				PFModel.save()
+				response = HttpResponseRedirect(reverse('stepwise_detail', args=[process_id]))
+			else:
+				response = render(request, 'stepwise/stepwise_upload_final_draft.html', context)
+		else:
+			response = render(request, 'stepwise/stepwise_upload_final_draft.html', context)
 	return response
 
 def stepwise_portal_admin(request):
@@ -572,12 +596,15 @@ def stepwise_project_delete(request, process_id):
 			context = {
 				'projects': projects,
 			}
-			#delete project
-			prospectus_path = os.path.join(settings.BASE_DIR, 'static', 'documents', 'stepwise', 'prospectus', str(process_id))
-			if os.path.exists(prospectus_path):
-				shutil.rmtree(prospectus_path)
+
 			process = Process.objects.filter(pk=process_id)[0]
-			prospectus = Prospectus.objects.filter(pk=process.prospectus_id.id)[0].delete()
+			if process.proposal_id != None and process.proposal_id != '':
+				process.proposal_id.delete()
+			if process.prospectus_id.file != None and process.prospectus_id.file != '':
+				process.prospectus_id.file.delete()
+			if process.prospectus_id != None and process.prospectus_id != '':
+				process.prospectus_id.delete()
+
 			process.delete()
 
 			response = HttpResponseRedirect(reverse('stepwise_portal_admin'))
@@ -593,7 +620,7 @@ def stepwise_project_delete(request, process_id):
 
 def stepwise_project_detail_admin(request, process_id):
 	response = stepwise_auth_user_in_group(request, "stepwise_manager", "/stepwise/stepwise_portal_admin/")
-	if response:
+	if response == True:
 		project = Process.objects.all().filter(pk=process_id)[0]
 		prospectus = Prospectus.objects.all().filter(pk=project.prospectus_id.id)[0]
 		if prospectus.file == '' or prospectus.file == None:
@@ -611,6 +638,87 @@ def stepwise_project_detail_admin(request, process_id):
 		response = render(request, 'stepwise/stepwise_project_detail_admin.html', context)
 	return response
 
+def review_prospectus_approve(request, process_id):
+	response = stepwise_auth_user_in_group(request, "stepwise_manager", "/stepwise/stepwise_portal_admin/stepwise_project_detail_admin/"+str(process_id)+"/")
+	if response == True:
+		project = Process.objects.get(pk=process_id)
+		project.percent_done = 28
+		project.current_step = 3
+		project.review_id = True
+		project.save()
+		#send the user an email
+		response = HttpResponseRedirect(reverse('stepwise_project_detail_admin', args=[process_id]))
+	return response
+
+def review_prospectus_deny(request, process_id):
+	response = stepwise_auth_user_in_group(request, "stepwise_manager", "/stepwise/stepwise_portal_admin/stepwise_project_detail_admin/"+str(process_id)+"/")
+	if response == True:
+		project = Process.objects.get(pk=process_id)
+		project.percent_done = 0
+		project.current_step = 1
+		project.save()
+		#send the user an email
+		response = HttpResponseRedirect(reverse('stepwise_project_detail_admin', args=[process_id]))
+	return response
+
+def oweb_app_submitted(request, process_id):
+	response = stepwise_auth_user_in_group(request, "stepwise_manager", "/stepwise/stepwise_portal_admin/stepwise_project_detail_admin/"+str(process_id)+"/")
+	if response == True:
+		project = Process.objects.get(pk=process_id)
+		project.percent_done = 42
+		project.current_step = 4
+		project.save()
+		#send the user an email
+		response = HttpResponseRedirect(reverse('stepwise_project_detail_admin', args=[process_id]))
+	return response
+
+def evaluate_draft_approve(request, process_id):
+	response = stepwise_auth_user_in_group(request, "stepwise_manager", "/stepwise/stepwise_portal_admin/stepwise_project_detail_admin/"+str(process_id)+"/")
+	if response == True:
+		project = Process.objects.get(pk=process_id)
+		project.percent_done = 57
+		project.current_step = 5
+		project.save()
+		#send the user an email
+		response = HttpResponseRedirect(reverse('stepwise_project_detail_admin', args=[process_id]))
+	return response
+
+def evaluate_draft_deny(request, process_id):
+	response = stepwise_auth_user_in_group(request, "stepwise_manager", "/stepwise/stepwise_portal_admin/stepwise_project_detail_admin/"+str(process_id)+"/")
+	if response == True:
+		project = Process.objects.get(pk=process_id)
+		project.percent_done = 28
+		project.current_step = 3
+		project.save()
+		#send the user an email
+		response = HttpResponseRedirect(reverse('stepwise_project_detail_admin', args=[process_id]))
+	return response
+
+def final_approval_approve(request, process_id):
+	response = stepwise_auth_user_in_group(request, "stepwise_manager", "/stepwise/stepwise_portal_admin/stepwise_project_detail_admin/"+str(process_id)+"/")
+	if response == True:
+		project = Process.objects.get(pk=process_id)
+		project.percent_done = 100
+		project.current_step = 7
+		project.final_approval = True
+		project.overall_status_id = Overall_status.objects.get(pk=3)
+		project.save()
+		#send the user an email
+		response = HttpResponseRedirect(reverse('stepwise_project_detail_admin', args=[process_id]))
+	return response
+def final_approval_deny(request, process_id):
+	response = stepwise_auth_user_in_group(request, "stepwise_manager", "/stepwise/stepwise_portal_admin/stepwise_project_detail_admin/"+str(process_id)+"/")
+	if response == True:
+		project = Process.objects.get(pk=process_id)
+		project.percent_done = 100
+		project.current_step = 7
+		project.final_approval = False
+		project.overall_status_id = Overall_status.objects.get(pk=4)
+		project.save()
+		#send the user an email
+		response = HttpResponseRedirect(reverse('stepwise_project_detail_admin', args=[process_id]))
+	return response
+
 
 
 # The following three functions work together to determine the login status of a user. 
@@ -626,8 +734,8 @@ def stepwise_project_detail_admin(request, process_id):
 	# 	HttpResponseRedirect - User is either not logged in, or has the wrong credentials. 
 	# 	True - User is logged in and either is a member of the provided group or is the owner of the provided id
 def stepwise_auth_user_in_group(request, grp, redir):
-	response = False
-	if request.user.is_authenticated():
+	response = stepwise_auth_user_loggedin(request, redir)
+	if response == True:
 		#make sure user is a part of manager group
 		group = Group.objects.get(name=grp)
 		if group in request.user.groups.all():
@@ -636,15 +744,11 @@ def stepwise_auth_user_in_group(request, grp, redir):
 			err = "You do not have the proper credentials, please login to an account with the proper permissions and try again."
 			redirect = redir
 			response = HttpResponseRedirect("/login/?error="+err+"&redirect="+redirect)
-	else:
-		err = "You must be logged in to access stepwise, if you don't have a login, you can register by clicking the 'Register' button below."
-		redirect = redir
-		response = HttpResponseRedirect("/login/?error="+err+"&redirect="+redirect)
 	return response
 def stepwise_auth_user_ownership(request, owner_id, redir):
 	response = stepwise_auth_user_loggedin(request, redir)
-	if response:
-		#make sure user is a part of manager group
+	if response == True:
+		#make sure user id matches the owner id
 		if request.user.id == owner_id:
 			response = True
 		else:

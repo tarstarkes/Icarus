@@ -17,26 +17,37 @@
 		<div>
 			<br>
 			<form class="regForm" method="POST" action="">{% csrf_token %}
-				<div id="inputs">
-				<!--
-					<input placeholder="Username" required/>
-					<input placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required/>
-					<input placeholder="Password" type="password" required/>
-					<input placeholder="Confirm Password" type="password" required/>
-					<input placeholder="First Name" required/>
-					<input placeholder="Last Name" required/>
-					<input placeholder="Organization (optional)"/>-->
+			<center>
+				<div style="width: 20vw; margin-left:0;" id="inputs">
 					{{ form }}
-					<div style="background: #ececec;margin-left: 40vw;font-size: 1vw; width: 20vw; padding:1vw;">
+					<div style="background: #ececec;font-size: 1vw; width: 20vw; padding:1vw;">
 						<p>
 							By clicking "Submit Registration" you are agreeing to the grmw.org <a href="{% static 'documents/terms/terms&conditions.doc' %}">Terms and Conditions</a> and <a href="{% static 'documents/policies/privacypolicy.htm' %}" target="_blank">Privacy Policy</a>.
 						</p>
 					</div>
-					<div class="submitButtons">
+					<div style="margin-left:0; font-size: 1vw; text-align:left;" class="submitButtons">
 						<input class="button" type="submit" value="Submit Registration"/>
 					</div>
+					<style type="text/css">
+						input#id_username,
+						input#id_email,
+						input#id_first_name,
+						input#id_last_name,
+						input#id_password1,
+						input#id_password2{
+							width: 100%;
+							margin-left: 0;
+							font-size: 1vw;
+						}
+						#inputs ul.errorlist {
+							margin-left:0 !important;
+						    width: 100%;
+						    padding-left:0 !important;
+						}
+					</style>
 					<br><br>
 				</div>
+			</center>
 			</form>
 		</div>
 	</div>

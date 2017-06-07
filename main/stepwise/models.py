@@ -6,18 +6,6 @@ import os
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
-class Final_approval(models.Model):
-	approval_flag = models.BooleanField()
-	approval_date = models.DateTimeField(auto_now_add=True)
-
-	def __str__(self):
-		return (self.approval_date)
-
-	class Meta:
-		managed = True
-		ordering = ['-approval_date']
-		db_table = 'stepwise_final_approval'
-
 class Overall_status(models.Model):
 	status = models.CharField(max_length=200)
 	def __str__(self):
@@ -28,7 +16,7 @@ class Overall_status(models.Model):
 		db_table = 'stepwise_overall_status'
 
 def get_proposal_path(instance, filename):
-	upload_dir = os.path.join( "documents", "stepwise", "proposals", str(User.id))
+	upload_dir = os.path.join( "static", "documents",  "stepwise", "proposals")
 	if not os.path.exists(upload_dir):
 		os.makedirs(upload_dir)
 	return os.path.join(upload_dir, filename)
@@ -63,31 +51,6 @@ class Site_visit(models.Model):
 	class Meta:
 		managed = True
 		db_table = 'stepwise_site_visit'
-
-class Evaluation(models.Model):
-	approval_flag = models.BooleanField()
-	approval_date = models.DateTimeField(auto_now_add=True)
-
-	def __str__(self):
-		return (self.approval_date)
-
-	class Meta:
-		managed = True
-		ordering = ['-approval_date']
-		db_table = 'stepwise_evaluation'
-
-
-class Review(models.Model):
-	approval_flag = models.BooleanField()
-	approval_date = models.DateTimeField(auto_now_add=True)
-
-	def __str__(self):
-		return (self.approval_date)
-
-	class Meta:
-		managed = True
-		ordering = ['-approval_date']
-		db_table = 'stepwise_review'
 
 class WorkSpecialties(models.Model):
 	work_specialty = models.CharField(max_length=200)
@@ -151,7 +114,7 @@ class bsr_tier(models.Model):
 		db_table = 'stepwise_bsr_tier'
 
 def get_prospectus_upload_path(instance, filename):
-	upload_dir = os.path.join( "static", "documents",  "stepwise", "prospectus", str(instance.id))
+	upload_dir = os.path.join( "static", "documents",  "stepwise", "prospectus")
 	if not os.path.exists(upload_dir):
 		os.makedirs(upload_dir)
 	return os.path.join(upload_dir, filename)
@@ -242,11 +205,11 @@ def process_title(self):
 class Process(models.Model):
 	user_id = models.ForeignKey(User)
 	prospectus_id = models.ForeignKey(Prospectus, blank=True, null=True, on_delete=models.CASCADE)
-	review_id = models.ForeignKey(Review, blank=True, null=True)
-	evaluation_id = models.ForeignKey(Evaluation, blank=True, null=True)
+	review = models.NullBooleanField(blank=True, default=False)
+	evaluation = models.NullBooleanField(blank=True, default=False)
 	site_visit_id = models.ForeignKey(Site_visit, blank=True, null=True)
-	proposal_id = models.ForeignKey(Proposal, blank=True, null=True)
-	final_approval_id = models.ForeignKey(Final_approval, blank=True, null=True)
+	proposal_id = models.ForeignKey(Proposal, blank=True, null=True, on_delete=models.CASCADE)
+	final_approval = models.NullBooleanField(blank=True, default=False)
 	overall_status_id = models.ForeignKey(Overall_status)
 	percent_done = models.IntegerField()
 	date_created = models.DateTimeField(auto_now_add=True)
@@ -280,7 +243,6 @@ class Draft(models.Model):
 		db_table = 'stepwise_draft_file'
 
 def get_doc_path(instance, filename):
-	print(User.id)
 	upload_dir = os.path.join( "static", "documents", "stepwise", "comments", str(instance.user_id.id))
 	if not os.path.exists(upload_dir):
 		os.makedirs(upload_dir)
