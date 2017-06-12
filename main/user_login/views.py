@@ -11,10 +11,11 @@ from django.contrib.auth import logout as django_logout
 from django.core.urlresolvers import reverse
 import time
 import os
+from django.contrib.auth.models import User
 
 def index(request):
 	#get the username, password, redirect params
-	usr = request.GET.get("user")
+	email = request.GET.get("email")
 	pas = request.GET.get("pass")
 	redirect = request.GET.get("redirect")
 	err = request.GET.get("error")
@@ -28,11 +29,16 @@ def index(request):
 	
 	returnHtml = render(request, "user_login/login.html", variableList)
 
-	#usr and pas were not entered
-	if(usr != None and pas != None):
+	#email and pas were entered
+	if(email != None and pas != None):
 		parser = HTMLParser()
 		password = parser.unescape(pas)
-		username = parser.unescape(usr)
+		email = parser.unescape(email)
+		username = User.objects.all().filter(email=email)
+		if len(username) >= 1:
+			username = username[0].username
+		else:
+			username=None
 		user = authenticate(username=username, password=password) #authenticate the username and password
 		#user authenticated successfully, there should be no errors beyond this point so we may use HttpResponseRedirect without fear of losing an error message
 		if user is not None:
@@ -46,7 +52,7 @@ def index(request):
 		elif user == None:
 			#user failed to authenticate
 			print("going back to login")
-			variableList['error'] = "Sorry, but that username and password combination is invalid. Please check your credentials and try again or contact the server admin at infotech@gmail.com."
+			variableList['error'] = "Sorry, but that email and password combination is invalid. Please check your credentials and try again or contact the server admin at infotech@gmail.com."
 			returnHtml = render(request, "user_login/login.html", variableList)
 
 	return returnHtml

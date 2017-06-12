@@ -200,7 +200,9 @@ hr {
     margin-left: -.5vw;
 }
 .social img{
-	width:5vw;
+	width:4vw;
+	filter: brightness(200000%) contrast(100%);
+    -webkit-filter: brightness(200000%) contrast(100%);
 }
 .credits{
 	display: inline-block;

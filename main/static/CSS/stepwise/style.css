@@ -662,6 +662,9 @@ label[for=id_draft_file]{
 .comment, .other_comment p{
     word-wrap: break-word;
 }
+.highlight{
+    background: yellow;
+}
 @media screen and (min-width: 1500px){
     .stylized_heading{
         font-size: 1.5vw;

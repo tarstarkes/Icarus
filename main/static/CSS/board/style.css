@@ -301,6 +301,13 @@ ul.yearList li {
 #selectMenuLabel h4:first-child{
     margin-left: 4vw;
 }
+.list-title{
+    padding-bottom: 0 !important;
+}
+.list-area{
+    padding-left: 6vw;
+    font-size: 1.5vw;
+}
 @media screen and (max-width: 1499px){
     .content-wrapper{
         margin-left: 2vw;

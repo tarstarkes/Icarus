@@ -196,10 +196,10 @@ class Landowner(models.Model):
 
 def process_title(self):
 	rtn = ''
-	if prospectus_id:
-		rtn = prospectus_id.title
+	if self.prospectus_id:
+		rtn = self.prospectus_id.title
 	else:
-		rtn = str(self.user_id.username)+" - "+str(self.date_created)
+		rtn = str(self.landowner_name)+" - "+str(self.date_created)
 	return rtn
 
 class Process(models.Model):
@@ -257,7 +257,7 @@ class Comment(models.Model):
 	process_id = models.ForeignKey(Process)
 
 	def __str__(self):
-		return (str(user_id.username)+" - "+str(self.date_created))
+		return (str(self.user_id.username)+" - "+str(self.date_created))
 
 	class Meta:
 		managed = True

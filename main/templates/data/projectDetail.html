@@ -274,6 +274,14 @@
 				z=z+10;
 				$(".block2").css("margin-top", z+"px");
 			}
+
+			//inner_slider for gallery set width based on the number of pictures
+			var imgs = $(".slider_inner .thumbnailImage").length
+			totalwidth = 0
+			for(var i=0; i < imgs; i++){
+				totalwidth = totalwidth + $(".slider_inner .thumbnailImage")[i].width + 5
+			}
+			$(".slider_inner").width(totalwidth)
 		}
 	</script>
 {% endblock %}
