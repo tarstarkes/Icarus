@@ -1,0 +1,9 @@
+----- CC Atlas Change Log -----
+Date Created: 6/12/2017
+================================
+>>> BSR NEW OPPORTUNITY ADDED - CC3B1: test opportunity -- UPDATED BY: connar@grmw.org -- [ 13:39:46.214509 ]
+>>> OPPORTUNITY MAP UPDATED -> CC3B1 -> CC 40.64 - 40.69 -- UPDATED BY: connar@grmw.org -- [ 13:44:57.760802 ]
+>>> OPPORTUNITY LIMITING FACTOR ADDED -> CC3B1 -> CC 40.64 - 40.69 -> 36. Road Grading - Drainage Improvments -- UPDATED BY: connar@grmw.org -- [ 13:51:20.112271 ]
+>>> OPPORTUNITY LIMITING FACTOR ADDED -> CC3B1 -> CC 40.64 - 40.69 -> 36. Road Grading - Drainage Improvments -- UPDATED BY: connar@grmw.org -- [ 13:55:32.027557 ]
+>>> OPPORTUNITY LIMITING FACTOR DELETED -> CC3B1 -> CC 40.64 - 40.69 -> 36. Road Grading - Drainage Improvments -- UPDATED BY: connar@grmw.org -- [ 13:55:43.561895 ]
+>>> BSR NATURAL PROCESS UPDATED - CC3B1 -> CC 40.64 - 40.69 -> UPDATED TO Partial Restoration -- UPDATED BY: connar@grmw.org -- [ 15:28:18.224671 ]

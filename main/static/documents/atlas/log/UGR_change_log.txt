@@ -1,3 +1,4 @@
 ----- UGR Atlas Change Log -----
 Date Created: 3/7/2017
 ================================
+BSR ADDED - UGR-1 -- UPDATED BY: connar@grmw.org -- [ 11:27:37.020227 ]

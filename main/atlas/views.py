@@ -24,7 +24,7 @@ def change_log(request, atlas_id, msg):
 	log = atlas_change_log.objects.filter(atlas_id=atlas_id)[0]
 	fileURL = os.path.join(str(settings.BASE_DIR), str(log.change_log_file))
 	file = open(fileURL, 'a')
-	file.write(msg+' -- [ '+str(datetime.datetime.now().time())+" ]\n")
+	file.write(">>> "+msg+' -- UPDATED BY: '+str(request.user.email)+' -- [ '+str(datetime.datetime.now().time())+" ]\n")
 	file.close()
 
 def get_assoc_group(atlas_id):
@@ -196,8 +196,7 @@ def add_new_bsr(request, atlas_id):
 				form.atlas_id = atlas.objects.get(pk=atlas_id)
 				form.save()
 				generate_ras(request, form.id)
-			else:
-				print(bsr_form.errors)
+				change_log(request, form.atlas_id.id, "BSR ADDED - "+str(form.name))
 		response = HttpResponseRedirect("/atlas/go_to_atlas/"+str(atlas_id))
 	return response
 
@@ -342,6 +341,7 @@ def update_tier(request, bsr_id):
 			form = bsr_tier_form(instance=bsr, data=request.POST or None)
 			if form.is_valid():
 				form.save()
+				change_log(request, bsr.atlas_id.id, "ATLAS BSR TIER UPDATED - "+str(bsr.name)+" tier updated to "+str(bsr.tier_id.tier))
 		response = HttpResponseRedirect("/atlas/edit_bsr/"+str(bsr_id))
 	return response
 
@@ -355,6 +355,8 @@ def add_new_life_stage(request, bsr_id):
 				form.bsr_id = atlas_bsr.objects.get(pk=bsr_id)
 				form.save()
 				response = HttpResponseRedirect("/atlas/edit_bsr/"+str(bsr_id))
+				bsr = atlas_bsr.objects.get(pk=bsr_id)
+				change_log(request, bsr.atlas_id.id, "BSR LIFE STAGE ADDED - "+str(bsr.name)+": "+str(form.life_stage_name))
 			else:
 				response = edit_bsr(request, bsr_id)
 		else:
@@ -366,6 +368,8 @@ def delete_life_stage(request, life_stage_id):
 	response = atlas_auth_user_is_manager(request, bsr_id)
 	if response == True:
 		ls = life_stage.objects.get(pk=life_stage_id)
+		bsr = atlas_bsr.objects.get(pk=bsr_id)
+		change_log(request, bsr.atlas_id.id, "BSR LIFE STAGE DELETED - "+str(bsr.name)+": "+str(ls))
 		ls.delete()
 		response = HttpResponseRedirect("/atlas/edit_bsr/"+str(bsr_id))
 	return response
@@ -379,6 +383,8 @@ def update_fish_use(request, bsr_id):
 			if formset.is_valid():
 				formset.save()
 				response = HttpResponseRedirect("/atlas/edit_bsr/"+str(bsr_id))
+				bsr = atlas_bsr.objects.get(pk=bsr_id)
+				change_log(request, bsr.atlas_id.id, "BSR FISH USE UPDATED - "+str(bsr.name))
 			else:
 				response = edit_bsr(request, bsr_id)
 		else:
@@ -396,13 +402,14 @@ def add_new_fish_use(request, bsr_id):
 				form.bsr_id = atlas_bsr.objects.get(pk=bsr_id)
 				form.save()
 				all_species = fish_use_scoring.objects.filter(atlas_id=atlas_id).distinct('species')
-				##THIS IS AN ISSUE BECAUSE THE CATHERINE CREEK ATLAS IS NOT BY SPECIES, IT IS A SINGULAR SCORE
 				for ls in all_species:
 					u_form = utilization_score_form(None)
 					u_form = u_form.save(commit=False)
 					u_form.species = ls.species
 					u_form.utilization_id = utilization.objects.get(pk=form.id)
 					u_form.save()
+				bsr = atlas_bsr.objects.get(pk=bsr_id)
+				change_log(request, bsr.atlas_id.id, "BSR FISH USE ADDED - "+str(bsr.name)+": "+str(form.utilization_name))
 				response = HttpResponseRedirect("/atlas/edit_bsr/"+str(bsr_id))
 			else:
 				response = edit_bsr(request, bsr_id)
@@ -416,6 +423,10 @@ def delete_fish_use(request, util_id):
 	response = atlas_auth_user_is_manager(request, bsr_id)
 	if response == True:
 		util_scores = utilization_score.objects.filter(utilization_id=util)
+
+		bsr = atlas_bsr.objects.get(pk=bsr_id)
+		change_log(request, bsr.atlas_id.id, "BSR FISH USE DELETED - "+str(bsr.name)+": "+str(util.utilization_name))
+
 		util_scores.delete()
 		util.delete()
 		response = HttpResponseRedirect('/atlas/edit_bsr/'+str(bsr_id))
@@ -432,14 +443,16 @@ def add_new_limiting_factor(request, bsr_id):
 				form.bsr_id = atlas_bsr.objects.get(pk=bsr_id)
 				form.save()
 				all_species = fish_use_scoring.objects.filter(atlas_id=atlas_id).distinct('species')
-				##THIS IS AN ISSUE BECAUSE THE CATHERINE CREEK ATLAS IS NOT BY SPECIES, IT IS A SINGULAR SCORE
+
+				bsr = atlas_bsr.objects.get(pk=bsr_id)
+				change_log(request, bsr.atlas_id.id, "BSR LIMITING FACTOR ADDED - "+str(bsr.name)+": "+str(form.limiting_factor_id))
+
 				for s in all_species:
 					lf_form = limiting_factor_score_form(None)
 					lf_form = lf_form.save(commit=False)
 					lf_form.species = species.objects.get(pk=s.species.id)
 					lf_form.limiting_factor_instance_id = limiting_factor_instance.objects.get(pk=form.id)
 					lf_form.save()
-					print("SAVED")
 				response = HttpResponseRedirect("/atlas/edit_bsr/"+str(bsr_id))
 			else:
 				response = edit_bsr(request, bsr_id)
@@ -453,6 +466,10 @@ def update_limiting_factors(request, bsr_id):
 		if request.method == 'POST':
 			lf_form = modelformset_factory(limiting_factor_score, fields='__all__', extra=0)
 			formset = lf_form(request.POST or None)
+
+			bsr = atlas_bsr.objects.get(pk=bsr_id)
+			change_log(request, bsr.atlas_id.id, "BSR LIMITING FACTORS UPDATED - "+str(bsr.name))
+
 			if formset.is_valid():
 				formset.save()
 				response = HttpResponseRedirect("/atlas/edit_bsr/"+str(bsr_id))
@@ -468,6 +485,10 @@ def delete_limiting_factor(request, lf_id):
 	response = atlas_auth_user_is_manager(request, bsr_id)
 	if response == True:
 		lf_scores = limiting_factor_score.objects.filter(limiting_factor_instance_id=lf)
+
+		bsr = atlas_bsr.objects.get(pk=bsr_id)
+		change_log(request, bsr.atlas_id.id, "BSR LIMITING FACTOR DELETED - "+str(bsr.name)+": "+str(lf.limiting_factor_id))
+
 		lf_scores.delete()
 		lf.delete()
 		response = HttpResponseRedirect('/atlas/edit_bsr/'+str(bsr_id))
@@ -481,9 +502,12 @@ def update_rest_actions(request, bsr_id):
 			formset = rest_action_form(request.POST or None)
 			if formset.is_valid():
 				formset.save()
+
+				bsr = atlas_bsr.objects.get(pk=bsr_id)
+				change_log(request, bsr.atlas_id.id, "BSR RESTORATION ACTIONS UPDATED - "+str(bsr.name))
+
 				response = HttpResponseRedirect("/atlas/edit_bsr/"+str(bsr_id))
 			else:
-				print(formset.errors)
 				response = edit_bsr(request, bsr_id)
 		else:
 			response = edit_bsr(request, bsr_id)
@@ -497,6 +521,10 @@ def add_new_opp(request, bsr_id):
 			if form.is_valid():
 				form = form.save(commit=False)
 				form.bsr_id = atlas_bsr.objects.get(pk=bsr_id)
+
+				bsr = atlas_bsr.objects.get(pk=bsr_id)
+				change_log(request, bsr.atlas_id.id, "BSR NEW OPPORTUNITY ADDED - "+str(bsr.name)+": "+str(form.opportunity_name))
+
 				form.save()
 				response = HttpResponseRedirect("/atlas/edit_bsr/"+str(bsr_id))
 			else:
@@ -543,6 +571,10 @@ def update_opp_map(request, opp_id):
 		if request.method == "POST":
 			opp_map_form = opp_map(instance=opportunity, data=request.POST or None)
 			if opp_map_form.is_valid():
+				bsr_id = opportunity.bsr_id.id
+				bsr = atlas_bsr.objects.get(pk=bsr_id)
+				change_log(request, bsr.atlas_id.id, "OPPORTUNITY MAP UPDATED -> "+str(bsr.name)+" -> "+str(opportunity.opportunity_name))
+
 				opp_map_form.save()
 		response = HttpResponseRedirect("/atlas/edit_opp/"+str(opp_id))
 	return response
@@ -556,6 +588,11 @@ def add_opp_limiting_factor(request, opp_id):
 			if lf_form.is_valid():
 				form = lf_form.save(commit=False)
 				form.opportunity_id = opportunity
+
+				bsr_id = opportunity.bsr_id.id
+				bsr = atlas_bsr.objects.get(pk=bsr_id)
+				change_log(request, bsr.atlas_id.id, "OPPORTUNITY LIMITING FACTOR ADDED -> "+str(bsr.name)+" -> "+str(opportunity.opportunity_name)+" -> "+str(form.action_id.restoration_action_id))
+
 				form.save()
 		response = HttpResponseRedirect("/atlas/edit_opp/"+str(opp_id))
 	return response
@@ -567,6 +604,12 @@ def update_opp_np(request, opp_id):
 		if request.method == "POST":
 			np_form = opp_np_form(instance=opportunity, data=request.POST or None)
 			if np_form.is_valid():
+				np_form = np_form.save(commit=False)
+
+				bsr_id = opportunity.bsr_id.id
+				bsr = atlas_bsr.objects.get(pk=bsr_id)
+				change_log(request, bsr.atlas_id.id, "OPPORTUNITY NATURAL PROCESS UPDATED - "+str(bsr.name)+" -> "+str(opportunity.opportunity_name)+" -> UPDATED TO "+str(np_form.natural_process))
+
 				np_form.save()
 		response = HttpResponseRedirect("/atlas/edit_opp/"+str(opp_id))
 	return response
@@ -578,6 +621,12 @@ def update_longitudinal_score(request, opp_id):
 		if request.method == "POST":
 			water_form = opp_water_form(instance=opportunity, data=request.POST or None)
 			if water_form.is_valid():
+				water_form = water_form.save(commit=False)
+
+				bsr_id = opportunity.bsr_id.id
+				bsr = atlas_bsr.objects.get(pk=bsr_id)
+				change_log(request, bsr.atlas_id.id, "OPPORTUNITY LONGITUDINAL SCORE UPDATED - "+str(bsr.name)+" -> "+str(opportunity.opportunity_name)+" -> UPDATED TO "+str(np_form.natural_process))
+
 				water_form.save()
 		response = HttpResponseRedirect("/atlas/edit_opp/"+str(opp_id))
 	return response
@@ -589,6 +638,10 @@ def update_fc(request, opp_id):
 		if request.method == "POST":
 			fc_form = opp_fc_form(instance=opportunity, data=request.POST or None)
 			if fc_form.is_valid():
+				bsr_id = opportunity.bsr_id.id
+				bsr = atlas_bsr.objects.get(pk=bsr_id)
+				change_log(request, bsr.atlas_id.id, "OPPORTUNITY FEASABILITY CRITERIA UPDATED - "+str(bsr.name)+" -> "+str(opportunity.opportunity_name))
+
 				fc_form.save()
 		response = HttpResponseRedirect("/atlas/edit_opp/"+str(opp_id))
 	return response
@@ -600,6 +653,10 @@ def update_opp_comment(request, opp_id):
 		if request.method == "POST":
 			comment_form = opp_comment_form(instance=opportunity, data=request.POST or None)
 			if comment_form.is_valid():
+				bsr_id = opportunity.bsr_id.id
+				bsr = atlas_bsr.objects.get(pk=bsr_id)
+				change_log(request, bsr.atlas_id.id, "OPPORTUNITY COMMENT UPDATED - "+str(bsr.name)+" -> "+str(opportunity.opportunity_name))
+
 				comment_form.save()
 		response = HttpResponseRedirect("/atlas/edit_opp/"+str(opp_id))
 	return response
@@ -611,6 +668,10 @@ def update_opp_desc(request, opp_id):
 		if request.method == "POST":
 			desc_form = opp_desc_form(instance=opportunity, data=request.POST or None)
 			if desc_form.is_valid():
+				bsr_id = opportunity.bsr_id.id
+				bsr = atlas_bsr.objects.get(pk=bsr_id)
+				change_log(request, bsr.atlas_id.id, "OPPORTUNITY DESCRIPTION UPDATED - "+str(bsr.name)+" -> "+str(opportunity.opportunity_name))
+
 				desc_form.save()
 		response = HttpResponseRedirect("/atlas/edit_opp/"+str(opp_id))
 	return response
@@ -620,6 +681,9 @@ def delete_lf_score(request, lf_id):
 	bsr_id = lf.opportunity_id.bsr_id.id
 	response = atlas_auth_user_is_manager(request, bsr_id)
 	if response == True:
+		bsr = atlas_bsr.objects.get(pk=bsr_id)
+		change_log(request, bsr.atlas_id.id, "OPPORTUNITY LIMITING FACTOR DELETED -> "+str(bsr.name)+" -> "+str(lf.opportunity_id.opportunity_name)+" -> "+str(lf.action_id.restoration_action_id))
+
 		lf.delete()
 		response = HttpResponseRedirect('/atlas/edit_opp/'+str(lf.opportunity_id.id))
 	return response
