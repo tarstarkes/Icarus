@@ -6,6 +6,10 @@
 {% endblock%}
 {% block head %}
 	<link rel="stylesheet" href="{% static 'CSS/atlas/style.css' %}" type="text/css">
+	{% block extrastyle %}
+	   {{block.super}}
+		<link rel="stylesheet" href="{% static 'CSS/atlas/style.css' %}" type="text/css" media="print" charset="utf-8">
+	{% endblock %}
 {% endblock %}
 
 {% block content %}
@@ -363,9 +367,8 @@
 								{% endfor %}
 
 								<td style="padding:.5vw; text-align:center;">{{action.limiting_factor_score}}</td>
-								<td class="comment" style="padding:.5vw;"> {% autoescape off %}
-    							{{action.comment}}
-								{% endautoescape %}</td>
+								<td style="width: 40%; background: #f3f3f3;">
+								<textarea class="ra-comment" style="width: 100%; resize: none;">{% autoescape off %}{{action.comment}}{% endautoescape %}</textarea></td>
 
 							</tr>
 							{% endfor %}
@@ -413,6 +416,7 @@
 								<th><div><span>Risk & Uncertainty (Public Safety)</span></div></th>
 								<th><div><span>Regulatory Requirements</span></div></th>
 								<th><div><span>Value</span></div></th>
+								<th><div><span>Remove</span></div></th>
 							</tr>
 
 							{% for opportunity in opportunities%}
@@ -439,6 +443,7 @@
 									<td style="padding:.5vw;text-align:center;">{{opportunity.fc_risk_public_safety}}</td>
 									<td style="padding:.5vw;text-align:center;">{{opportunity.fc_regulatory_requirements}}</td>
 									<td style="padding:.5vw;text-align:center;">{{opportunity.fc_value}}</td>
+									<td style="padding: .5vw; text-align: center;"><a class="delete_opp_link" data-href="/atlas/delete_opp/{{opportunity.id}}">DELETE</a></td>
 								</tr>
 							{% endfor %}
 						</tbody>
@@ -492,7 +497,12 @@
 <script>
 	$(document).ready(function(e){
 		$(".clickable-row").click(function() {
-       		window.location = $(this).data("href");
+       		window.open($(this).data("href"), "_blank");
+    	});
+
+    	$(".delete_opp_link").click(function(e){
+    		e.stopPropagation();
+    		window.open($(this).data("href"), "_self");
     	});
 
     	//TIER UPDATE
@@ -781,13 +791,9 @@
     		}
     	});
 
-    	$("#rest_actions .comment").click(function(e){
-    		$(e.target).attr("contenteditable", "true");
-    	});
-
-    	$("#rest_actions .comment").focusout(function(e){
+    	$("#rest_actions .ra-comment").focusout(function(e){
     		$('#update_RA').css('display', 'inline-block');
-    		value = $(e.target)[0].innerHTML;
+    		value = $(e.target)[0].value;
     		update_ra_comment(e, value);
     	});
 

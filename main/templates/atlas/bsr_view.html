@@ -14,7 +14,14 @@
 			<img src="{% static 'images/atlas/mainImage.png' %}">
 			<h2>{{atlas.atlas_name|safe}} BSRs</h2>
 		</div>
-		<div class="window_nav_bar"><a href="/atlas/">Atlas</a>/<span class="page_landed">{{atlas.atlas_name|safe}}</span></div>
+		<div>
+			{% load filters %}
+			{% if request.user|has_group:perm or request.user|has_group:"Atlas_Admin" %}
+				<button id="viewLogButton" class="link_button link_button_hover">View Change Log</button>
+			{% endif %}
+
+			<div class="window_nav_bar"><a href="/atlas/">Atlas</a>/<span class="page_landed">{{atlas.atlas_name|safe}}</span></div>
+		</div>
 		<center>
 			<h2 class="stylized_heading">Select a BSR</h2>
 		</center>
@@ -119,7 +126,6 @@
 				</div> -->
 			{% endif %}
 			</div>
-			{% load filters %}
 			{% if request.user|has_group:perm or request.user|has_group:"Atlas_Admin" %}
 			<center>
 				<div style="display: inline-block; margin:2vw;">
@@ -205,11 +211,26 @@
 				</table>
 			</div>
 		</div>
+		<center>
+			<div id="change_log_window">
+				<textarea id="change_log_text" readonly style="width: 100%;height: 20vw;">{% if request.user|has_group:perm or request.user|has_group:"Atlas_Admin" %}{{log}}{% endif %}</textarea>
+				<button id="close_log_window" class="link_button link_button_hover">Close</button>
+			</div>
+		</center>
 	</div>
 <script>
 	$(document).ready(function(e){
+		$("#viewLogButton, #close_log_window").click(function(e){
+
+			$('#change_log_window').animate({
+				height: "toggle"
+			}, 300, function() {
+				// Animation complete.
+			});
+		});
+
 		$(".clickable-row").click(function() {
-       		window.location = $(this).data("href");
+       		window.open($(this).data("href"), "_blank");
     	});
 
 

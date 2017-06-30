@@ -37,6 +37,7 @@ urlpatterns = [
     url(r'^update_rest_actions/(?P<bsr_id>.*)/$', views.update_rest_actions, name='update_rest_actions'),
     url(r'^add_new_opp/(?P<bsr_id>.*)/$', views.add_new_opp, name='add_new_opp'),
     url(r'^edit_opp/(?P<opp_id>.*)/$', views.edit_opp, name='edit_opp'),
+    url(r'^delete_opp/(?P<opp_id>.*)/$', views.delete_opp, name='delete_opp'),
     url(r'^update_opp_map/(?P<opp_id>.*)/$', views.update_opp_map, name='update_opp_map'),
     url(r'^add_opp_limiting_factor/(?P<opp_id>.*)/$', views.add_opp_limiting_factor, name='add_opp_limiting_factor'),
     url(r'^update_opp_np/(?P<opp_id>.*)/$', views.update_opp_np, name='update_opp_np'),
@@ -46,6 +47,6 @@ urlpatterns = [
     url(r'^update_opp_desc/(?P<opp_id>.*)/$', views.update_opp_desc, name='update_opp_desc'),
     url(r'^delete_lf_score/(?P<lf_id>.*)/$', views.delete_lf_score, name='delete_lf_score'),
     url(r'^go_to_opp_map/(?P<atlas_id>.*)/$', views.atlas_opp_map, name='atlas_opp_map'),
-
+    url(r'^load_atlas_resources/$', views.load_atlas_resources, name='load_atlas_resources'),
 ]
 

@@ -156,6 +156,8 @@ class atlas(models.Model):
 	limiting_factor_scoring_id = models.ForeignKey(limiting_factor_scoring, blank=True, null=True)
 	restoration_action_scoring_id = models.ForeignKey(restoration_action_scoring, blank=True, null=True)
 	natural_process_scoring_id = models.ForeignKey(natural_process_scoring, blank=True, null=True)
+	opp_map_zoom = models.IntegerField(blank=True, null=True)
+	opp_map_center = models.TextField(blank=True, null=True)
 	CHOICES = ((True, "Single Species"), (False, "Multi Species"))
 	p_score_mode = models.BooleanField(choices=CHOICES, default=False)
 	def __str__(self):
@@ -406,6 +408,7 @@ class atlas_bsr(models.Model):
 	cumulative_score = property(_calc_cumulative_score)
 	tier_id = models.ForeignKey(atlas_bsr_tier, blank=True, null=True)
 	atlas_id = models.ForeignKey(atlas, blank=True, null=True)
+	periodicity_notes = models.TextField(blank=True, null=True)
 
 	def __str__(self):
 		return (self.name)
@@ -451,6 +454,8 @@ class life_stage(models.Model):
 
 class periodicity(models.Model):
 	bsr_id = models.ForeignKey(atlas_bsr)
+	#notes replaces the need for periodicity_comment, but deleting periodicity_comment causes makemigrations to fail
+	notes = models.TextField(blank=True, null=True)
 
 	def __str__(self):
 		return (self.bsr_id.name)
@@ -638,7 +643,7 @@ class restoration_actions_score(models.Model):
 		db_table = 'atlas_restoration_actions_score'
 
 class opportunity_status(models.Model):
-	CHOICES = (("Not Started", "Not Started"), ("Planning & Construction", "Planning & Construction"), ("Completed", "Completed"))
+	CHOICES = (("Not Started", "Not Started"), ("Planning & Construction", "Planning & Construction"), ("Completed", "Completed"), ("On Hold", "On Hold"))
 	status = models.CharField(choices=CHOICES, max_length=30)
 	def _colorize_model(self):
 		color = "#FF0000"
@@ -646,6 +651,8 @@ class opportunity_status(models.Model):
 			color="#FFFF00"
 		elif self.status == "Completed":
 			color="#008000"
+		elif self.status == "On Hold":
+			color="#4E7DB8"
 		return color
 
 	color = property(_colorize_model)

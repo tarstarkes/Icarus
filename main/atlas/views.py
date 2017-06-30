@@ -19,6 +19,11 @@ from django.conf import settings
 import datetime
 from django.forms import modelformset_factory
 
+#temporary
+import openpyxl
+import os
+import pyperclip
+
 # Create your views here.
 def change_log(request, atlas_id, msg):
 	log = atlas_change_log.objects.filter(atlas_id=atlas_id)[0]
@@ -171,6 +176,10 @@ def BSR_view(request, atlas_id):
 			bsr_form = atlas_bsr_form(None)
 			lethok = (("Lethal", "Lethal"), ("Ok", "Ok"))
 			norm = (("Poor", "Poor"), ("Fair", "Fair"), ("Good", "Good"), ("Excellent", "Excellent"), ("TBD", "TBD"))
+			atlas_log = atlas_change_log.objects.filter(atlas_id=atlas_id)[0].change_log_file
+			print(atlas_log)
+			file = open(str(atlas_log), 'r')
+			log = file.read()
 			if atlas_id == "4":
 				bsr_form.fields['current_temp'].choices = lethok
 			else: 
@@ -182,6 +191,7 @@ def BSR_view(request, atlas_id):
 				'atlas': atlas_set,
 				'all_bsr': all_bsr,
 				'opportunities': all_opps,
+				'log': log,
 			}
 			response = render(request, 'atlas/bsr_view.html', context)
 	return response
@@ -564,6 +574,15 @@ def edit_opp(request, opp_id):
 		response = render(request, "atlas/edit_opportunity.html", context)
 	return response
 
+def delete_opp(request, opp_id):
+	print("OPP ID----> ", opp_id)
+	opp = bsr_opportunity.objects.get(pk=opp_id)
+	response = atlas_auth_user_is_manager(request, opp.bsr_id.id)
+	if response == True:
+		opp.delete()
+		response = HttpResponseRedirect("/atlas/edit_bsr/"+str(opp.bsr_id.id))
+	return response
+
 def update_opp_map(request, opp_id):
 	opportunity = bsr_opportunity.objects.get(pk=opp_id)
 	response = atlas_auth_user_is_manager(request, opportunity.bsr_id.id)
@@ -574,7 +593,6 @@ def update_opp_map(request, opp_id):
 				bsr_id = opportunity.bsr_id.id
 				bsr = atlas_bsr.objects.get(pk=bsr_id)
 				change_log(request, bsr.atlas_id.id, "OPPORTUNITY MAP UPDATED -> "+str(bsr.name)+" -> "+str(opportunity.opportunity_name))
-
 				opp_map_form.save()
 		response = HttpResponseRedirect("/atlas/edit_opp/"+str(opp_id))
 	return response
@@ -699,3 +717,70 @@ def atlas_opp_map(request, atlas_id):
 		}
 		response = render(request, 'atlas/atlas_opportunity_map.html', context)
 	return response
+
+def calculate_center(sheet, val):
+	avg_lat = 0.0
+	avg_lng = 0.0
+	count = 0
+	for i in range(2, sheet.max_row+1):
+		sheet_opp_name = sheet.cell(row=i, column=8).value.replace('_', ' ')
+		sheet_opp_name = sheet_opp_name.replace(' ', '')
+		if sheet_opp_name == val:
+			if sheet.cell(row=i, column=18).value != None and sheet.cell(row=i, column=19).value != None:
+				avg_lat = avg_lat + sheet.cell(row=i, column=18).value
+				avg_lng = avg_lng + sheet.cell(row=i, column=19).value
+				count = count + 1
+	if count != 0:
+		avg_lat = round(avg_lat/count, 8)
+		avg_lng = round(avg_lng/count, 8)
+	else:
+		avg_lat = 0.0
+		avg_lng = 0.0
+	cntr = "{lat: "+str(avg_lat)+", lng:"+str(avg_lng)+"}"
+	return cntr
+
+def load_atlas_resources(request):
+	response = "SUCCESS"
+
+	# wb = openpyxl.load_workbook(os.path.join(str(settings.BASE_DIR), "/Users/GRMW/Documents/GitHub/Icarus/main/static/documents/Prioritization Matrix UGR.xlsx"))
+	# input_sheet = "Opp-UGR-20"
+	# sheet = wb.get_sheet_by_name(input_sheet)
+
+	# for i in range(sheet.max_row+1):
+	# 	title = sheet.cell(row=i+1, column=2).value
+	# 	action = sheet.cell(row=i+1, column=1).value
+	# 	rest = sheet.cell(row=i+1, column=8).value
+	# 	if (str(title) == 'Opportunity:  "NAME"'):
+	# 		continue
+	ugr_opportunities = bsr_opportunity.objects.filter(bsr_id__atlas_id__id=2)
+	wb = openpyxl.load_workbook(os.path.join(str(settings.BASE_DIR), "/Users/GRMW/Documents/GitHub/Icarus/main/static/documents/UGR_OpportunityPoints.xlsx"))
+	sheet = wb.get_sheet_by_name('UGR_OpportunityPoints')
+	z=0
+	for opp in ugr_opportunities:
+		ll_string = "["
+		last_lat = 0.0
+		last_lng = 0.0
+		z = z+1
+		opp_name = opp.opportunity_name.replace('_', ' ')
+		opp_name = opp_name.replace(' ', '')
+		for i in range(2, sheet.max_row+1):
+			sheet_opp_name = sheet.cell(row=i, column=8).value.replace('_', ' ')
+			sheet_opp_name = sheet_opp_name.replace(' ', '')
+			if sheet_opp_name == opp_name:
+				# if round(last_lat, 4) != round(sheet.cell(row=i, column=15).value, 4) and round(last_lng, 4) != round(sheet.cell(row=i, column=16).value, 4):
+				ll_string = ll_string + "{lat: " + str(sheet.cell(row=i, column=18).value) + ", "
+				ll_string = ll_string + "lng: " + str(sheet.cell(row=i, column=19).value) +" }, "
+				last_lat = sheet.cell(row=i, column=19).value
+				last_lng = sheet.cell(row=i, column=20).value
+		if ll_string != "[":
+			ll_string = ll_string + "]"
+			center = calculate_center(sheet, opp_name)
+			response = response+"<br>"+str(opp_name)+" - "+ll_string+" CENTER: "+center+"<br>"
+			# opp.location = ll_string
+			# opp.zoom = 14
+			# opp.save()
+			print("Opportunity "+str(z)+" of "+str(len(ugr_opportunities))+" complete", end="\r")
+		else:
+			ll_string = ""
+
+	return HttpResponse(response)

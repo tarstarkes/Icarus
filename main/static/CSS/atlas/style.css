@@ -819,8 +819,8 @@ tr.clickable-row:hover {
 }
 .view_opp_map{
     padding: .5vw;
-    background: white;
-    color: #ef9502;
+    background: white !important;
+    color: #ef9502 !important;
     position: absolute;
     right: .75vw;
     vertical-align: top;
@@ -844,4 +844,40 @@ tr.clickable-row:hover {
 }
 .bsr_table .clickable-row{
     background: #ffffff;
+}
+button#viewLogButton {
+    float: right;
+    /* vertical-align: bottom; */
+    margin-top: 3.15vw;
+    margin-right: 2vw;
+}
+#change_log_window{
+    display: none;
+    position: absolute;
+    top: calc(50% - 10vw);
+    left: 25%;
+    /* top: -webkit-calc(50% - 10vw); */
+    top: -moz-calc(50% - 10vw);
+    padding: 2vw;
+    width: 50%;
+    background: #f3f3f3;
+    border: 1px solid black;
+}
+#change_log_text{
+    resize: none;
+    overflow-y: scroll;
+}
+#periodicity_note{
+    resize: none; 
+    font-size: 1vw; 
+    width: 100%;
+    padding: .5vw;
+    height: 8vw;
+    overflow-y: scroll;
+}
+.delete_opp_link{
+    color: red;
+}
+.delete_opp_link:hover{
+    color: white;
 }

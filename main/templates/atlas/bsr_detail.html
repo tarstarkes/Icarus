@@ -261,6 +261,16 @@
 						</table>
 						<p style="font-size:1.5vw; font-weight: bold;"><span class="normal"># of Life Stages:</span> {%for x in bsr%}{{x.raw_p_score}}{%endfor%}</p>
 					</div>
+					{%for x in bsr%}
+					<div style="padding-left:2vw; padding-right:2vw; padding-bottom:2vw;">
+						<h3 style="font-size: 1.5vw; margin-top:0;">Notes:</h3>
+						{% if x.periodicity_notes %}
+						<textarea id="periodicity_note" disabled style="resize: none; font-size: 1vw; width: 100%">{{x.periodicity_notes}}</textarea>
+						{% else %}
+						<textarea id="periodicity_note" disabled style="resize: none; font-size: 1vw; width: 100%;"></textarea>
+						{% endif %}
+					</div>
+					{%endfor%}
 				</div>
 			</div>
 			<div>
@@ -476,7 +486,7 @@
 <script>
 	$(document).ready(function(e){
 		$(".clickable-row").click(function() {
-       		window.location = $(this).data("href");
+       		window.open($(this).data("href"), "_blank");
     	});
 
 		$("#comment_form label").hide();

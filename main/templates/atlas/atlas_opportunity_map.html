@@ -23,8 +23,9 @@
 				function atlas_opp_map() {
 					var cent = {lat: 45.292565, lng: -117.824576};
 			        var map = new google.maps.Map(document.getElementById('atlas_opportunity_map'), {
-						zoom: Math.round(($(window).width()/1000)+10)-1,
-						center: cent,
+						// zoom: Math.round(($(window).width()/1000)+10)-1,
+						zoom: {{atlas.opp_map_zoom}},
+						center: {{atlas.opp_map_center|safe}},
 						mapTypeId: 'terrain',
 						scrollwheel: false,
 			        });
