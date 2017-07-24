@@ -141,3 +141,42 @@ class opp_desc_form(forms.ModelForm):
 	class Meta:
 		model = bsr_opportunity
 		fields = ["description",]
+
+class bsr_periodicity_notes(forms.ModelForm):
+	class Meta:
+		model= atlas_bsr
+		fields = ["periodicity_notes",]
+
+class bsr_name_form(forms.ModelForm):
+	class Meta:
+		model= atlas_bsr
+		fields = ["name",]
+
+class opp_name_form(forms.ModelForm):
+	class Meta:
+		model= bsr_opportunity
+		fields = ["opportunity_name",]
+
+class gen_info_form(forms.ModelForm):
+	class Meta:
+		model = atlas_bsr
+		fields = [
+		'geomorphic_potential',
+		'current_habitat_cond',
+		'current_temp',
+		'future_cond',
+		'desc',
+		]
+		labels = {
+			'geomorphic_potential': 'Geomorphic Potential',
+			'current_habitat_cond': 'Current Habitat Condition',
+			'current_temp': 'Current Temperature',
+			'future_cond': 'Future Condition',
+			'desc': 'Description',
+		}
+
+class opp_status_form(forms.ModelForm):
+	class Meta:
+		model = bsr_opportunity
+		fields = ["status"]
+		

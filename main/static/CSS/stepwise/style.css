@@ -46,7 +46,7 @@
 }
 .start_stepwise,
 .manage_stepwise{
-    width: 26vw;
+    width: 15vw;
     background: #ef9502;
     color: #ffffff;
     text-align: center;
@@ -54,7 +54,7 @@
     border-radius: .5vw;
     -moz-border-radius: .5vw;
     -webkit-border-radius: .5vw;
-    font-size: 3vw;
+    font-size: 1.5vw;
     font-weight: bold;
     margin-bottom: 2vw;
 }

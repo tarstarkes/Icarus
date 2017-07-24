@@ -26,5 +26,7 @@ urlpatterns = [
 	url(r'^stepwise_portal_admin/final_approval_approve/(?P<process_id>[0-9]*)/$', views.final_approval_approve, name="final_approval_approve"),
 	url(r'^stepwise_portal_admin/final_approval_deny/(?P<process_id>[0-9]*)/$', views.final_approval_deny, name="final_approval_deny"),
 	url(r'^upload_final/(?P<process_id>[0-9]*)/$', views.stepwise_upload_final, name="stepwise_upload_final"),
+    url(r'^stepwise_approval_letter/generate/$', views.generate_approval_letter, name="generate_approval_letter"),
+    url(r'^stepwise_approval_letter/(?P<process_id>[0-9]*)/$', views.stepwise_approval_letter, name="stepwise_approval_letter"),
 
 ]

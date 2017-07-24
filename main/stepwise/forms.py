@@ -385,3 +385,13 @@ class upload_final_form(forms.ModelForm):
 			if not ext.lower() in valid_extensions:
 				raise forms.ValidationError(u'Unsupported file extension. Allowed extensions are: .pdf, .doc, .docx, .jpg, .png, .xlsx, and .xls')
 		return value
+
+class approval_letter_form(forms.ModelForm):
+	class Meta:
+		model = Approval_letter
+		exclude = [
+			'project_id',
+			
+		]
+
+

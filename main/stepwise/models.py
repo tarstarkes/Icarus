@@ -264,3 +264,45 @@ class Comment(models.Model):
 		ordering = ['-date_created']
 		db_table = 'stepwise_comment'
 
+class Approval_letter(models.Model):
+	project_id = models.ForeignKey(Process)
+	recipient_name = models.CharField(max_length=100)
+	recipient_street_address = models.CharField(max_length=200)
+	STATES=(('AK', 'AK'), ('AL', 'AL'), ('AR', 'AR'), ('AZ', 'AZ'), ('CA', 'CA'), ('CO', 'CO'), ('CT', 'CT'), ('DC', 'DC'), ('DE', 'DE'), ('FL', 'FL'), ('GA', 'GA'), ('HI', 'HI'), ('IA', 'IA'), ('ID', 'ID'), ('IL', 'IL'), ('IN', 'IN'), ('KS', 'KS'), ('KY', 'KY'), ('LA', 'LA'), ('MA', 'MA'), ('MD', 'MD'), ('ME', 'ME'), ('MI', 'MI'), ('MN', 'MN'), ('MO', 'MO'), ('MS', 'MS'), ('MT', 'MT'), ('NC', 'NC'), ('ND', 'ND'), ('NE', 'NE'), ('NH', 'NH'), ('NJ', 'NJ'), ('NM', 'NM'), ('NV', 'NV'), ('NY', 'NY'), ('OH', 'OH'), ('OK', 'OK'), ('OR', 'OR'), ('PA', 'PA'), ('RI', 'RI'), ('SC', 'SC'), ('SD', 'SD'), ('TN', 'TN'), ('TX', 'TX'), ('UT', 'UT'), ('VA', 'VA'), ('VT', 'VT'), ('WA', 'WA'), ('WI', 'WI'), ('WV', 'WV'), ('WY', 'WY'))
+	recipient_city = models.CharField(max_length=100)
+	recipient_state = models.CharField(choices=STATES, max_length=2)
+	recipient_zip = models.CharField(max_length=10, null=True, blank=True, validators=[RegexValidator(regex=r'(^[0-9]{5}(?:-[0-9]{4})?$|^$)', message=(u'Valid zip code format: XXXXX or XXXXX-XXXX'))])
+	recipient_org = models.CharField(max_length=100, null=True, blank=True)
+	recipient_email = models.CharField(max_length=100, null=True, blank=True)
+	project_name = models.CharField(max_length=200)
+	letter_content = models.TextField()
+	cc_1 = models.CharField(max_length=100, blank=True, null=True)
+	cc_1_org = models.CharField(max_length=50, blank=True, null=True)
+	cc_1_email = models.EmailField(max_length=100, blank=True, null=True)
+	cc_2 = models.CharField(max_length=100, blank=True, null=True)
+	cc_2_org = models.CharField(max_length=50, blank=True, null=True)
+	cc_2_email = models.EmailField(max_length=100, blank=True, null=True)
+	cc_3 = models.CharField(max_length=100, blank=True, null=True)
+	cc_3_org = models.CharField(max_length=50, blank=True, null=True)
+	cc_3_email = models.EmailField(max_length=100, blank=True, null=True)
+	cc_4 = models.CharField(max_length=100, blank=True, null=True)
+	cc_4_org = models.CharField(max_length=50, blank=True, null=True)
+	cc_4_email = models.EmailField(max_length=100, blank=True, null=True)
+	cc_5 = models.CharField(max_length=100, blank=True, null=True)
+	cc_5_org = models.CharField(max_length=50, blank=True, null=True)
+	cc_5_email = models.EmailField(max_length=100, blank=True, null=True)
+	cc_6 = models.CharField(max_length=100, blank=True, null=True)
+	cc_6_org = models.CharField(max_length=50, blank=True, null=True)
+	cc_6_email = models.EmailField(max_length=100, blank=True, null=True)
+	date_created = models.DateTimeField(auto_now_add=True)
+
+	def __str__(self):
+		return (str(self.project_name)+" - "+str(self.date_created))
+
+	class Meta:
+		db_table = 'stepwise_approval_letter'
+
+
+
+
+

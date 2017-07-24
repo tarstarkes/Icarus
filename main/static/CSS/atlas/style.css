@@ -312,8 +312,14 @@ label[for=id_attachment]:hover{
     border: .25vw solid lightgray;
     width: 1vw;
 }
+.periodicity_data th.species {
+    width: 5vw;
+}
+.periodicity_data td.ls_name {
+    min-width: 7vw;
+}
 .subscript{
-    font-size: .75vw !important;
+    font-size: .5vw !important;
     text-align:center;
 }
 .month_label{
@@ -880,4 +886,7 @@ button#viewLogButton {
 }
 .delete_opp_link:hover{
     color: white;
+}
+.edit_bsr_opps th > div{
+    width: 3.7vw !important;
 }

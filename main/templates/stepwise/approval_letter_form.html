@@ -1,0 +1,145 @@
+{% extends 'header.html' %}
+
+{% load staticfiles %}
+{% block title %}
+	<title>GRMW Stepwise - Generate Approval Letter</title>
+{% endblock%}
+{% block head %}
+	<link rel="stylesheet" href="{% static 'CSS/stepwise/style.css' %}" type="text/css">
+{% endblock %}
+
+{% block content %}
+	<div class="stepwise_project_detail">
+		<div class="mainImage">
+			<img src="{% static 'images/stepwise/mainImage.png' %}">
+			<h2>Stepwise - {{ project.prospectus_id.title }} (Generate Approval Letter)</h2>
+		</div>
+	</div>
+	<div id="nav_menu_links" style="margin:2vw;">
+		<a href="/stepwise/stepwise_portal"><div class="back_to_stepwise menu_button link_button">Back to Stepwise Portal</div></a>
+	</div>
+	<center>
+		<div id="form_box" >
+				<form id="approval_letter_form" action="/stepwise/stepwise_approval_letter/generate/{{project.id}}/" method="post" onsubmit="disable_input(this, '#submit_gen_form')">{% csrf_token %}
+					{{approval_letter_form}}
+					<input id="submit_gen_form" class="link_button" type="submit" value="Generate">
+				</form>
+				<button id="preview_form" class="link_button" onclick="preview_letter()">Preview</button>
+		</div>
+	</center>
+	<style>
+		#approval_letter_form{
+			display: inline-block;
+		}
+		#approval_letter_form label{
+			display: block;
+			text-align: left;
+			margin-top:1vw;
+			color: white;
+			font-size: 1vw;
+		}
+		#approval_letter_form select,
+		#approval_letter_form input{
+			padding:.5vw;
+			margin-right: 1.5vw;
+			font-size: 1vw;
+		}
+		#approval_letter_form select{
+			font-size: 1vw;
+		}
+		#form_box{
+			width:50vw;
+			padding: 2vw;
+			margin:2vw;
+			background: #ef9502;
+			text-align:left;
+		}
+		#submit_gen_form{
+			display: inline-block;
+			margin-top: 2vw;
+		}
+		.combined_block{
+			display: inline-block;
+		}
+		.cc_block{
+			display: inline-block;
+			width: 100%;
+			margin-top:.25vw;
+		}
+		.cc_block input{
+			width: 25%;
+		}
+		.cc_block .combined_block input{
+			width: 100%;
+		}
+		.cc_block .combined_block{
+			margin-right:1.5vw;
+			width: 25%;
+		}
+		.cc_block p{
+			display: inline-block;
+		}
+		#id_letter_content{
+			width: 46vw;
+			height: 30vw;
+		}
+		label[for="id_recipient_state"]{
+			margin-right:1.5vw;
+		}
+		#id_recipient_state{
+			width:10vw;
+		}
+		#id_recipient_name{
+			width:23vw;
+		}
+		#id_recipient_street_address,
+		#id_project_name{
+			width: 46vw;
+		}
+		#approval_letter_form .link_button,
+		#preview_form{
+			background: white;
+			color: #ef9502;
+		}
+
+	</style>
+	<script>
+		function group_elements(){
+			for(var x=0; x < $('#approval_letter_form').children().length; x++){
+				var id = $($('#approval_letter_form').children()[x]).attr('id');
+				if(id != undefined && id != 'submit_gen_form' && id.includes('id_cc') != 1){
+					$('label[for="'+id+'"], #'+id).wrapAll('<div class="combined_block"></div');
+				}
+				else if(id != undefined && id.includes('id_cc')){
+					if(id == "id_cc_1"){
+						$('label[for="'+id+'"], #'+id+', #'+id+'_org, #'+id+'_email, label[for="'+id+'_org"], label[for="'+id+'_email"]').wrapAll('<div class="cc_block"></div');
+					}
+					else{
+						$('label[for="'+id+'"], #'+id+', #'+id+'_org, #'+id+'_email').wrapAll('<div class="cc_block"></div');
+					}
+				}
+			}
+			$('#id_cc_1').parent().before('<br>');
+			$('label[for="id_cc_1"], #id_cc_1').wrapAll('<div class="combined_block"></div');
+			$('label[for="id_cc_1_org"], #id_cc_1_org').wrapAll('<div class="combined_block"></div');
+			$('label[for="id_cc_1_email"], #id_cc_1_email').wrapAll('<div class="combined_block"></div');
+
+			for(var i=2; i < 7; i++){
+				$('label[for="id_cc_'+i+'"]').hide();
+				$('label[for="id_cc_'+i+'_org"]').hide();
+				$('label[for="id_cc_'+i+'_email"]').hide();
+			}
+
+			for(var i=0; i < 6; i++){
+				if(i == 0){
+					$('#id_cc_1').before('<p>'+(i+1)+'.</p>');
+				}else{
+					$($(".cc_block")[i]).prepend('<p>'+(i+1)+'.</p>');
+				}
+				
+			}
+
+		}
+		group_elements()
+	</script>
+{% endblock %}

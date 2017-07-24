@@ -88,10 +88,8 @@
 			{% endif %}
 			{% if opportunity.description %}
 			<h2 class="stylized_heading">Description</h2>
-			<div class="content">
-				<div>
-					<p>{% autoescape off %}{{opportunity.description|linebreaks}}{% endautoescape %}</p>
-				</div>
+			<div class="content" style="padding:2vw;">
+				<textarea disabled style="resize: none; width: 100%; height:20vw; overflow-y:scroll;padding: .5vw;">{% autoescape off %}{{opportunity.description}}{% endautoescape %}</textarea>
 			</div>
 			{% endif %}
 			<h2 class="stylized_heading">Limiting Factors Score</h2>
@@ -274,11 +272,11 @@
 
 			<h2 class="stylized_heading">Comments</h2>
 			<div class="content">
-				<div>
+				<div style="padding:2vw;">
 					{% if opportunity.comments %}
-						<p>{% autoescape off %}{{opportunity.comments|linebreaks}}{% endautoescape %}</p>
+						<textarea disabled style="resize: none; width: 100%; height:20vw; overflow-y:scroll;padding: .5vw;">{% autoescape off %}{{opportunity.comments}}{% endautoescape %}</textarea>
 					{% else %}
-						<p>There are no comments at this time</p>
+						<textarea disabled style="resize: none; width: 100%; height:20vw; overflow-y:scroll;padding: .5vw;">There are no comments at this time.</textarea>
 					{% endif %}
 				</div>
 			</div>

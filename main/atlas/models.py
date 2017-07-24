@@ -290,13 +290,25 @@ class atlas_bsr(models.Model):
 		return score
 
 	def _calc_p_score(self):
-		score = self.raw_p_score*self.atlas_id.p_score_cal_factor
-		score = round(score)
+		score = 0
+		if self.saved_p_score != None:
+			score = self.saved_p_score
+		else:
+			score = self.raw_p_score*self.atlas_id.p_score_cal_factor
+			score = round(score)
+			self.saved_p_score = score
+			self.save()
 		return score
 
 	def _calc_u_score(self):
-		score = self.raw_u_score*self.atlas_id.u_score_cal_factor
-		score = round(score)
+		score = 0
+		if self.saved_u_score != None:
+			score = self.saved_u_score
+		else:
+			score = self.raw_u_score*self.atlas_id.u_score_cal_factor
+			score = round(score)
+			self.saved_u_score = score
+			self.save()
 		return score
 
 	def _calc_raw_u_score(self):
@@ -390,11 +402,16 @@ class atlas_bsr(models.Model):
 
 	def _calc_cumulative_score(self):
 		score = 0
-		if self.atlas_id.id != 3:
-			score = self.u_score+self.p_score+self.geomorphic_score+self.current_cond_score+self.current_temp_score
-		elif self.atlas_id == 3:
-			score = self.u_score+self.p_score+self.geomorphic_score+self.current_cond_score+self.future_cond_score
-		score = round(score)
+		if self.saved_cumulative_score != None:
+			score = self.saved_cumulative_score
+		else:
+			if self.atlas_id.id != 3:
+				score = self.u_score+self.p_score+self.geomorphic_score+self.current_cond_score+self.current_temp_score
+			elif self.atlas_id == 3:
+				score = self.u_score+self.p_score+self.geomorphic_score+self.current_cond_score+self.future_cond_score
+			score = round(score)
+			self.saved_cumulative_score = score
+			self.save()
 		return score
 
 	p_score = property(_calc_p_score)
@@ -406,6 +423,11 @@ class atlas_bsr(models.Model):
 	current_temp_score = property(_calc_current_temp)
 	future_score = property(_calc_future_score)
 	cumulative_score = property(_calc_cumulative_score)
+
+	saved_p_score = models.IntegerField(blank=True, null=True)
+	saved_u_score = models.IntegerField(blank=True, null=True)
+	saved_cumulative_score = models.IntegerField(blank=True, null=True)
+
 	tier_id = models.ForeignKey(atlas_bsr_tier, blank=True, null=True)
 	atlas_id = models.ForeignKey(atlas, blank=True, null=True)
 	periodicity_notes = models.TextField(blank=True, null=True)

@@ -98,32 +98,6 @@
 						{% endfor %}
 					</tbody>
 				</table>
-				<!-- <div class="list-group-head">
-					<p style="width: 10%;">BSR Name</p>
-					<p style="width: 16%;">Currrent Condition Score</p>
-					<p style="width: 14%;">Current Temp Score</p>
-					<p style="width: 13%;">Geomorphic Score</p>
-					<p style="width: 10%;">P Score</p>
-					<p style="width: 10%;">U Score</p>
-					<p style="width: 12%;">Cumulative Score</p>
-					<p style="width: 8%; padding-right:1vw">Tier</p>
-				</div>
-				<div class="content list-group">
-					{% for bsr in all_bsr %}
-					<a href="/atlas/go_to_bsr/{{bsr.id}}" class="list-group-item">	
-						<p style="width: 10%;">{{bsr.name|safe}}</p>
-						<p style="width: 16%;">{{bsr.current_cond_score|safe}}</p>
-						<p style="width: 14%;">{{bsr.current_temp_score|safe}}</p>
-						<p style="width: 13%;">{{bsr.geomorphic_score|safe}}</p>
-						<p style="width: 10%;">{{bsr.p_score|safe}}</p>
-						<p style="width: 10%;">{{bsr.u_score|safe}}</p>
-						<p style="width: 12%;">{{bsr.cumulative_score|safe}}</p>
-						<div style="display: inline-block; width: 8%; padding-right: 1vw; text-align: center;">
-							<p class="tier_{{bsr.tier_id.tier}}" style="padding-right:1vw">{{bsr.tier_id.tier|safe}}</p>
-						</div>
-					</a>
-					{% endfor %}
-				</div> -->
 			{% endif %}
 			</div>
 			{% if request.user|has_group:perm or request.user|has_group:"Atlas_Admin" %}
@@ -131,10 +105,25 @@
 				<div style="display: inline-block; margin:2vw;">
 					<input id="add_bsr" type="submit" class="link_button link_button_hover" value="Add New BSR">
 				</div>
-				<form id="bsr_form" style="display:none;" method="post" action="/atlas/add_new_bsr/{{atlas.id}}/">{% csrf_token %}
+				<form id="bsr_form" style="display:none; font-size: 1vw;" method="post" action="/atlas/add_new_bsr/{{atlas.id}}/" onsubmit="return disable_input(this, '#bsr_form .submit')">{% csrf_token %}
 					{{bsr_form|safe}}
-					<input type="submit" class="link_button link_button_hover submit" value="Submit">
+					<input type="submit" class="link_button link_button_hover submit" value="Submit" name="form_submit">
 				</form>
+				<style>
+					#bsr_form label{
+						display: block;
+						text-align:left;
+					}
+					#bsr_form .grouped_box{
+						display: inline-block;
+					}
+					#bsr_form #id_name{
+						width: 20vw;
+					}
+					#bsr_form #id_desc {
+						width: 30vw;
+					}
+				</style>
 			</center>
 			{% endif %}
 		</div>
@@ -217,9 +206,44 @@
 				<button id="close_log_window" class="link_button link_button_hover">Close</button>
 			</div>
 		</center>
+		<script>
+			function disable_input(form, target){
+				$(target).css('opacity', '.5');
+				$(target).val('Please Wait...');
+				$(target).css('width', 'auto');
+				$(target).css('display', 'inline-block');
+				form.form_submit.disabled = true;
+				return true;
+			}
+			function disable_submit(target){
+				$(target).css('opacity', '.5');
+				if( $(target)[0].innerHTML != undefined && $(target)[0].innerHTML != ""){
+					$(target)[0].innerHTML = "Please Wait...";
+				}
+				else{
+					$(target).val("Please Wait...")
+				}
+				$(target).prop('disabled', true);
+				return true;
+			}
+		</script>
 	</div>
 <script>
 	$(document).ready(function(e){
+		$('label[for="id_name"], #id_name').wrapAll("<div class='grouped_box'></div>");
+		$('label[for="id_desc"], #id_desc').wrapAll("<div id='brk_pnt' class='grouped_box'></div>");
+		$("#brk_pnt").after("<br>");
+		$('label[for="id_geomorphic_potential"], #id_geomorphic_potential').wrapAll("<div class='grouped_box'></div>");
+		$('label[for="id_current_habitat_cond"], #id_current_habitat_cond').wrapAll("<div class='grouped_box'></div>");
+		$('label[for="id_current_temp"], #id_current_temp').wrapAll("<div class='grouped_box'></div>");
+		$('label[for="id_future_cond"], #id_future_cond').wrapAll("<div class='grouped_box'></div>");
+		$('label[for="id_tier_id"], #id_tier_id').wrapAll("<div class='grouped_box'></div>");
+
+
+
+		$('#bsr_form .submit').css("display", "block");
+		$('#bsr_form').css('padding-bottom', '2vw');
+
 		$("#viewLogButton, #close_log_window").click(function(e){
 
 			$('#change_log_window').animate({
@@ -241,6 +265,7 @@
 				// Animation complete.
 			});
 		});
+
 	});
 
 	{% if atlas.atlas_name == "Upper Grande Ronde Atlas" %}

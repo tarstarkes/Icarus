@@ -2,7 +2,7 @@
 
 {% load staticfiles %}
 {% block title %}
-	<title>GRMW Atlas</title>
+	<title>GRMW Atlas - Edit Opportunity</title>
 {% endblock%}
 {% block head %}
 	<link rel="stylesheet" href="{% static 'CSS/atlas/style.css' %}" type="text/css">
@@ -12,18 +12,65 @@
 	<div class="atlas_body">
 		<div class="mainImage">
 			<img src="{% static 'images/atlas/mainImage.png' %}">
-			<h2>Opportunity - {{opportunity.opportunity_name}}</h2>
+			<h2><span id="opp_title">Opportunity - {{opportunity.opportunity_name}}</span><input id="edit_opp_name" type="submit" style="float:right; display: inline-block; width:4vw; text-align:center; margin-left:1vw;" class="link_button" value="Edit">
+			<form id="save_name_buttons" method="post" action="/atlas/update_opp_name/{{opportunity.id}}/" style="display: none; vertical-align:middle" onsubmit="return disable_input(this, '#save_name_buttons .post_submit');">{% csrf_token %}
+				<input style="display:none;" id="id_opp_name" name="id_opportunity_name">
+				<input class="link_button post_submit" type="submit" style="display: inline-block; width:4vw; text-align:center; margin-left:1vw;" value="Save" name="form_submit"/>
+				<a id="cancel" href="javascript: void(0)" style="color: #ef5902;display: inline-block; font-size: 1vw;vertical-align:middle">cancel</a>
+			</form>
+			</h2>
 		</div>
 		<div class="window_nav_bar"><a href="/atlas/">Atlas</a>/<a href="/atlas/go_to_atlas/{{opportunity.bsr_id.atlas_id.id}}">{{opportunity.bsr_id.atlas_id}}</a>/<a href="/atlas/go_to_bsr/{{opportunity.bsr_id.id}}/">{{opportunity.bsr_id}}</a>/<span class="page_landed">{{opportunity.opportunity_name}} (Editing)</span>
+		</div>
+		<br>
+		<div id="opp_status_div">
+			<form id="opp_status" action="/atlas/update_opp_status/{{opportunity.id}}/" method="post" onsubmit="return disable_submit('#opp_status .post_submit');">{% csrf_token %}
+				{{opp_status_form}}
+				<button class="submit link_button link_button_hover post_submit">Update Status</button>
+			</form>
+			<style>
+				#opp_status_div{
+					background:white;
+					border: .1vw solid gray;
+					padding: 1vw;
+					display: inline-block;
+					margin-left:2vw;
+					margin-top:2vw;
+					border-radius: .5vw .5vw .5vw .5vw;
+				    -moz-border-radius: .5vw .5vw .5vw .5vw;
+				    -webkit-border-radius: .5vw .5vw .5vw .5vw;
+				}
+				#opp_status label{
+					font-size: 1.25vw;
+					margin-right:1vw;
+					color: #ef9502;
+				}
+				#opp_status #id_status{
+					font-size: 1vw;
+				    padding: .5vw;
+				    vertical-align: top;
+				}
+				#opp_status .submit{
+					display:none;
+					margin-bottom:0;
+				}
+			</style>
+			<script>
+				$(document).ready(function(e){
+					$("#opp_status #id_status").on('change', function(e){
+						$('#opp_status .submit').show();
+					});
+				});
+			</script>
 		</div>
 		<div id="opportunity_body">
 			<div id="opportunity_map" style="width:96%;height:30vw; margin: 2%;">
 			</div>
 
 			{% if opportunity.location %}
-				<input class="link_button link_button_hover" style="display: none; margin-left:2vw; margin-top: 0vw;" type="submit" id="update_map" value="Update Opportunity Area"/>
+				<input class="link_button link_button_hover map_submit" style="display: none; margin-left:2vw; margin-top: 0vw;" type="submit" id="update_map" value="Update Opportunity Area"/>
 			{% else %}
-				<input class="link_button link_button_hover" style="margin-left:2vw; margin-top: 0vw;" type="submit" id="set_map" value="Set Opportunity Area"/>
+				<input class="link_button link_button_hover map_submit" style="margin-left:2vw; margin-top: 0vw;" type="submit" id="set_map" value="Set Opportunity Area"/>
 			{% endif %}
 			<script>
 				function opp_map() {
@@ -110,23 +157,17 @@
 				    });
 				 }
 			</script>
-			<form style="display: none;" id="opp_map_setup" method="post" action="/atlas/update_opp_map/{{opportunity.id}}/">{% csrf_token %}
+			<form style="display: none;" id="opp_map_setup" method="post" action="/atlas/update_opp_map/{{opportunity.id}}/" onsubmit="return disable_submit('.map_submit');">{% csrf_token %}
 				{{opp_map_form}}
 				<input id="submit_opp_map" type="submit" value="Submit"/>
 			</form>
 
 			<h2 class="stylized_heading">Description</h2>
 			<div class="content" style="padding: 2vw;">
-				<div id="edit_desc" style="padding: 2vw;">
-				{% if opportunity.description %}
-					{% autoescape off %}{{opportunity.description|linebreaks}}{% endautoescape %}
-				{% else %}
-					<p>There is no description for this opportunity</p>
-				{% endif %}
-				</div>
+				<textarea id="edit_desc" style="width: 100%; resize: none; height: 20vw; padding: .5vw;">{% if opportunity.description %}{{opportunity.description}}{% else %}There is no description for this opportunity{% endif %}</textarea>
 				<center>
-					<div id="update_description" style="display: none; margin-top: 2vw;" class="link_button  link_button_hover">Update Description</div>
-					<form id="desc_form" style="display: none;" method="post" action="/atlas/update_opp_desc/{{opportunity.id}}/">{% csrf_token %}
+					<button id="update_description" style="display: none; margin-top: 2vw;" class="link_button  link_button_hover post_submit">Update Description</button>
+					<form id="desc_form" style="display: none;" method="post" action="/atlas/update_opp_desc/{{opportunity.id}}/" onsubmit="return disable_submit('#update_description');">{% csrf_token %}
 						{{opp_desc_form}}
 						<input id="desc_submit" style="margin-top:1vw;" class="link_button link_button_hover submit" type="submit" value="Submit"></input>
 					</form>
@@ -163,9 +204,9 @@
 				</table>
 				<center>
 					<div id="add_new_limiting_factor" class="link_button  link_button_hover">Add Limiting Factor</div>
-					<form style="display:none;" id="add_opp_lf" method="post" action="/atlas/add_opp_limiting_factor/{{opportunity.id}}/">{% csrf_token %}
+					<form style="display:none;" id="add_opp_lf" method="post" action="/atlas/add_opp_limiting_factor/{{opportunity.id}}/" onsubmit="return disable_input(this, '#add_opp_lf .post_submit');">{% csrf_token %}
 						{{lf_form}}
-						<input style="margin-top:1vw;" class="link_button link_button_hover submit" type="submit" value="Submit"></input>
+						<input style="margin-top:1vw;" class="link_button link_button_hover submit post_submit" type="submit" value="Submit" name="form_submit"></input>
 					</form>
 				</center>
 			</div>
@@ -202,8 +243,8 @@
 					</div>
 				</center>
 				<center>
-					<div id="update_np" style="display: none;" class="link_button  link_button_hover">Update Natural Process</div>
-					<form id="np_form" style="display: none;" method="post" action="/atlas/update_opp_np/{{opportunity.id}}/">{% csrf_token %}
+					<button id="update_np" style="display: none;" class="link_button  link_button_hover post_submit">Update Natural Process</button>
+					<form id="np_form" style="display: none;" method="post" action="/atlas/update_opp_np/{{opportunity.id}}/" onsubmit="return disable_submit('#update_np');">{% csrf_token %}
 						{{np_form}}
 						<input id="np_submit" style="margin-top:1vw;" class="link_button link_button_hover submit" type="submit" value="Submit"></input>
 					</form>
@@ -235,8 +276,8 @@
 					</tbody>
 				</table>
 				<center>
-					<div id="update_water" style="display: none; margin-top: 2vw;" class="link_button  link_button_hover">Update Longitudinal Score</div>
-					<form id="water_form" style="display: none;" method="post" action="/atlas/update_longitudinal_score/{{opportunity.id}}/">{% csrf_token %}
+					<div id="update_water" style="display: none; margin-top: 2vw;" class="link_button  link_button_hover post_submit">Update Longitudinal Score</div>
+					<form id="water_form" style="display: none;" method="post" action="/atlas/update_longitudinal_score/{{opportunity.id}}/" onsubmit="return disable_submit('#update_water');">{% csrf_token %}
 						{{opp_water_form}}
 						<input id="water_submit" style="margin-top:1vw;" class="link_button link_button_hover submit" type="submit" value="Submit"></input>
 					</form>
@@ -308,8 +349,8 @@
 					</tbody>
 				</table>
 				<center>
-					<div id="update_fc" style="display: none; margin-top: 2vw;" class="link_button  link_button_hover">Update Feasability Criteria</div>
-					<form id="fc_form" style="display: none;" method="post" action="/atlas/update_fc/{{opportunity.id}}/">{% csrf_token %}
+					<button id="update_fc" style="display: none; margin-top: 2vw;" class="link_button  link_button_hover post_submit">Update Feasability Criteria</button>
+					<form id="fc_form" style="display: none;" method="post" action="/atlas/update_fc/{{opportunity.id}}/" onsubmit="return disable_submit('#update_fc');">{% csrf_token %}
 						{{fc_form}}
 						<input id="fc_submit" style="margin-top:1vw;" class="link_button link_button_hover submit" type="submit" value="Submit"></input>
 					</form>
@@ -346,28 +387,62 @@
 
 			<h2 class="stylized_heading">Comments</h2>
 			<div class="content" style="padding: 2vw;">
-				<div class="edit_opp_comment">
-					{% if opportunity.comments %}
-						<p>{% autoescape off %}{{opportunity.comments|linebreaks}}{% endautoescape %}</p>
-					{% else %}
-						<p>There are no comments at this time</p>
-					{% endif %}
-				</div>
+				<textarea class="edit_opp_comment" style="width: 100%; resize: none; height:20vw; padding: .5vw;">{% if opportunity.description %}{{opportunity.comments}}{% else %}There are no comments at this time{% endif %}</textarea>
 				<center>
-					<div id="update_comment" style="display: none; margin-top: 2vw;" class="link_button  link_button_hover">Update Comments</div>
-					<form id="comment_form" style="display: none;" method="post" action="/atlas/update_opp_comment/{{opportunity.id}}/">{% csrf_token %}
+					<button id="update_comment" style="display: none; margin-top: 2vw;" class="link_button  link_button_hover" >Update Comments</button>
+					<form id="comment_form" style="display: none;" method="post" action="/atlas/update_opp_comment/{{opportunity.id}}/" onsubmit="return disable_submit('#update_comment');">{% csrf_token %}
 						{{opp_comment_form}}
 						<input id="comment_submit" style="margin-top:1vw;" class="link_button link_button_hover submit" type="submit" value="Submit"></input>
 					</form>
 				</center>
-
 			</div>
-
+			<script>
+				function disable_input(form, target){
+					$(target).css('opacity', '.5');
+					$(target).val('Please Wait...');
+					$(target).css('width', 'auto');
+					$(target).css('display', 'inline-block');
+					form.form_submit.disabled = true;
+					return true;
+				}
+				function disable_submit(target){
+					$(target).css('opacity', '.5');
+					if( $(target)[0].innerHTML != undefined && $(target)[0].innerHTML != ""){
+						$(target)[0].innerHTML = "Please Wait...";
+					}
+					else{
+						$(target).val("Please Wait...")
+					}
+					$(target).prop('disabled', true);
+					return true;
+				}
+			</script>
 		</div>
 		
 	</div>
 <script>
 	$(document).ready(function(e){
+
+		//EDIT OPP NAME
+    	$("#edit_opp_name").click(function(e){
+    		$("#opp_title").wrap('<input id="edit_opp_title">');
+    		$("#edit_opp_title").on('keyup', function() {
+	    		$("#id_opp_name")[0].value = $("#edit_opp_title")[0].value;
+	    	});
+    		$("#edit_opp_title")[0].value = "{{opportunity.opportunity_name}}";
+    		$("#id_opp_name")[0].value = $("#edit_opp_title")[0].value;
+    		$("#edit_opp_name").hide();
+    		$("#save_name_buttons").css('display', 'inline-block');
+
+    	});
+    	$("#cancel").click(function(e){
+    		$("#edit_opp_name").css('display', 'inline-block');
+    		$("#save_name_buttons").hide();
+			$(".mainImage h2").prepend("<span id='opp_title'>Opportunity - {{opportunity.opportunity_name}}</span>");
+			$("#edit_opp_title").remove();
+
+    	});
+
 		//LIMITING FACTORS
 		$("#add_new_limiting_factor").click(function(){
 			$('#add_opp_lf').animate({
@@ -410,8 +485,7 @@
 
 		$("#edit_desc").focusout(function(e){
 			$("#update_description").show();
-			var result = $("#edit_desc")[0].innerHTML;
-
+			var result = $("#edit_desc")[0].value;
 			$("#id_description").val(result);
 		});
 
@@ -427,13 +501,7 @@
 
 		$(".edit_opp_comment").focusout(function(e){
 			$("#update_comment").show();
-			var lines = $(".edit_opp_comment p")
-			var comment = ""
-			for (var x=0; x<lines.length; x++){
-				comment = comment + lines[x].innerHTML+"\n"
-			}
-			var result = comment.replace(/<br>/g, "\n");
-
+			var result = $(".edit_opp_comment")[0].value;
 			$("#id_comments").val(result);
 		});
 
@@ -444,7 +512,9 @@
 
 		//sets the window location to the YOffset While editing
 		if(window.localStorage.getItem('YOffset')){
-			$(window).scrollTop(window.localStorage.getItem('YOffset'));
+			if(window.localStorage.getItem('page_title') == window.document.title){
+				$(window).scrollTop(window.localStorage.getItem('YOffset'));
+			}
 		}
 		//-------------------------------------------------
 
@@ -616,6 +686,7 @@
 		$(window).scroll(function(e){
 			var storage = window.localStorage;
 			storage.setItem("YOffset", window.pageYOffset)
+			storage.setItem("page_title", window.document.title)
 		});
 	});
 

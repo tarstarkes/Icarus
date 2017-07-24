@@ -24,16 +24,51 @@
 			{% endif %}
 		</div>
 			<div class="bsr_detail">
-				<h2 class="stylized_heading">Tier</h2>
-				<div class="content" style="padding-bottom: 2vw;">
+				<h2 class="stylized_heading">General Information</h2>
+				<div class="content" style="padding: 2vw;padding-top:0;">
+					{%for x in bsr%}
 					<center>
-						<p style="margin: 0;">{%for x in bsr%}{{x.name}}{%endfor%} has a cumulative score of: <span style="font-weight: bold">{%for x in bsr%}{{x.cumulative_score}}{%endfor%}</span>
+						<p style="margin: 0;padding-bottom:1vw;">{{x.name}} has a cumulative score of: <span style="font-weight: bold">{{x.cumulative_score}}</span>
 						</p>
+						<p style="padding: 0;">Tier</p>
 						<div class="tier_{%for x in bsr%}{{x.tier_id}}{%endfor%}">
-							{%for x in bsr%}{{x.tier_id}}{%endfor%}
+							{{x.tier_id}}
 						</div>
+						<table class="bsr_table gen_info_table" style="margin-top:2vw;">
+							<tbody>
+								<tr style="font-size: 1vw;">
+									<th>Geomorphic Potential</th>
+									<th>Current Habitat Condition</th>
+									<th>Current Temperature</th>
+									{% if x.atlas_id.id == 3%}
+									<th>Future Condition</th>
+									{% endif %}
+								</tr>
+								<tr>
+									<td>{{x.geomorphic_potential}}</td>
+									<td>{{x.current_habitat_cond}}</td>
+									<td>{{x.current_temp}}</td>
+									{% if x.atlas_id.id == 3%}
+									<td>{{x.future_cond}}</td>'
+									{% endif %}
+								</tr>
+							</tbody>
+						</table>
+						<style>
+							.gen_info_table th{
+								background: gray;
+							}
+							.gen_info_table td{
+								background: white;
+								font-size:1vw;
+							}
+						</style>
 					</center>
+					<h3 style="font-size:1.25vw;">Description</h3>
+					<textarea disabled style="width: 100%; height:20vw;">{{x.desc}}</textarea>
+					{%endfor%}
 				</div>
+
 				<h2 class="stylized_heading">Periodicity</h2>
 				<div class="content">
 					<div style="padding:2vw;">

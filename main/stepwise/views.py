@@ -422,7 +422,7 @@ def stepwise_generate_prospectus(request, process_id):
 				message,
 				'infotech@grmw.org',
 				#change this to projects@grmw.org for production server
-				['infotech@grmw.org'],
+				['projects@grmw.org'],
 				fail_silently=False,
 			)
 
@@ -766,3 +766,27 @@ def stepwise_auth_user_loggedin(request, redir):
 		response = HttpResponseRedirect("/login/?error="+err+"&redirect="+redirect)
 	return response
 
+def generate_approval_letter(request):
+	context = {
+		'user_name': 'Joe Schmoe',
+		'user_street_address': '111 Infiniti Ln.',
+		'user_city_state_zip': 'Nowhere, NB, 88888',
+		'project_name': "Jesse Steele's Mid-Summer Pool Project",
+		'letter_content': 'At a regularly scheduled meeting of the Grande Ronde Model Watershed Board of Directors on May 9, 2017, your project UGR Bird Track Springs Fish Habitat Restoration was recommended for funding. The recommendation included allocations as follows: <br><br>OWEB FIP             $507,016<br>	BPA FY 2017    $1,503,539<br>		BPA FY 2018         $507,752<br><br>Please work with Tracy Hauser at BPA to confirm funding and input information in Pisces. An OWEB grant agreement will be made available for signatures shortly after the OWEB Board meeting in late July, barring unforeseen circumstances.<br><br>Congratulations and good luck.',
+		'signer': 'Jeff Oveson',
+		'cc_list': {'Jesse Steele, GRMW jesse@grmw.org', 'Tracy Hauser, BPA tlhauser@bpa.gov', 'Andrew Dutterer, OWEB andrew.dutterer@state.or.us'}
+	}
+	response = render(request, 'stepwise/approval_letter_template.html', context)
+	return response
+
+def stepwise_approval_letter(request, process_id):
+	response = stepwise_auth_user_in_group(request, "stepwise_manager", "/stepwise/stepwise_portal_admin/stepwise_project_detail_admin/"+str(process_id)+"/")
+	if response == True:
+		project = Process.objects.get(pk=process_id)
+		form = approval_letter_form(request.POST or None)
+		context = {
+			'project': project,
+			'approval_letter_form': form,
+		}
+		response = render(request, 'stepwise/approval_letter_form.html', context)
+	return response

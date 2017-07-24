@@ -20,13 +20,13 @@
 				<p>To enter stepwise, please click the link labeled "My Stepwise". This will take you to a personalized page where you can track each prospectus and the overall progress of each submission within the Stepwise process. Stepwise will also track correspondance, uploaded documents, and completed Stepwise projects.</p>
 				<center>
 					<div class="enterStepwise">
-						<a style="text-decoration: none;" href="stepwise_portal/">
-							<h4 class="start_stepwise">My Stepwise<h4>
+						<a style="text-decoration: none; display: inline-block;" href="stepwise_portal/">
+							<h4 class="start_stepwise">My Stepwise</h4>
 						</a>
 						{% load filters %}
 						{% if request.user|has_group:"stepwise_manager"%}
-						<a style="text-decoration: none;" href="stepwise_portal_admin/">
-							<h4 class="manage_stepwise">Stepwise Admin<h4>
+						<a style="text-decoration: none; display: inline-block;" href="stepwise_portal_admin/">
+							<h4 class="manage_stepwise">Stepwise Admin</h4>
 						</a>
 						{% endif %}
 					</div>

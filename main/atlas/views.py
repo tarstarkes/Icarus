@@ -14,6 +14,7 @@ from django.core.files import File
 from django.contrib.auth.models import Group
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.mail import send_mail
+import json
 import os
 from django.conf import settings
 import datetime
@@ -174,10 +175,9 @@ def BSR_view(request, atlas_id):
 			all_opps = bsr_opportunity.objects.filter(bsr_id__atlas_id__pk=atlas_id).order_by("bsr_id")
 			perm = get_assoc_group(atlas_id)
 			bsr_form = atlas_bsr_form(None)
-			lethok = (("Lethal", "Lethal"), ("Ok", "Ok"))
-			norm = (("Poor", "Poor"), ("Fair", "Fair"), ("Good", "Good"), ("Excellent", "Excellent"), ("TBD", "TBD"))
+			lethok = ((None , "---------"), ("Lethal", "Lethal"), ("Ok", "Ok"))
+			norm = ((None, "---------"), ("Poor", "Poor"), ("Fair", "Fair"), ("Good", "Good"), ("Excellent", "Excellent"), ("TBD", "TBD"))
 			atlas_log = atlas_change_log.objects.filter(atlas_id=atlas_id)[0].change_log_file
-			print(atlas_log)
 			file = open(str(atlas_log), 'r')
 			log = file.read()
 			if atlas_id == "4":
@@ -295,6 +295,57 @@ def opportunity_detail(request, opp_id):
 		response = render(request, 'atlas/opportunity_detail.html', context)
 	return response
 
+def load_p_forms(request, bsr_id):
+	response = atlas_auth_user_is_manager(request, bsr_id)
+	if response == True:
+		p_forms = modelformset_factory(life_stage, fields='__all__', extra=0)
+		p_formset = p_forms(queryset=life_stage.objects.filter(bsr_id=bsr_id))
+		formset_p = u""+str(p_formset)
+		payload = {
+			'success': True, 
+			'data': formset_p,
+		}
+	return HttpResponse(json.dumps(payload), content_type='application/json')
+
+def load_util_forms(request, bsr_id):
+	response = atlas_auth_user_is_manager(request, bsr_id)
+	if response == True:
+		util_forms = modelformset_factory(utilization_score, fields='__all__', extra=0)
+		util_formset = util_forms(queryset=utilization_score.objects.filter(utilization_id__bsr_id=bsr_id))
+
+		formset = u""+str(util_formset)
+		payload = {
+			'success': True,
+			'data': formset,
+		}
+	return HttpResponse(json.dumps(payload), content_type='application/json')
+
+def load_lf_forms(request, bsr_id):
+	response = atlas_auth_user_is_manager(request, bsr_id)
+	if response == True:
+		lf_forms = modelformset_factory(limiting_factor_score, fields='__all__', extra=0)
+		lf_formset = lf_forms(queryset=limiting_factor_score.objects.filter(limiting_factor_instance_id__bsr_id=bsr_id))
+
+		formset = u""+str(lf_formset)
+		payload = {
+			'success': True,
+			'data': formset,
+		}
+	return HttpResponse(json.dumps(payload), content_type='application/json')
+
+def load_ra_forms(request, bsr_id):
+	response = atlas_auth_user_is_manager(request, bsr_id)
+	if response == True:
+		ra_forms = modelformset_factory(restoration_actions_score, fields='__all__', extra=0)
+		ra_formset = ra_forms(queryset=restoration_actions_score.objects.filter(bsr_id=bsr_id))
+
+		formset = u""+str(ra_formset)
+		payload = {
+			'success': True,
+			'data': formset,
+		}
+	return HttpResponse(json.dumps(payload), content_type='application/json')
+
 def edit_bsr(request, bsr_id):
 	response = atlas_auth_user_is_manager(request, bsr_id)
 	if response == True:
@@ -317,6 +368,7 @@ def edit_bsr(request, bsr_id):
 		new_limiting_factor_form = limiting_factor_form(None)
 		opp_add_new = new_opportunity_form(None)
 		tier_form = bsr_tier_form(None)
+		gen_info = gen_info_form(instance=atlas_bsr.objects.get(pk=bsr_id))
 
 		lf_instances = limiting_factor_instance.objects.filter(bsr_id=bsr_id)
 		obj_id_list = []
@@ -324,8 +376,8 @@ def edit_bsr(request, bsr_id):
 			obj_id_list.append(instance.limiting_factor_id.id)
 		new_limiting_factor_form.fields['limiting_factor_id'].queryset = limiting_factor.objects.exclude(pk__in=obj_id_list).order_by("sub_id")
 
-		context['p_formset'] = p_formset
-		context['util_formset'] = util_formset
+		# context['p_formset'] = p_formset
+		# context['util_formset'] = util_formset
 		context['lf_formset'] = lf_formset
 		context['ra_formset'] = ra_formset
 		context['tier_form'] = tier_form
@@ -333,6 +385,7 @@ def edit_bsr(request, bsr_id):
 		context['new_limiting_factor_form'] = new_limiting_factor_form
 		context['p_addnew'] = p_addnew
 		context['new_opp_form'] = opp_add_new
+		context['gen_info_form'] = gen_info
 		response = render(request, 'atlas/edit_bsr_detail.html', context)
 
 		if request.method=='POST':
@@ -340,7 +393,47 @@ def edit_bsr(request, bsr_id):
 			if formset.is_valid():
 				formset.save()
 				response = HttpResponseRedirect("/atlas/edit_bsr/"+str(bsr_id))
-				
+	return response
+
+def update_bsr_gen_info(request, bsr_id):
+	response = atlas_auth_user_is_manager(request, bsr_id)
+	bsr = atlas_bsr.objects.get(pk=bsr_id)
+	if response == True:
+		if request.method == 'POST':
+			form = gen_info_form(instance=bsr, data=request.POST or None)
+			if form.is_valid():
+				form.save()
+				change_log(request, bsr.atlas_id.id, "ATLAS BSR GENERAL INFO UPDATED")
+				response = HttpResponseRedirect("/atlas/edit_bsr/"+str(bsr_id))
+	return response
+
+
+def update_bsr_name(request, bsr_id):
+	response = atlas_auth_user_is_manager(request, bsr_id)
+	bsr = atlas_bsr.objects.get(pk=bsr_id)
+	if response == True:
+		if request.method == 'POST':
+			form = bsr_name_form(instance=bsr)
+			form = form.save(commit=False)
+			old_bsr_name = form.name
+			form.name = request.POST['id_name']
+			form.save()
+			change_log(request, bsr.atlas_id.id, "ATLAS BSR NAME UPDATED - From "+str(old_bsr_name)+" to "+str(form.name))
+		response = HttpResponseRedirect("/atlas/edit_bsr/"+str(bsr_id))
+	return response
+
+def update_opp_name(request, opp_id):
+	opp = bsr_opportunity.objects.get(pk=opp_id)
+	response = atlas_auth_user_is_manager(request, opp.bsr_id.id)
+	if response == True:
+		if request.method == 'POST':
+			form = opp_name_form(instance=opp)
+			form = form.save(commit=False)
+			old_opp_name = form.opportunity_name
+			form.opportunity_name = request.POST['id_opportunity_name']
+			form.save()
+			change_log(request, opp.bsr_id.atlas_id.id, "ATLAS OPPORTUNITY NAME UPDATED - From "+str(old_opp_name)+" to "+str(form.opportunity_name))
+		response = HttpResponseRedirect("/atlas/edit_opp/"+str(opp_id))
 	return response
 
 def update_tier(request, bsr_id):
@@ -382,6 +475,18 @@ def delete_life_stage(request, life_stage_id):
 		change_log(request, bsr.atlas_id.id, "BSR LIFE STAGE DELETED - "+str(bsr.name)+": "+str(ls))
 		ls.delete()
 		response = HttpResponseRedirect("/atlas/edit_bsr/"+str(bsr_id))
+	return response
+
+def update_notes(request, bsr_id):
+	response = atlas_auth_user_is_manager(request, bsr_id)
+	if response == True:
+		bsr = atlas_bsr.objects.get(pk=bsr_id)
+		if request.method == 'POST':
+			form = bsr_periodicity_notes(instance=bsr)
+			form = form.save(commit=False)
+			form.periodicity_notes = request.POST['id_periodicity_notes']
+			form.save()
+			response = HttpResponseRedirect("/atlas/edit_bsr/"+str(bsr_id))
 	return response
 
 def update_fish_use(request, bsr_id):
@@ -555,6 +660,7 @@ def edit_opp(request, opp_id):
 		fc_form = opp_fc_form(None)
 		comment_form = opp_comment_form(None)
 		desc_form = opp_desc_form(None)
+		status_form = opp_status_form(instance=opportunity)
 		ra_ids = []
 		for ra in opp_objs:
 			ra_ids.append(ra.action_id.id)
@@ -570,6 +676,7 @@ def edit_opp(request, opp_id):
 			'opportunity': opportunity,
 			'rest_actions': rest_actions,
 			'opp_map_form': opp_map,
+			'opp_status_form': status_form,
 		}
 		response = render(request, "atlas/edit_opportunity.html", context)
 	return response
@@ -581,6 +688,23 @@ def delete_opp(request, opp_id):
 	if response == True:
 		opp.delete()
 		response = HttpResponseRedirect("/atlas/edit_bsr/"+str(opp.bsr_id.id))
+	return response
+
+def update_opp_status(request, opp_id):
+	opportunity = bsr_opportunity.objects.get(pk=opp_id)
+	response = atlas_auth_user_is_manager(request, opportunity.bsr_id.id)
+	if response == True:
+		if request.method == "POST":
+			status_form = opp_status_form(instance=opportunity, data=request.POST or None)
+			print(status_form)
+			if status_form.is_valid():
+				bsr = atlas_bsr.objects.get(pk=opportunity.bsr_id.id)
+				form = status_form.save(commit=False)
+				prev_status = opportunity.status
+				new_status = form.status
+				form.save()
+				change_log(request, bsr.atlas_id.id, "OPPORTUNITY STATUS UPDATED -> "+str(bsr.name)+" -> "+str(opportunity.opportunity_name)+": FROM "+str(prev_status)+" TO "+str(new_status))
+			response = HttpResponseRedirect("/atlas/edit_opp/"+str(opp_id))
 	return response
 
 def update_opp_map(request, opp_id):
@@ -643,7 +767,7 @@ def update_longitudinal_score(request, opp_id):
 
 				bsr_id = opportunity.bsr_id.id
 				bsr = atlas_bsr.objects.get(pk=bsr_id)
-				change_log(request, bsr.atlas_id.id, "OPPORTUNITY LONGITUDINAL SCORE UPDATED - "+str(bsr.name)+" -> "+str(opportunity.opportunity_name)+" -> UPDATED TO "+str(np_form.natural_process))
+				change_log(request, bsr.atlas_id.id, "OPPORTUNITY LONGITUDINAL SCORE UPDATED - "+str(bsr.name)+" -> "+str(opportunity.opportunity_name))
 
 				water_form.save()
 		response = HttpResponseRedirect("/atlas/edit_opp/"+str(opp_id))

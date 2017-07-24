@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<title>Stepwise - Approval Letter</title>
+<head>
+	<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+	<!-- Latest compiled and minified JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	{% load staticfiles%}
+</head>
+<body>
+	<div>
+		<div class="container-fluid">
+			<img id="GRMW_header" src="{% static 'images/stepwise/GRMW_template_header.png' %}">
+			<center>
+				<h3 style="font-size: 1.5vw;font-weight: bold;">{% now "F j\, Y"%}</h3>
+			</center>
+			<div id="main_body">
+				<div id="col_a">
+					<p>1114  J Ave.<br>
+					La Grande, Oregon 97850</p>
+
+					<p>(541) 663-0570<br>
+					Fax: (541) 962-1585</p>
+
+					<a>http://www.grmw.org</a><br><br>
+
+
+					<b>Board of Directors</b>
+					<p>Chair:<br>
+					Susan Roberts</p>
+					
+					<p style="">Vice-Chair:<br>
+					Donna Beverage</p>
+
+					<p>Allen Childs<br>
+					Norm Cimon<br>
+					Larry Cribbs<br>
+					Katie Frenyea<br>
+					Jed Hassinge<br>
+					Joe McCormack<br>
+					Nick Myatt<br>
+					Larry Nall<br>
+					Dave Yost</p>
+
+
+
+					<b>Staff:</b>
+					<p>Alexandra Borgerding<br>
+					Mary Estes<br>
+					Coby Menton<br>
+					Jeff Oveson<br>
+					Jessica Phelps<br>
+					Jesse Steele<br>
+					Connar Stone</p>
+
+					
+				</div>
+				<div id="col_b">
+					<p>{{ user_name }}<br>
+					{{ user_street_address}}<br>
+					{{ user_city_state_zip}}</p>
+					<center>
+						<p id="p_name">{{ project_name}}</p>
+					</center>
+					{{letter_content|safe}}
+
+					<p>Copy<br>
+					{% for cc in cc_list %}
+						{{cc}}<br>
+					{% endfor %}
+					</p>
+
+				</div>
+
+				<center>
+					<p id="foot"><b>Cooperators:</b> Union County • Wallowa County • Northwest Power Conservation Council •Bonneville Power Administration 
+					Oregon State Natural Resource Agencies; ODFW, ODF, OWEB, ODA, OWRD, DSL, DOGAMI, EDD, DEQ 
+					Eastern Oregon University •Union & Wallowa Soil & Water Conservation Districts •Oregon Cattlemen’s Association
+					Boise Cascade Corporation • U.S.D.A. Forest Service & Natural Resources Conservation Service • U.S.D.I. Bureau of Reclamation 
+					</p>
+				</center>
+			</div>
+		</div>
+
+	</div>
+
+	<style type="text/css">
+		#GRMW_header{
+			width: 50%;
+			margin-left:12.5%;
+			margin-bottom:4vw;
+			margin-top:2vw;
+		}
+		#col_a{
+			display: inline-block;
+			width: 18%;
+			text-align:right;
+			padding-right: 2%;
+			font-size: .8vw;
+		}
+		#col_b{
+			display: inline-block;
+			vertical-align: top;
+			font-size: 1.25vw;
+			border-left: 1px solid black;
+			padding-left:2vw;
+			width: 80%;
+    		padding-right: 10%;
+		}
+		#p_name{
+			font-size: 1.5vw;
+			font-weight: bold;
+			text-decoration:underline;
+		}
+		#sig{
+			margin-top:2vw;
+		}
+		#foot{
+			width: 75%;
+			font-size: .75vw;
+			margin-top:6vw;
+		}
+		
+	</style>
+</body>
+</html>

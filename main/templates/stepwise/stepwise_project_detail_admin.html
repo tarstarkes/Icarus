@@ -28,6 +28,9 @@
 							</ul>
 						</div>
 						<div id="nav_menu_links">
+							{% if project.current_step == 6 %}
+								<a href="/stepwise/stepwise_approval_letter/{{project.id}}/"><div class="menu_button link_button">Generate Approval Letter</div></a>
+							{% endif %}
 							<a href="/stepwise/stepwise_portal_admin"><div class="back_to_stepwise menu_button link_button">Back to Stepwise Admin Portal</div></a>
 						</div>
 					</div>
@@ -155,11 +158,27 @@
 								</span></p>
 								<center>
 								<form class="approve-deny" method="POST" action="/stepwise/stepwise_portal_admin/final_approval_deny/{{project.id}}/">{% csrf_token %}
+									<textarea name="message" placeholder="Reason for denial (comment will be sent to stepwise user)" required></textarea>
 									<button class="link_button deny" value="Deny">Deny</button>
 								</form>
 								<form class="approve-deny" method="POST" action="/stepwise/stepwise_portal_admin/final_approval_approve/{{project.id}}/">{% csrf_token %}
+									<textarea type="textarea" name="message" placeholder="Approval Comments (comment will be sent to stepwise user)."></textarea>
 									<button class="link_button approve" value="Approve">Approve</button>
 								</form>
+								<style>
+									.approve-deny{
+										display: inline-block;
+										text-align:left;
+										margin:2vw;
+									}
+									.approve-deny textarea{
+										display: block;
+										padding: .5vw;
+										margin-bottom:2vw;
+										height: 15vw;
+										width: 20vw;
+									}
+								</style>
 								</center>
 							{% elif project.current_step == 7 %}
 								<p>
